@@ -1,3 +1,31 @@
+/* =================================================================
+   1. ESTILOS GLOBALES Y VARIABLES
+   - Fuentes, variables de color, estilos para body, h1, a, etc.
+   ================================================================= */
+:root {
+    --color-principal: #073cf8;
+    --color-texto: #1a1a1a;
+    --color-fondo-claro: #f8f9fa;
+}
+
+body {
+    font-family: 'Ubuntu', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex-grow: 1;
+}
+
+
+/* =================================================================
+   2. COMPONENTES REUTILIZABLES
+   - Estilos para Header, Footer, botones, tarjetas, etc.
+   ================================================================= */
+
+
 #header-fijo {
     position: fixed;
     top: 0;
