@@ -13,6 +13,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    padding-top: 185px;
 }
 
 main {
@@ -36,10 +37,6 @@ main {
     box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 }
 
-body {
-    padding-top: 185px; 
-}
-
 .card .product-image-wrapper {
     height: 200px; 
     
@@ -54,4 +51,17 @@ body {
     height: 100%;
 
     object-fit: contain; 
+}
+
+/* =================================================================
+   4. ESTILOS RESPONSIVOS
+   - Ajustes para tablets y móviles.
+   ================================================================= */
+
+/* Se aplica a pantallas con un ancho MÁXIMO de 991.98px (tablets y móviles) */
+@media (max-width: 991.98px) {
+    body {
+        /* Aumentamos el padding para compensar la nueva altura del header */
+        padding-top: 320px; /* <-- ¡PUEDES AJUSTAR ESTE NÚMERO! */
+    }
 }
