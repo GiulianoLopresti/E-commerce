@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Looprex</title>
+    <link rel="icon" type="image/png" href="assets/img/Logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <style>
+        :root {
+            --accent: #073cf8;
+            --text: #111111;
+            --muted: #6b7280;
+            --line: #e5e7eb;
+            --panel: #f6f7f9;
+            --sidebar-width: 150px;
+        }
+
+        * { box-sizing: border-box; }
+
+        html, body { height: 100%; }
+
+        body {
+            margin: 0;
+            font-family: 'Ubuntu', sans-serif;
+            color: var(--text);
+            background: #ffffff;
+        }
+
+        a { color: inherit; text-decoration: none; }
+
+        /* Marco general inspirado en el wireframe */
+        .layout {
+            margin: 16px;
+            border: 2px solid #111;
+            min-height: calc(100vh - 32px);
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            background: #fff;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            border-right: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px 8px;
+            gap: 10px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 6px;
+            font-weight: 700;
+        }
+
+        .brand img { height: 20px; width: 20px; }
+
+        .menu { display: flex; flex-direction: column; gap: 4px; }
+
+        .menu-title { 
+            margin: 10px 6px 6px; 
+            font-size: 12px; 
+            text-transform: uppercase; 
+            color: var(--muted);
+            letter-spacing: .06em;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: #111;
+        }
+
+        .menu-item i { width: 18px; text-align: center; color: #111; }
+
+        .menu-item.active {
+            background: #eef2ff;
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        .menu-item.active i { color: var(--accent); }
+
+        .sidebar-bottom { margin-top: auto; border-top: 1px solid var(--line); padding-top: 10px; }
+
+        /* Área principal */
+        .main { display: flex; flex-direction: column; min-width: 0; }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .topbar h1 { font-size: 22px; margin: 0; }
+
+        .icon-button {
+            background: transparent;
+            border: none;
+            padding: 6px;
+            cursor: pointer;
+            color: #111;
+            font-size: 18px;
+        }
+
+        .workspace {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .slot {
+            background: var(--panel);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .slot-top { min-height: 38vh; }
+        .slot-bottom { flex: 1; min-height: 0; }
+
+        /* Responsive mínimo */
+        @media (max-width: 900px) {
+            .layout { grid-template-columns: 64px 1fr; }
+            .menu-item span { display: none; }
+            .brand span { display: none; }
+            .brand { justify-content: center; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar" aria-label="Barra lateral de administración">
+            <div>
+                <a class="brand" href="index.html">
+                    <img src="assets/img/Logo.png" alt="Looprex">
+                    <span>Looprex</span>
+                </a>
+
+                <nav class="menu" aria-label="Menú principal">
+                    <a class="menu-item active" href="#"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i><span>Dashboard</span></a>
+                    <a class="menu-item" href="#"><i class="fa-solid fa-receipt" aria-hidden="true"></i><span>Pedidos</span></a>
+                    <a class="menu-item" href="#"><i class="fa-solid fa-boxes-stacked" aria-hidden="true"></i><span>Inventario</span></a>
+                    <a class="menu-item" href="#"><i class="fa-solid fa-chart-line" aria-hidden="true"></i><span>Reportes</span></a>
+                    <a class="menu-item" href="#"><i class="fa-solid fa-users" aria-hidden="true"></i><span>Empleados</span></a>
+                    <a class="menu-item" href="#"><i class="fa-solid fa-user-group" aria-hidden="true"></i><span>Clientes</span></a>
+                </nav>
+
+                <nav class="menu sidebar-bottom" aria-label="Menú secundario">
+                    <a class="menu-item" href="#"><i class="fa-solid fa-gear" aria-hidden="true"></i><span>Configuración</span></a>
+                    <a class="menu-item" href="#"><i class="fa-regular fa-user" aria-hidden="true"></i><span>Perfil</span></a>
+                    <a class="menu-item" href="#"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>Buscar</span></a>
+                    <a class="menu-item" href="#"><i class="fa-regular fa-circle-question" aria-hidden="true"></i><span>Ayuda</span></a>
+                </nav>
+            </div>
+
+            <a class="menu-item" href="#" aria-label="Perfil">
+                <i class="fa-solid fa-circle-user" aria-hidden="true"></i>
+                <span>Perfil</span>
+            </a>
+        </aside>
+
+        <main class="main">
+            <header class="topbar">
+                <h1>¡HOLA Administrador!</h1>
+                <button class="icon-button" aria-label="Notificaciones">
+                    <i class="fa-regular fa-bell"></i>
+                </button>
+            </header>
+
+            <section class="workspace" aria-label="Contenido principal">
+                <div class="slot slot-top" role="region" aria-label="Resumen del panel"></div>
+                <div class="slot slot-bottom" role="region" aria-label="Detalle del panel"></div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
+
