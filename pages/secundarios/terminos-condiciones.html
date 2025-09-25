@@ -37,7 +37,7 @@
         <div class="col-lg-6 order-3 order-lg-2">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar producto..." aria-label="Buscar producto">
-                <button class="btn btn-primary" type="button" style="background-color: #073cf8; border-color: #073cf8;">
+                <button class="btn" type="button">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </div>
@@ -120,7 +120,9 @@
     </header>
 </div>
     
-    <main class="container my-5">
+
+<main class="container my-5">
+    <div class="bg-white p-5 rounded shadow-sm">        
         <article>
             <h1 class="border-bottom pb-3 mb-4">Términos y Condiciones</h1>
             <p class="text-muted">Última actualización: 25 de septiembre de 2025</p>
@@ -145,55 +147,50 @@
                 <p>Todos nuestros productos cuentan con la garantía legal de 3 meses por fallas de fabricación. Para hacer efectiva la garantía, el cliente debe presentar la boleta o factura de compra.</p>
             </section>
         </article>
-    </main>
+    </div>
+</main>
 
-    <footer class="bg-dark text-white pt-5 pb-4">
-        <div class="container text-center text-md-start">
-            <div class="row text-center text-md-start">
-                <section class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <h5 class="mb-4 fw-bold">Looprex</h5>
-                    <p>
-                        Tu tienda de confianza para componentes y periféricos gamer. Llevamos tu experiencia de juego al siguiente nivel.
-                    </p>
-                    <address style="font-style: normal;">
-                        <p class="mb-2"><i class="fas fa-envelope me-2"></i> contacto@looprex.cl</p>
-                        <p><i class="fab fa-whatsapp me-2"></i> +56 9 1234 5678</p>
-                    </address>
-                </section>
-                
-                <nav class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3" aria-label="Enlaces útiles">
-                    <h5 class="text-uppercase mb-4 fw-bold">Enlaces</h5>
-                    <p><a href="/pages/secundarios/quienes-somos.html" class="text-white text-decoration-none">Quiénes Somos</a></p>
-                    <p><a href="/pages/secundarios/politicas-envio.html" class="text-white text-decoration-none">Políticas de Envío</a></p>
-                    <p><a href="/pages/secundarios/terminos-condiciones.html" class="text-white text-decoration-none">Términos y Condiciones</a></p>
-                    <p><a href="/pages/secundarios/preguntas-frecuentes.html" class="text-white text-decoration-none">Preguntas Frecuentes</a></p>
-                </nav>
-
-                <section class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-                    <form class="mt-4">
-                        <p class="mb-2">¡Suscríbete para recibir las mejores ofertas!</p>
-                        <div class="input-group mb-3">
-                            <input type="email" class="form-control" placeholder="Tu email" aria-label="Tu email" required>
-                            <button class="btn btn-primary" type="submit" style="background-color: #073cf8;">Suscribirse</button>
-                        </div>
-                    </form>
-                </section>
-            </div>
+    <footer class="text-white pt-5 pb-4">
             <hr class="mb-4">
-            <div class="row align-items-center">
-                <div class="col-md-7 col-lg-8">
-                    <small>© 2025 Looprex. Todos los derechos reservados.</small>
+            <div class="container text-center text-md-start">
+                <div class="row text-center text-md-start">
+                    <section class="col-md-3 col-lg-3 col-xl-3 mx-auto mt-3">
+                        <h5 class="mb-4 fw-bold">Looprex</h5>
+                        <p>
+                            Tu tienda de confianza para componentes y periféricos gamer. Llevamos tu experiencia de juego al siguiente nivel.
+                        </p>
+                        <address style="font-style: normal;">
+                            <p class="mb-2"><i class="fas fa-envelope me-2"></i> contacto@looprex.cl</p>
+                            <p><i class="fab fa-whatsapp me-2"></i> +56 9 1234 5678</p>
+                        </address>
+                    </section>
+
+                    <nav class="col-md-2 col-lg-2 col-xl-2 mx-auto mt-3" aria-label="Enlaces útiles">
+                    <h5 class="text-uppercase mb-4 fw-bold">Enlaces</h5>
+                        <p><a href="/pages/secundarios/quienes-somos.html" class="text-white text-decoration-none">Quiénes Somos</a></p>
+                        <p><a href="/pages/secundarios/politicas-envio.html" class="text-white text-decoration-none">Políticas de Envío</a></p>
+                        <p><a href="/pages/secundarios/terminos-condiciones.html" class="text-white text-decoration-none">Términos y Condiciones</a></p>
+                        <p><a href="/pages/secundarios/preguntas-frecuentes.html" class="text-white text-decoration-none">Preguntas Frecuentes</a></p>
+                    </nav>
+
+                    <section class="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
+                        <form class="mt-4">
+                            <p class="mb-2">¡Suscríbete para recibir las mejores ofertas!</p>
+                            <div class="input-group mb-3">
+                                <input type="email" class="form-control" placeholder="Tu email" aria-label="Tu email" required>
+                                <button class="btn text-white" type="submit">Suscribirse</button>
+                            </div>
+                        </form>
+                    </section>
                 </div>
-                <div class="col-md-5 col-lg-4">
-                    <div class="text-center text-md-end">
-                        <i class="fab fa-cc-visa fa-2x me-2" aria-label="Visa"></i>
-                        <i class="fab fa-cc-mastercard fa-2x me-2" aria-label="Mastercard"></i>
+                <hr class="mb-4">
+                <div class="row align-items-center">
+                    <div class="col-md-7 col-lg-8">
+                        <small>© 2025 Looprex. Todos los derechos reservados.</small>
                     </div>
                 </div>
             </div>
-        </div>
     </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

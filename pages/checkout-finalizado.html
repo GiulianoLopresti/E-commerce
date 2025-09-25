@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout - Looprex</title>
+    <title>Checkout-finalizado - Looprex</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -17,7 +17,7 @@
 
 <body>
 
-    <div id="header-fijo">
+<div id="header-fijo">
     <header class="py-3 border-bottom shadow-sm bg-white">
         <div class="container">
             <div class="row align-items-center">
@@ -54,121 +54,103 @@
     </header>
 </div>
 
-    <main class="container my-5">
-
-        <nav class="progress-container container mt-3">
-            <ul class="progress-steps">
-            
-                <li class="step completed">
-                    <a href="/pages/carrito.html" class="text-decoration-none d-flex flex-column align-items-center">
-                        <div class="step-circle">1</div>
-                        <div class="step-title">Carrito</div>
-                    </a>
-                </li>
-            
-                <li class="step active">
-                    <a href="/pages/checkout.html" class="text-decoration-none d-flex flex-column align-items-center">
-                        <div class="step-circle">2</div>
-                        <div class="step-title">Envío y facturación</div>
-                    </a>
-                </li>
-
-                <li class="step">
-                    <div class="d-flex flex-column align-items-center">
-                        <div class="step-circle">3</div>
-                        <div class="step-title">Finalizar</div>
-                    </div>
-                </li>
-            </ul>
-        </nav>
+<main class="container my-5">
+    <div class="bg-white bg-opacity- text- p-4 p-md-5 rounded">
 
         <section class="text-center">
-            <i class="fa-solid fa-check-circle text-success" style="font-size: 5rem;"></i>
-            <h1 class="mt-3">¡Gracias! Tu pedido ha sido recibido.</h1>
-            <p class="lead text-muted">Recibirás un correo de confirmación con los detalles de tu compra.</p>
+            <i class="fa-solid fa-check-circle" style="font-size: 5rem;"></i>
+            <h1 class="mt-3 text">¡Gracias! Tu pedido ha sido recibido.</h1>
+            <p class="lead">Recibirás un correo de confirmación con los detalles de tu compra.</p>
         </section>
 
         <hr class="my-5">
 
         <section class="order-summary-details">
             <ul class="list-group list-group-horizontal-md text-center">
-                <li class="list-group-item flex-fill">
-                    <span class="text-muted d-block">NÚMERO DE PEDIDO:</span>
-                    <strong class="fs-5">LPX-85632</strong>
+                <li class="list-group-item flex-fill bg-transparent border-secondary text-light">
+                    <span class="text-dark fw-bold d-block">NÚMERO DE PEDIDO:</span>
+                    <strong class="fs-5 text-dark">LPX-85632</strong>
                 </li>
-                <li class="list-group-item flex-fill">
-                    <span class="text-muted d-block">FECHA:</span>
-                    <strong class="fs-5">1 de Septiembre, 2025</strong>
+                <li class="list-group-item flex-fill bg-transparent border-secondary text-light">
+                    <span class="text-dark fw-bold d-block">FECHA:</span>
+                    <strong class="fs-5 text-dark">1 de Septiembre, 2025</strong>
                 </li>
-                <li class="list-group-item flex-fill">
-                    <span class="text-muted d-block">EMAIL:</span>
-                    <strong class="fs-5">cliente@email.com</strong>
+                <li class="list-group-item flex-fill bg-transparent border-secondary text-light">
+                    <span class="text-dark fw-bold d-block">EMAIL:</span>
+                    <strong class="fs-5 text-dark">cliente@email.com</strong>
                 </li>
-                <li class="list-group-item flex-fill">
-                    <span class="text-muted d-block">TOTAL:</span>
-                    <strong class="fs-5">$214.960</strong>
+                <li class="list-group-item flex-fill bg-transparent border-secondary text-light">
+                    <span class="text-dark fw-bold d-block">TOTAL:</span>
+                    <strong class="fs-5 text-dark">$214.960</strong>
                 </li>
-                <li class="list-group-item flex-fill">
-                    <span class="text-muted d-block">MÉTODO DE PAGO:</span>
-                    <strong class="fs-5">Transferencia bancaria</strong>
+                <li class="list-group-item flex-fill bg-transparent border-secondary text-light">
+                    <span class="text-dark fw-bold d-block">MÉTODO DE PAGO:</span>
+                    <strong class="fs-5 text-dark">Transferencia bancaria</strong>
                 </li>
             </ul>
         </section>
 
         <section class="mt-5">
-            <h2 class="mb-4">Detalles del pedido</h2>
-            
-            <table class="table table-bordered">
-                <thead>
-                    <tr class="table-light">
-                        <th scope="col">Producto</th>
-                        <th scope="col" class="text-end">Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Procesador AMD Ryzen 5 5600G × 1</td>
-                        <td class="text-end">$149.990</td>
-                    </tr>
-                    <tr>
-                        <td>Memoria RAM Kingston Fury 8GB × 2</td>
-                        <td class="text-end">$59.980</td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th scope="row">Subtotal:</th>
-                        <td class="text-end">$209.970</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Envío:</th>
-                        <td class="text-end">$4.990 (Normal)</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Método de pago:</th>
-                        <td class="text-end">Transferencia bancaria directa</td>
-                    </tr>
-                    <tr class="fs-5 table-light">
-                        <th scope="row">Total:</th>
-                        <td class="text-end fw-bold">$214.960</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </section>
+    <h2 class="mb-4">Detalles del pedido</h2>
+    
+    <table class="table table-bordered table-white">
+        <thead>
+            <tr>
+                <th scope="col">Producto</th>
+                <th scope="col" class="text-end">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Procesador AMD Ryzen 5 5600G × 1</td>
+                <td class="text-end">$149.990</td>
+            </tr>
+            <tr>
+                <td>Memoria RAM Kingston Fury 8GB × 2</td>
+                <td class="text-end">$59.980</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="row">Subtotal:</th>
+                <td class="text-end">$209.970</td>
+            </tr>
+            <tr>
+                <th scope="row">Envío:</th>
+                <td class="text-end">$4.990 (Normal)</td>
+            </tr>
+            <tr>
+                <th scope="row">Método de pago:</th>
+                <td class="text-end">Transferencia bancaria directa</td>
+            </tr>
+            <tr class="fs-5">
+                <th scope="row">Total:</th>
+                <td class="text-end fw-bold">$214.960</td>
+            </tr>
+        </tfoot>
+    </table>
+</section>
 
-        <section class="mt-5">
-            <h2 class="mb-4">Detalles de facturación</h2>
-            <address>
-                <strong>Giuliano Lopresti</strong><br>
-                Calle Falsa 123<br>
-                Santiago, Metropolitana<br>
-                Chile<br>
-                <i class="fa-solid fa-phone me-2"></i> +56 9 1234 5678<br>
-                <i class="fa-solid fa-envelope me-2"></i> cliente@email.com
-            </address>
-        </section>
+<section class="mt-5">
+    <h2 class="mb-4">Detalles de facturación</h2>
+    <address>
+        <strong>Giuliano Lopresti</strong><br>
+        Calle Falsa 123<br>
+        Santiago, Metropolitana<br>
+        Chile<br>
+        <i class="fa-solid fa-phone me-2"></i> +56 9 1234 5678<br>
+        <i class="fa-solid fa-envelope me-2"></i> cliente@email.com
+    </address>
+</section>
 
-    </main>
+<section class="text-center mt-5">
+    <a href="/index.html" class="btn btn-lg">
+        <i class="fa-solid fa-arrow-left me-2"></i> Volver al comercio
+    </a>
+</section>
+
+    </div> 
+</main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>

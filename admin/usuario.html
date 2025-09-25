@@ -9,33 +9,52 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="/assets/img/Logo.png">
-  <link rel="stylesheet" href="/assets/css/admin.css"> <!-- CSS específico admin -->
+
 </head>
 <body class="d-flex">
 
-  <!-- Menú lateral -->
-  <aside class="bg-dark text-white p-3 vh-100" style="width: 250px;">
-    <header class="mb-4">
-      <h1 class="h4 text-center">
-        <i class="fa-solid fa-gears me-2"></i> Admin Looprex
-      </h1>
+ 
+  <div id="header-fijo">
+
+    <header>
+    <aside class="bg-dark text-white p-3 vh-100" style="width: 250px;">
+        <h1 class="h4 text-center">
+          <i class="fa-solid fa-gears me-2"></i> Admin Looprex
+        </h1>
+        <nav>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">
+            <a href="/admin/index1.html" class="nav-link text-white">
+              <i class="fa-solid fa-house me-2"></i> Home
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a href="/admin/productos.html" class="nav-link text-white">
+              <i class="fa-solid fa-box me-2"></i> Productos
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a href="/admin/usuario.html" class="nav-link text-white">
+              <i class="fa-solid fa-users me-2"></i> Usuarios
+            </a>
+          </li>
+          <li class="nav-item mt-3">
+            <a href="/index.html" class="nav-link text-danger fw-bold">
+              <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar sesión
+            </a>
+          </li>
+        </ul>
+        </nav>
+      </aside>
     </header>
-    <nav>
-      <ul class="nav flex-column">
-        <li class="nav-item mb-2"><a href="index.html" class="nav-link text-white"><i class="fa-solid fa-house me-2"></i> Dashboard</a></li>
-        <li class="nav-item mb-2"><a href="productos.html" class="nav-link text-white"><i class="fa-solid fa-box me-2"></i> Productos</a></li>
-        <li class="nav-item mb-2"><a href="usuarios.html" class="nav-link active bg-secondary text-white"><i class="fa-solid fa-users me-2"></i> Usuarios</a></li>
-        <li class="nav-item mb-2"><a href="ordenes.html" class="nav-link text-white"><i class="fa-solid fa-cart-shopping me-2"></i> Órdenes</a></li>
-        <li class="nav-item mt-3"><a href="../index.html" class="nav-link text-danger fw-bold"><i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar sesión</a></li>
-      </ul>
-    </nav>
-  </aside>
+
+  </div>
 
   <!-- Contenido principal -->
   <main class="flex-grow-1 p-4">
     <header class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
       <h2>Gestión de Usuarios</h2>
-      <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalUsuario">
+      <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modalUsuario">
         <i class="fa-solid fa-user-plus me-1"></i> Añadir Usuario
       </button>
     </header>
@@ -63,8 +82,10 @@
             <td>RM</td>
             <td>Santiago</td>
             <td>
-              <button class="btn btn-sm btn-warning"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn btn-sm btn" data-bs-toggle="modal" data-bs-target="#modalUsuarioEditar">
+              <i class="fa-solid fa-pen"></i>
+              </button>
+              <button class="btn btn-sm btn"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
           <tr>
@@ -75,8 +96,8 @@
             <td>Valparaíso</td>
             <td>Viña del Mar</td>
             <td>
-              <button class="btn btn-sm btn-warning"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn btn-sm btn"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-sm btn"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
         </tbody>
@@ -84,6 +105,79 @@
     </section>
   </main>
 
+
+  <<!-- Modal para editar usuario -->
+<div class="modal fade" id="modalUsuarioEditar" tabindex="-1" aria-labelledby="#modalUsuarioEditar" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <section class="modal-content">
+      <header class="modal-header">
+        <h5 class="modal-title" id="modalEditarUsuarioLabel">Editar Usuario</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </header>
+      <form>
+        <section class="modal-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="editRunInput" class="form-label">RUN</label>
+              <input type="text" class="form-control" id="editRunInput" value="19011022K" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editNombreInput" class="form-label">Nombre</label>
+              <input type="text" class="form-control" id="editNombreInput" value="Juan" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editApellidoInput" class="form-label">Apellidos</label>
+              <input type="text" class="form-control" id="editApellidoInput" value="Pérez" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editCorreoInput" class="form-label">Correo</label>
+              <input type="email" class="form-control" id="editCorreoInput" value="juanperez@duoc.cl" required>
+            </div>
+            <div class="col-md-6">
+              <label for="editRolSelect" class="form-label">Rol</label>
+              <select id="editRolSelect" class="form-select" required>
+                <option value="Administrador" selected>Administrador</option>
+                <option value="Vendedor">Vendedor</option>
+                <option value="Cliente">Cliente</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="editFechaInput" class="form-label">Fecha de nacimiento</label>
+              <input type="date" class="form-control" id="editFechaInput" value="1990-05-12">
+            </div>
+            <div class="col-md-6">
+              <label for="editRegionSelect" class="form-label">Región</label>
+              <select id="editRegionSelect" class="form-select" required>
+                <option value="">Seleccionar...</option>
+                <option value="RM" selected>Región Metropolitana</option>
+                <option value="Valparaiso">Valparaíso</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label for="editComunaSelect" class="form-label">Comuna</label>
+              <select id="editComunaSelect" class="form-select" required>
+                <option value="">Seleccionar...</option>
+                <option value="Santiago" selected>Santiago</option>
+                <option value="Viña">Viña del Mar</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <label for="editDireccionInput" class="form-label">Dirección</label>
+              <input type="text" class="form-control" id="editDireccionInput" value="Av. Siempre Viva 123" required>
+            </div>
+          </div>
+        </section>
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-warning">Guardar Cambios</button> <!-- Botón de advertencia para edición -->
+        </footer>
+      </form>
+    </section>
+  </div>
+</div>
+
+
+    
   <!-- Modal para añadir/editar usuario -->
   <div class="modal fade" id="modalUsuario" tabindex="-1" aria-labelledby="modalUsuarioLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -146,7 +240,7 @@
           </section>
           <footer class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Guardar</button>
+            <button type="submit" class="btn btn-primary">Guardar</button><!-- Botón de advertencia para edición -->
           </footer>
         </form>
       </section>

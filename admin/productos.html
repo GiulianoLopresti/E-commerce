@@ -9,33 +9,50 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="/assets/img/Logo.png">
-  <link rel="stylesheet" href="/assets/css/admin.css"> <!-- CSS específico admin -->
+  <link rel="stylesheet" href="/assets/css/admin.css">
 </head>
 <body class="d-flex">
 
   <!-- Menú lateral -->
-  <aside class="bg-dark text-white p-3 vh-100" style="width: 250px;">
-    <header class="mb-4">
-      <h1 class="h4 text-center">
-        <i class="fa-solid fa-gears me-2"></i> Admin Looprex
-      </h1>
-    </header>
-    <nav>
-      <ul class="nav flex-column">
-        <li class="nav-item mb-2"><a href="index.html" class="nav-link text-white"><i class="fa-solid fa-house me-2"></i> Dashboard</a></li>
-        <li class="nav-item mb-2"><a href="productos.html" class="nav-link active bg-secondary text-white"><i class="fa-solid fa-box me-2"></i> Productos</a></li>
-        <li class="nav-item mb-2"><a href="usuarios.html" class="nav-link text-white"><i class="fa-solid fa-users me-2"></i> Usuarios</a></li>
-        <li class="nav-item mb-2"><a href="ordenes.html" class="nav-link text-white"><i class="fa-solid fa-cart-shopping me-2"></i> Órdenes</a></li>
-        <li class="nav-item mt-3"><a href="../index.html" class="nav-link text-danger fw-bold"><i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar sesión</a></li>
-      </ul>
-    </nav>
-  </aside>
+<div id="header-fijo">
+  <header>
+    <aside class="bg-dark text-white p-3 vh-100" style="width: 250px;">
+        <h1 class="h4 text-center">
+          <i class="fa-solid fa-gears me-2"></i> Admin Looprex
+        </h1>
+      <nav>
+        <ul class="nav flex-column">
+          <li class="nav-item mb-2">
+            <a href="/admin/index1.html" class="nav-link text-white">
+              <i class="fa-solid fa-house me-2"></i> Home
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a href="/admin/productos.html" class="nav-link text-white">
+              <i class="fa-solid fa-box me-2"></i> Productos
+            </a>
+          </li>
+          <li class="nav-item mb-2">
+            <a href="/admin/usuario.html" class="nav-link text-white">
+              <i class="fa-solid fa-users me-2"></i> Usuarios
+            </a>
+          </li>
+          <li class="nav-item mt-3">
+            <a href="/index.html" class="nav-link text-danger fw-bold">
+              <i class="fa-solid fa-right-from-bracket me-2"></i> Cerrar sesión
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+  </header>
+</div>
 
   <!-- Contenido principal -->
   <main class="flex-grow-1 p-4">
     <header class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-2">
       <h2>Gestión de Productos</h2>
-      <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modalProducto">
+      <button class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modalProducto">
         <i class="fa-solid fa-plus me-1"></i> Añadir Producto
       </button>
     </header>
@@ -61,8 +78,8 @@
             <td>25</td>
             <td>Componentes PC</td>
             <td>
-              <button class="btn btn-sm btn-warning"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn btn-sm btn"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-sm btn"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
           <tr>
@@ -72,8 +89,8 @@
             <td>50</td>
             <td>Periféricos Gamer</td>
             <td>
-              <button class="btn btn-sm btn-warning"><i class="fa-solid fa-pen"></i></button>
-              <button class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+              <button class="btn btn-sm btn"><i class="fa-solid fa-pen"></i></button>
+              <button class="btn btn-sm btn"><i class="fa-solid fa-trash"></i></button>
             </td>
           </tr>
         </tbody>
