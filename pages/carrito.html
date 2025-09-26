@@ -19,7 +19,7 @@
     
 <div id="header-fijo">
     <header>
-        <div class="container py-3 bg-white">
+        <div class="container py-3">
             <div class="row gy-3 align-items-center">
 
             <div class="col-lg-3 text-center text-lg-start">
@@ -32,7 +32,7 @@
         <div class="col-lg-6 order-3 order-lg-2">
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar producto..." aria-label="Buscar producto">
-                <button class="btn" type="button">
+                <button class="btn btn-buscar" type="button">
                     <i class="fa-solid fa-magnifying-glass"></i>
                 </button>
             </div>
@@ -62,29 +62,33 @@
 
 <main class="container my-5">
   <section class="card shadow-lg border-0 p-4">
-    <header class="mb-4">
-      <h1 class="h3">Tu Carrito de Compras</h1>
-    </header>
-
+    <h1 class="h3">Tu Carrito de Compras</h1>
     <section class="row">
+      
+      <!-- Productos -->
       <section class="col-lg-8 border-end">
-
+        
+        <!-- Producto 1 -->
         <article class="d-flex align-items-center mb-3 pb-3 border-bottom">
-            <img src="/assets/img/Logitech G502 Hero.png" 
-            alt="Mouse Gamer" 
-            class="me-3 rounded" 
-            style="width: 60px; height: 60px; object-fit: contain;">
-            <div class="flex-grow-1">
-                <h5 class="h6 mb-0">Mouse Gamer Pro</h5>
-                    <p class="text-muted small mb-0">Color: Negro</p>
-            </div>
-            <input type="number" value="1" min="1" class="form-control me-3" style="width: 70px;">
-                <p class="fw-bold mb-0 me-3">$25.000</p>
-                <a href="#" class="text-danger"><i class="fas fa-trash"></i></a>
+          <img src="/assets/img/Logitech G502 Hero.png" 
+               alt="Mouse Gamer" 
+               class="me-3 rounded" 
+               style="width: 60px; height: 60px; object-fit: contain;">
+          <div class="flex-grow-1">
+            <h5 class="h6 mb-0">Mouse Gamer Pro</h5>
+            <p class="text-muted small mb-0">Color: Negro</p>
+          </div>
+          <input type="number" value="1" min="1" class="form-control me-3" style="width: 70px;">
+          <p class="fw-bold mb-0 me-3">$25.000</p>
+          <a href="#" class="text-danger"><i class="fas fa-trash"></i></a>
         </article>
 
+        <!-- Producto 2 -->
         <article class="d-flex align-items-center mb-3 pb-3 border-bottom">
-          <img src="/assets/img/MSI Forge GK600.png" alt="Teclado Mecánico" class="img-fluid me-3" style="max-height: 80px; width: 80px;">
+          <img src="/assets/img/MSI Forge GK600.png" 
+               alt="Teclado Mecánico" 
+               class="img-fluid me-3" 
+               style="max-height: 80px; width: 80px;">
           <div class="flex-grow-1">
             <h5 class="h6 mb-0">Teclado Mecánico RGB</h5>
             <p class="text-muted small mb-0">Switch: Red</p>
@@ -94,17 +98,23 @@
           <a href="#" class="text-danger"><i class="fas fa-trash"></i></a>
         </article>
 
-        <footer class="d-flex justify-content-between mt-3">
-          <a href="/index.html" class="text-decoration-none fw-semibold">
+        <!-- Botones de acción -->
+        <div class="d-flex justify-content-between mt-4">
+          <!-- Continuar comprando -->
+          <a href="/index.html" class="text-decoration-none text-black fw-semibold">
             <i class="fas fa-arrow-left me-2"></i> Continuar Comprando
           </a>
-          <div>
+
+          <!-- Actualizar y vaciar -->
+          <div class="d-flex gap-2">
             <button class="btn">Actualizar Carrito</button>
             <button class="btn">Vaciar Carrito</button>
           </div>
-        </footer>
+        </div>
+
       </section>
 
+      <!-- Resumen -->
       <aside class="col-lg-4 ps-4">
         <h2 class="h5 mb-3">Resumen del Pedido</h2>
         <p class="d-flex justify-content-between mb-2">
@@ -117,11 +127,15 @@
         <p class="d-flex justify-content-between fw-bold fs-5">
           <span>Total</span> <span>$110.000</span>
         </p>
-        <a href="/pages/checkout.html" class="btn w-100 fw-semibold mt-3">Finalizar Compra</a>
+        <a href="/pages/checkout.html" class="btn w-100 fw-semibold mt-3 btn-comprar">
+          Finalizar Compra
+        </a>
       </aside>
+
     </section>
   </section>
 </main>
+
 
 <footer class="text-white pt-5 pb-4">
             <hr class="mb-4">

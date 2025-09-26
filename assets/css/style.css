@@ -3,9 +3,8 @@
    - Fuentes, variables de color, estilos para body, h1, a, etc.
    ================================================================= */
 :root {
-    --color-principal: #073cf8;
     --color-texto: #1a1a1a;
-    --color-fondo-claro: #f8f9fa;;
+    --color-fondo-claro: #f8f9fa;
 }
 
 body {
@@ -19,28 +18,25 @@ body {
 
 main {
     flex-grow: 1;
+    font-family: 'Ubuntu', sans-serif
+}
+
+footer{
+    background-color: rgba(0, 0, 0, 0.5);
+    font-family: 'Ubuntu', sans-serif
 }
 
 
 /* =================================================================
-   2. COMPONENTES REUTILIZABLES
+   2. COMPONENTES REUTILIZABLES Y DE EJEMPLOS
    - Estilos para Header, Footer, botones, tarjetas, etc.
    ================================================================= */
 
 
-#header-fijo {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1030;
-    background-color: white; 
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-}
+
 
 .card .product-image-wrapper {
     height: 200px; 
-    
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,8 +46,133 @@ main {
 .card .product-image-wrapper img {
     width: 100%;
     height: 100%;
-
     object-fit: contain; 
+}
+/* Pruebas para botones /pages/ */
+
+.btn-comprar {
+    background-color: #2bbcff;   /* color de fondo */
+    color: rgb(255, 255, 255);  /* color del texto */
+    font-size: 16px;            /* tamaño de letra */
+    font-weight: bold;          /* negrita */
+    border: none;               /* sin borde */
+    padding: 12px 20px;         /* espacio interno */
+    transition: all 0.3s ease;  /* animación suave */
+}
+
+.btn-comprar:hover {
+    background-color: rgb(0, 68, 114);  /* un poco más oscuro */
+    color: rgb(255, 255, 255);
+    transform: scale(1.01);     /* efecto de "agrandarse" */
+}
+
+.btn-comprar {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* sombra externa */
+}
+
+.btn-comprar:hover {
+    box-shadow: 0 6px 10px rgba(0,0,0,0.3); /* sombra más grande */
+}
+
+/*
+.btn-comprar {
+    background: linear-gradient(135deg, #5bcbff, #2f667e);
+}
+
+.btn-comprar:hover {
+    background: linear-gradient(135deg, #42b6e6, #000000);
+}
+*/
+
+.btn-sm { /*index*/
+    background-color: #2bbcff;   /* color de fondo */
+    color: rgb(255, 255, 255);  /* color del texto */
+    font-size: 16px;            /* tamaño de letra */
+    font-weight: bold;          /* negrita */
+    border: none;               /* sin borde */
+    padding: 12px 20px;         /* espacio interno */
+    transition: all 0.3s ease;
+}
+
+.btn-sm:hover {
+    background-color: rgb(0, 68, 114);  /* un poco más oscuro */
+    color: rgb(255, 255, 255);
+    transform: scale(1.01);     /* efecto de "agrandarse" */
+}
+
+/* =================================================================
+   3. ESTILOS PARA EL HEADER
+   ================================================================= */
+
+/* Logo y marca */
+.navbar-brand {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #004464 !important;
+    letter-spacing: 0.5px;
+}
+
+#header-fijo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1030;
+    background-color: #f4fbff; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* sombra ligera */
+}
+
+#header-fijo nav.navbar {
+    background-color: #ffffff !important; /* color de la barra */
+}
+
+/* Input de búsqueda */
+.input-group .form-control {
+    border-radius: 20px 0 0 20px;
+    border: 1px solid #ddd;
+    box-shadow: none;
+    transition: border-color 0.2s;
+}
+.input-group .form-control:focus {
+    border-color: #5bcbff;
+    outline: none;
+}
+
+/* Botón de búsqueda */
+.btn-buscar {
+    background-color: #5bcbff;
+    border-radius: 0 20px 20px 0;
+    color: white;
+    transition: background 0.2s;
+}
+.btn-buscar:hover {
+    background-color: #42b6e6;
+}
+
+/* Íconos (Mi cuenta, Seguimiento, Carrito) */
+.icon-link {
+    color: #444 !important;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+.icon-link:hover {
+    color: #42b6e6 !important;
+}
+
+/* Barra de navegación de categorías */
+nav.navbar {
+    background: #f8f9fa !important;
+}
+.navbar-nav .nav-link {
+    font-weight: 500;
+    padding: 8px 15px;
+    color: #333 !important;
+    transition: color 0.2s, background 0.2s;
+}
+.navbar-nav .nav-link:hover {
+    color: #0077b6 !important;
+    background: rgba(91, 203, 255, 0.1);
+    border-radius: 6px;
 }
 
 /* =================================================================
@@ -63,6 +184,6 @@ main {
 @media (max-width: 991.98px) {
     body {
         /* Aumentamos el padding para compensar la nueva altura del header */
-        padding-top: 320px; /* <-- ¡PUEDES AJUSTAR ESTE NÚMERO! */
+        padding-top: 320px;
     }
 }
