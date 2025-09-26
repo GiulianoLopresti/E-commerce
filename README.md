@@ -1,7 +1,6 @@
 # E-commerce
-Desarrollo de un e-commerce a partir de lenguajes de programación  
+Desarrollo de un e-commerce 
 - HTML
 - CSS
 - JAVASCRIPT
 - JAVA (SPRING BOOT)
-- SQL
