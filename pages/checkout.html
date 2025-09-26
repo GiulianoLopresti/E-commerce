@@ -28,7 +28,7 @@
         </div>
     </header>
     </div>
-    <main class="container my-5">
+<main class="container my-5">
     
     <div class="alert alert-secondary" role="alert">
        <i class="fa-solid fa-user me-2"></i> ¿Ya eres cliente? <a href="/pages/login.html" class="alert-link">Haz clic aquí para acceder</a>
@@ -45,40 +45,54 @@
                                         <label for="rut" class="form-label">RUT <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="rut" placeholder="sin puntos, con guión">
                                     </div>
+
                                     <div class="col-sm-6">
                                         <label for="firstName" class="form-label">Nombre <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="firstName">
                                     </div>
+
                                     <div class="col-sm-6">
                                         <label for="lastName" class="form-label">Apellidos <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="lastName">
                                     </div>
+
                                     <div class="col-12">
                                         <label for="country" class="form-label">País/Región <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="country" value="Chile" disabled readonly>
                                     </div>
+
                                     <div class="col-12">
                                         <label for="region" class="form-label">Región / Provincia <span class="text-danger">*</span></label>
                                         <select class="form-select" id="region">
+                                            <option selected disabled value="">Elige una opción...</option>
+                                            <option value="METROPOLITANA">Región Metropolitana</option>
                                         </select>
                                     </div>
+
                                      <div class="col-12">
                                         <label for="comuna" class="form-label">Comuna <span class="text-danger">*</span></label>
                                         <select class="form-select" id="comuna">
+                                            <option selected disabled value="">Selecciona una comuna...</option>
+                                            <option value="Conchalí">Conchalí</option>
+                                            <option value="Huechuraba">Huechuraba</option>
                                         </select>
                                     </div>
+
                                     <div class="col-12">
                                         <label for="address" class="form-label">Nombre y número de la calle <span class="text-danger">*</span></label>
                                         <input type="text" class="form-control" id="address">
                                     </div>
-                                     <div class="col-12">
+
+                                    <div class="col-12">
                                         <label for="address2" class="form-label">N° Casa, Apartamento, etc. (opcional)</label>
                                         <input type="text" class="form-control" id="address2">
                                     </div>
+
                                     <div class="col-12">
                                         <label for="phone" class="form-label">Teléfono <span class="text-danger">*</span></label>
                                         <input type="tel" class="form-control" id="phone">
                                     </div>
+
                                     <div class="col-12">
                                         <label for="email" class="form-label">Dirección de correo electrónico <span class="text-danger">*</span></label>
                                         <input type="email" class="form-control" id="email">
@@ -122,10 +136,6 @@
                                                     <input class="form-check-input" type="radio" name="envio" id="envio-normal" checked>
                                                     <label class="form-check-label" for="envio-normal">Normal: $4.990</label>
                                                 </div>
-                                                <div class="form-check text-start">
-                                                    <input class="form-check-input" type="radio" name="envio" id="envio-express">
-                                                    <label class="form-check-label" for="envio-express">Express: $9.990</label>
-                                                </div>
                                             </td>
                                         </tr>
                                         <tr><td colspan="2" class="p-0"><hr class="my-2"></td></tr>
@@ -143,9 +153,6 @@
                                     <div class="form-check mb-2">
                                         <input id="webpay" name="paymentMethod" type="radio" class="form-check-input">
                                         <label class="form-check-label" for="webpay">Webpay</label>
-                                    </div>
-                                    <div class="text-muted small mt-2 ps-4">
-                                        Realiza tu pago directamente en nuestra cuenta bancaria. Por favor, usa el número del pedido como referencia de pago.
                                     </div>
                                 </div>
                                 <div class="form-check mt-4">
