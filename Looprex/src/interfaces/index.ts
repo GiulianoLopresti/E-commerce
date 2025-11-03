@@ -1,0 +1,12 @@
+// src/interfaces/index.ts
+
+export * from './product.interfaces';
+export * from './category.interfaces';
+export * from './user.interfaces';
+export * from './order.interfaces';
+export * from './orderDetail.interfaces';
+export * from './address.interfaces';
+export * from './region.interfaces';
+export * from './comuna.interfaces';
+export * from './status.interfaces';
+export * from './role.interfaces';
