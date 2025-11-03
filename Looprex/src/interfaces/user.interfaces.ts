@@ -1,5 +1,5 @@
 export interface UserProps {
-  idUser: number;
+  userId: number;
   rut: string;
   name: string;
   lastName: string;
@@ -7,8 +7,8 @@ export interface UserProps {
   email: string;
   password: string;     
   profilePhoto?: string; 
-  idRole: number;
-  idStatus: number;
+  roleId: number;
+  statusId: number;
 }
 
 export interface UsersAllProps { // (NUEVO, para el admin)

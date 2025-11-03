@@ -1,7 +1,7 @@
 import type { OrderDetailProps } from '../interfaces/orderDetail.interfaces';
 
 export interface OrderProps {
-  idOrder: number;
+  orderId: number;
   orderNumber: string;   
   purchaseDate: string; 
   subtotal: number;
@@ -9,9 +9,9 @@ export interface OrderProps {
   shipping: number;     
   total: number;
   paymentMethod: string;
-  idAddress: number;
-  idStatus: number;
-  idUser: number;
+  addressId: number;
+  statusId: number;
+  userId: number;
   details: OrderDetailProps[];
 }
 

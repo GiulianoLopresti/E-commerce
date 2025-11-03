@@ -1,13 +1,13 @@
 /** Interface que representa un producto */
 export interface ProductProps {
-  idProduct: number;
+  productId: number;
   name: string;
   stock: number;
   productPhoto: string;
   description: string;
   price: number;        
-  idCategory: number;
-  idStatus: number;
+  categoryId: number;
+  statusId: number;
 }
 
 export interface ProductsAllProps {

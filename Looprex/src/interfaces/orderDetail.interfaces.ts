@@ -1,7 +1,7 @@
 export interface OrderDetailProps {
-  idDetail: number;
-  idOrder: number;
-  idProduct: number;
+  detailId: number;
+  orderId: number;
+  productId: number;
   quantity: number;
   unitPrice: number;
   subtotal: number;

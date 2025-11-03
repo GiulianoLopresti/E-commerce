@@ -2,31 +2,31 @@ import type { StatusProps } from '../interfaces';
 
 export const STATUS: StatusProps[] = [
   {
-    idStatus: 1,
+    statusId: 1,
     name: 'Activo' // Para usuarios
   },
   {
-    idStatus: 2,
+    statusId: 2,
     name: 'Inactivo' // Para usuarios
   },
   {
-    idStatus: 10,
+    statusId: 10,
     name: 'Pendiente de Pago' // Para órdenes
   },
   {
-    idStatus: 11,
+    statusId: 11,
     name: 'En Preparación' // Para órdenes
   },
   {
-    idStatus: 12,
+    statusId: 12,
     name: 'Enviado' // Para órdenes
   },
   {
-    idStatus: 13,
+    statusId  : 13,
     name: 'Entregado' // Para órdenes
   },
   {
-    idStatus: 14,
+    statusId: 14,
     name: 'Cancelado' // Para órdenes
   }
 ];

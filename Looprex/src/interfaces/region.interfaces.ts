@@ -1,5 +1,5 @@
 export interface RegionProps {
-  idRegion: number;
+  regionId: number;
   name: string;
 }
 

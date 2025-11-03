@@ -1,5 +1,5 @@
 export interface StatusProps {
-  idStatus: number;
+  statusId: number;
   name: string;
 }
 

@@ -2,19 +2,19 @@ import type { CategoryProps } from '../interfaces';
 
 export const CATEGORIES: CategoryProps[] = [
   {
-    idCategory: 101,
+    categoryId: 101,
     name: 'Componentes PC'
   },
   {
-    idCategory: 102,
+    categoryId: 102,
     name: 'Periféricos Gamer'
   },
   {
-    idCategory: 103,
+    categoryId: 103,
     name: 'Monitores'
   },
   {
-    idCategory: 104,
+    categoryId: 104,
     name: 'Consolas y Videojuegos'
   }
 ];

@@ -1,10 +1,10 @@
 import type { ComunaProps } from '../interfaces/comuna.interfaces';
 
 export const COMUNAS: ComunaProps[] = [
-  { idComuna: 1, idRegion: 13, name: 'Santiago' },
-  { idComuna: 2, idRegion: 13, name: 'Providencia' },
-  { idComuna: 3, idRegion: 13, name: 'Las Condes' },
-  { idComuna: 4, idRegion: 5, name: 'Valparaíso' },
-  { idComuna: 5, idRegion: 5, name: 'Viña del Mar' },
-  { idComuna: 6, idRegion: 8, name: 'Concepción' }
+  { comunaId: 1, regionId: 13, name: 'Santiago' },
+  { comunaId: 2, regionId: 13, name: 'Providencia' },
+  { comunaId: 3, regionId: 13, name: 'Las Condes' },
+  { comunaId: 4, regionId: 5, name: 'Valparaíso' },
+  { comunaId: 5, regionId: 5, name: 'Viña del Mar' },
+  { comunaId: 6, regionId: 8, name: 'Concepción' }
 ];

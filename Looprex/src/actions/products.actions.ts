@@ -23,7 +23,7 @@ export const getProducts = async (): Promise<ProductsAllProps> => {
 export const getProductById = async (id: number): Promise<ProductByIdProps> => {
   return new Promise(resolve => {
     setTimeout(() => {
-      const product = PRODUCTS.find(p => p.idProduct === id);
+      const product = PRODUCTS.find(p => p.productId === id);
       if (product) {
         resolve({ ok: true, statusCode: 200, product: product });
       } else {
@@ -56,7 +56,7 @@ export const createProduct = async (data: CreateProductData): Promise<ProductRes
     setTimeout(() => {
       const newProduct: ProductProps = {
         ...data,
-        idProduct: Math.floor(Math.random() * 1000) + 100 // ID aleatorio
+        productId: Math.floor(Math.random() * 1000) + 100 // ID aleatorio
       };
       // Simulación: No modificamos el mock, solo devolvemos la respuesta.
       resolve({ ok: true, statusCode: 201, product: newProduct });
@@ -69,7 +69,7 @@ export const createProduct = async (data: CreateProductData): Promise<ProductRes
 export const updateProduct = async (id: number, data: Partial<ProductProps>): Promise<ProductResponseProps> => {
   return new Promise(resolve => {
     setTimeout(() => {
-      const product = PRODUCTS.find(p => p.idProduct === id);
+      const product = PRODUCTS.find(p => p.productId === id);
       if (product) {
         const updatedProduct = { ...product, ...data };
         resolve({ ok: true, statusCode: 200, product: updatedProduct });

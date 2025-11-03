@@ -4,11 +4,11 @@ import type { RoleProps } from '../interfaces';
 // (Asumimos idEstado 1 = Activo)
 export const ROLES: RoleProps[] = [
   {
-    idRole: 1,
+    roleId: 1,
     name: 'Admin',
   },
   {
-    idRole: 2,
+    roleId: 2,
     name: 'Cliente',
   },
 ];

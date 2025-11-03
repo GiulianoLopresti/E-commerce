@@ -1,7 +1,7 @@
 export interface ComunaProps {
-  idComuna: number;
+  comunaId: number;
   name: string;
-  idRegion: number;
+  regionId: number;
 }
 
 /** Para la acción getCommunesByRegion() */

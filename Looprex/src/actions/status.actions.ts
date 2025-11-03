@@ -26,7 +26,7 @@ export const createStatus = async (data: CreateStatusData): Promise<StatusRespon
     setTimeout(() => {
       const newStatus: StatusProps = {
         ...data,
-        idStatus: Math.floor(Math.random() * 100) + 20
+        statusId: Math.floor(Math.random() * 100) + 20
       };
       // Simulación: No modificamos el mock, solo devolvemos la respuesta.
       resolve({ ok: true, statusCode: 201, status: newStatus });
@@ -39,7 +39,7 @@ export const createStatus = async (data: CreateStatusData): Promise<StatusRespon
 export const updateStatus = async (id: number, data: Partial<StatusProps>): Promise<StatusResponseProps> => {
   console.log(`Simulando API (Admin): Actualizando estado ${id}`);
   return new Promise(resolve => {
-    const status = STATUS.find(s => s.idStatus === id);
+    const status = STATUS.find(s => s.statusId === id);
     if (status) {
       const updatedStatus = { ...status, ...data };
       resolve({ ok: true, statusCode: 200, status: updatedStatus });

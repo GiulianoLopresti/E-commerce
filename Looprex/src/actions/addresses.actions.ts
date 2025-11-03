@@ -8,10 +8,10 @@ import type {
 
 // (Cliente)
 /** (READ) Simula la obtención de direcciones PARA UN USUARIO */
-export const getAddressesByUserId = async (idUser: number): Promise<AddressesByUserProps> => {
+export const getAddressesByUserId = async (userId: number): Promise<AddressesByUserProps> => {
   return new Promise(resolve => {
     setTimeout(() => {
-      const results = ADDRESSES.filter(a => a.idUser === idUser);
+      const results = ADDRESSES.filter(a => a.userId === userId);
       resolve({ ok: true, statusCode: 200, addresses: results });
     }, 200);
   });
@@ -24,7 +24,7 @@ export const createAddress = async (data: CreateAddressData): Promise<AddressRes
   return new Promise(resolve => {
     const newAddress: AddressProps = {
       ...data,
-      idAddress: Math.floor(Math.random() * 100) + 50
+      addressId: Math.floor(Math.random() * 100) + 50
     };
     resolve({ ok: true, statusCode: 201, address: newAddress });
   });
@@ -32,9 +32,9 @@ export const createAddress = async (data: CreateAddressData): Promise<AddressRes
 
 // (Cliente)
 /** (UPDATE) Simula un cliente actualizando su dirección */
-export const updateAddress = async (idAddress: number, data: Partial<AddressProps>): Promise<AddressResponseProps> => {
+export const updateAddress = async (addressId: number, data: Partial<AddressProps>): Promise<AddressResponseProps> => {
   return new Promise(resolve => {
-    const address = ADDRESSES.find(a => a.idAddress === idAddress);
+    const address = ADDRESSES.find(a => a.addressId === addressId);
     if(address) {
       const updatedAddress = { ...address, ...data };
       resolve({ ok: true, statusCode: 200, address: updatedAddress });

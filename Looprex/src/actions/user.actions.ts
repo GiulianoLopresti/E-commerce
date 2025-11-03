@@ -35,7 +35,7 @@ export const registerUser = async (data: RegisterData): Promise<UserRegisterProp
       if (emailExists) {
         return reject(new Error('El correo ya está registrado'));
       }
-      const newUser: UserProps = { ...data, idUser: 99, idRole: 2, idStatus: 1 };
+      const newUser: UserProps = { ...data, userId: 99, roleId: 2, statusId: 1 };
       resolve({ ok: true, statusCode: 201, user: newUser });
     }, 1000);
   });
@@ -43,9 +43,9 @@ export const registerUser = async (data: RegisterData): Promise<UserRegisterProp
 
 /** (UPDATE) Simula al cliente actualizando su propio perfil */
 type UpdateProfileData = Partial<Omit<UserProps, 'idUser' | 'idRole' | 'idStatus' | 'password'>>;
-export const updateUserProfile = async (idUser: number, data: UpdateProfileData): Promise<UserUpdateProps> => {
+export const updateUserProfile = async (userId: number, data: UpdateProfileData): Promise<UserUpdateProps> => {
   return new Promise(resolve => {
-     const user = USERS.find(u => u.idUser === idUser);
+     const user = USERS.find(u => u.userId === userId);
      if (user) {
        const updatedUser = { ...user, ...data };
        resolve({ ok: true, statusCode: 200, user: updatedUser });
@@ -72,15 +72,15 @@ export const getAllUsers = async (): Promise<UsersAllProps> => {
 };
 
 /** (UPDATE) Simula al admin actualizando cualquier usuario (ej. cambiar rol) */
-export const updateUserByAdmin = async (idUser: number, data: Partial<UserProps>): Promise<UserUpdateProps> => {
+export const updateUserByAdmin = async (userId: number, data: Partial<UserProps>): Promise<UserUpdateProps> => {
   return new Promise((resolve, reject) => {
-     const user = USERS.find(u => u.idUser === idUser);
+     const user = USERS.find(u => u.userId === userId);
      if (!user) {
        resolve({ ok: false, statusCode: 404, user: {} as UserProps });
        return;
      }
-     // Agregamos validación para el idRole
-     if (data.idRole && ![1, 2].includes(data.idRole)) {
+     // Agregamos validación para el roleId
+     if (data.roleId && ![1, 2].includes(data.roleId)) {
        reject(new Error('Invalid role ID'));
        return;
      }

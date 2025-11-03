@@ -1,5 +1,5 @@
 export interface RoleProps {
-  idRole: number;
+  roleId: number;
   name: string;
 }
 

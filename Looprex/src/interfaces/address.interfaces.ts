@@ -1,9 +1,9 @@
 export interface AddressProps {
-  idAddress: number;
+  addressId: number;
   street: string;
   number: string;
-  idComuna: number;
-  idUser: number;
+  comunaId: number;
+  userId: number;
 }
 
 /** Para la acción getAddressesByUserId() */

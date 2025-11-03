@@ -24,7 +24,7 @@ export const createCategory = async (data: CreateCategoryData): Promise<Category
     setTimeout(() => {
       const newCategory: CategoryProps = {
         ...data,
-        idCategory: Math.floor(Math.random() * 100) + 10
+        categoryId: Math.floor(Math.random() * 100) + 10
       };
       resolve({ ok: true, statusCode: 201, category: newCategory });
     }, 500);
@@ -33,9 +33,9 @@ export const createCategory = async (data: CreateCategoryData): Promise<Category
 
 // (Admin)
 /** (UPDATE) Simula la actualización de una categoría */
-export const updateCategory = async (id: number, data: Partial<CategoryProps>): Promise<CategoryResponseProps> => {
+export const updateCategory = async (categoryId: number, data: Partial<CategoryProps>): Promise<CategoryResponseProps> => {
   return new Promise(resolve => {
-    const category = CATEGORIES.find(c => c.idCategory === id);
+    const category = CATEGORIES.find(c => c.categoryId === categoryId);
     if (category) {
       const updatedCategory = { ...category, ...data };
       resolve({ ok: true, statusCode: 200, category: updatedCategory });
