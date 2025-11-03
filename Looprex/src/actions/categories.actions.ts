@@ -1,47 +1,56 @@
-import { storage, STORAGE_KEYS } from '../actions/persistence';
-import type { Category } from '../interfaces/category.interfaces';
-import { INITIAL_CATEGORIES } from '../mocks/categories';
+import { CATEGORIES } from '../mocks';
+import type { 
+  CategoryProps,
+  CategoriesAllProps,
+  CategoryResponseProps,
+  CategoryDeleteProps
+} from '../interfaces';
 
-let CATEGORIES: Category[] = storage.get<Category[]>(STORAGE_KEYS.CATEGORIES) || INITIAL_CATEGORIES;
-const saveCategories = () => storage.set(STORAGE_KEYS.CATEGORIES, CATEGORIES);
-
-// READ
-export const getCategories = (): Promise<Category[]> => {
-  return Promise.resolve([...CATEGORIES]);
+// (Admin)
+/** (READ) Simula la obtención de TODAS las categorías */
+export const getCategories = async (): Promise<CategoriesAllProps> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ ok: true, statusCode: 200, categories: CATEGORIES });
+    }, 100);
+  });
 };
 
-export const getCategoryById = (id: number): Promise<Category | null> => {
-  const category = CATEGORIES.find(c => c.id === id);
-  return Promise.resolve(category || null);
+// (Admin)
+/** (CREATE) Simula la creación de una nueva categoría */
+type CreateCategoryData = Omit<CategoryProps, 'idCategory'>;
+export const createCategory = async (data: CreateCategoryData): Promise<CategoryResponseProps> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const newCategory: CategoryProps = {
+        ...data,
+        idCategory: Math.floor(Math.random() * 100) + 10
+      };
+      resolve({ ok: true, statusCode: 201, category: newCategory });
+    }, 500);
+  });
 };
 
-// CREATE
-export const createCategory = (data: Omit<Category, 'id'>): Promise<Category> => {
-  const newCategory: Category = {
-    ...data,
-    id: Math.max(...CATEGORIES.map(c => c.id), 0) + 1
-  };
-  CATEGORIES.push(newCategory);
-  saveCategories();
-  return Promise.resolve(newCategory);
+// (Admin)
+/** (UPDATE) Simula la actualización de una categoría */
+export const updateCategory = async (id: number, data: Partial<CategoryProps>): Promise<CategoryResponseProps> => {
+  return new Promise(resolve => {
+    const category = CATEGORIES.find(c => c.idCategory === id);
+    if (category) {
+      const updatedCategory = { ...category, ...data };
+      resolve({ ok: true, statusCode: 200, category: updatedCategory });
+    } else {
+      resolve({ ok: false, statusCode: 404, category: {} as CategoryProps });
+    }
+  });
 };
 
-// UPDATE
-export const updateCategory = (id: number, data: Partial<Category>): Promise<Category | null> => {
-  const index = CATEGORIES.findIndex(c => c.id === id);
-  if (index === -1) return Promise.resolve(null);
-
-  CATEGORIES[index] = { ...CATEGORIES[index], ...data };
-  saveCategories();
-  return Promise.resolve(CATEGORIES[index]);
-};
-
-// DELETE
-export const deleteCategory = (id: number): Promise<boolean> => {
-  const index = CATEGORIES.findIndex(c => c.id === id);
-  if (index === -1) return Promise.resolve(false);
-
-  CATEGORIES.splice(index, 1);
-  saveCategories();
-  return Promise.resolve(true);
+// (Admin)
+/** (DELETE) Simula la eliminación de una categoría */
+export const deleteCategory = async (): Promise<CategoryDeleteProps> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ ok: true, statusCode: 200, message: 'Categoría eliminada' });
+    }, 500);
+  });
 };

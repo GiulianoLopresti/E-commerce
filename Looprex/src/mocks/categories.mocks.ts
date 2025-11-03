@@ -1,7 +1,20 @@
-import type { Category } from '../interfaces/category.interfaces';
+import type { CategoryProps } from '../interfaces';
 
-export const INITIAL_CATEGORIES: Category[] = [
-  { id: 1, name: 'Tarjetas Gráficas' },
-  { id: 2, name: 'Ram' },
-  { id: 3, name: 'Procesadores' }
+export const CATEGORIES: CategoryProps[] = [
+  {
+    idCategory: 101,
+    name: 'Componentes PC'
+  },
+  {
+    idCategory: 102,
+    name: 'Periféricos Gamer'
+  },
+  {
+    idCategory: 103,
+    name: 'Monitores'
+  },
+  {
+    idCategory: 104,
+    name: 'Consolas y Videojuegos'
+  }
 ];

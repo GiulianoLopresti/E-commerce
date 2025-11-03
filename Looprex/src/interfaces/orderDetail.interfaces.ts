@@ -1,8 +1,8 @@
-export interface OrderDetail {
-  id: number;
-  orderId: number;
-  productId: number;
+export interface OrderDetailProps {
+  idDetail: number;
+  idOrder: number;
+  idProduct: number;
   quantity: number;
   unitPrice: number;
-  subTotal: number;
+  subtotal: number;
 }

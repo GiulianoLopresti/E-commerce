@@ -1,11 +1,13 @@
-import type { Comuna } from '../interfaces/comuna.interfaces'
-import { COMUNAS } from '../mocks/comunas.data'
+import { COMUNAS } from '../mocks';
+import type { CommunesByRegionProps } from '../interfaces';
 
-export const getComunas = (): Promise<Comuna[]> => {
-  return Promise.resolve([...COMUNAS]);
-};
-
-export const getComunasByRegion = (regionId: number): Promise<Comuna[]> => {
-  const filtered = COMUNAS.filter(c => c.regionId === regionId);
-  return Promise.resolve([...filtered]);
+// (Cliente & Admin)
+/** (READ) Simula la obtención de comunas filtradas por idRegion */
+export const getCommunesByRegion = async (idRegion: number): Promise<CommunesByRegionProps> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const results = COMUNAS.filter(c => c.idRegion === idRegion);
+      resolve({ ok: true, statusCode: 200, communes: results });
+    }, 150);
+  });
 };

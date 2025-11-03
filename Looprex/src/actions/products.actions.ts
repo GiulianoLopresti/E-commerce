@@ -1,56 +1,91 @@
-import { storage, STORAGE_KEYS } from './persistence';
-import { INITIAL_PRODUCTS } from '../mocks/products.data';
-import type { Product } from '../interfaces/product.interfaces';
+import { PRODUCTS } from '../mocks';
+import type { 
+  ProductProps,
+  ProductsAllProps, 
+  ProductByIdProps,
+  ProductsByNameProps,
+  ProductResponseProps,
+  ProductDeleteProps
+} from '../interfaces';
 
-let PRODUCTS: Product[] = storage.get<Product[]>(STORAGE_KEYS.PRODUCTS) || INITIAL_PRODUCTS;
-
-const saveProducts = () => {
-  storage.set(STORAGE_KEYS.PRODUCTS, PRODUCTS);
+// (Cliente & Admin)
+/** (READ) Simula la obtención de TODOS los productos */
+export const getProducts = async (): Promise<ProductsAllProps> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ ok: true, statusCode: 200, products: PRODUCTS });
+    }, 300);
+  });
 };
 
-// READ
-export const getProducts = (): Promise<Product[]> => {
-  return Promise.resolve([...PRODUCTS]);
+// (Cliente & Admin)
+/** (READ) Simula la obtención de un producto por su ID */
+export const getProductById = async (id: number): Promise<ProductByIdProps> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const product = PRODUCTS.find(p => p.idProduct === id);
+      if (product) {
+        resolve({ ok: true, statusCode: 200, product: product });
+      } else {
+        resolve({ ok: false, statusCode: 404 });
+      }
+    }, 200);
+  });
 };
 
-export const getProductById = (id: number): Promise<Product | null> => {
-  const product = PRODUCTS.find(p => p.id === id);
-  return Promise.resolve(product || null);
+// (Cliente & Admin)
+/** (READ) Simula la búsqueda de productos por nombre */
+export const getProductsByName = async (query: string): Promise<ProductsByNameProps> => {
+  const lowerQuery = query.toLowerCase().trim();
+  if (lowerQuery === '') {
+    return { ok: true, statusCode: 200, products: [] };
+  }
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const results = PRODUCTS.filter(p => p.name.toLowerCase().includes(lowerQuery));
+      resolve({ ok: true, statusCode: 200, products: results });
+    }, 400);
+  });
 };
 
-export const getProductsByCategory = (categoryId: number): Promise<Product[]> => {
-  const filtered = PRODUCTS.filter(p => p.categoryId === categoryId);
-  return Promise.resolve([...filtered]);
+// (Admin)
+/** (CREATE) Simula la creación de un nuevo producto */
+type CreateProductData = Omit<ProductProps, 'idProduct'>;
+export const createProduct = async (data: CreateProductData): Promise<ProductResponseProps> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const newProduct: ProductProps = {
+        ...data,
+        idProduct: Math.floor(Math.random() * 1000) + 100 // ID aleatorio
+      };
+      // Simulación: No modificamos el mock, solo devolvemos la respuesta.
+      resolve({ ok: true, statusCode: 201, product: newProduct });
+    }, 500);
+  });
 };
 
-// CREATE
-export const createProduct = (data: Omit<Product, 'id' | 'createdAt'>): Promise<Product> => {
-  const newProduct: Product = {
-    ...data,
-    id: Math.max(...PRODUCTS.map(p => p.id), 0) + 1,
-    createdAt: new Date().toISOString()
-  };
-  PRODUCTS.push(newProduct);
-  saveProducts();
-  return Promise.resolve(newProduct);
+// (Admin)
+/** (UPDATE) Simula la actualización de un producto */
+export const updateProduct = async (id: number, data: Partial<ProductProps>): Promise<ProductResponseProps> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      const product = PRODUCTS.find(p => p.idProduct === id);
+      if (product) {
+        const updatedProduct = { ...product, ...data };
+        resolve({ ok: true, statusCode: 200, product: updatedProduct });
+      } else {
+        resolve({ ok: false, statusCode: 404, product: {} as ProductProps }); 
+      }
+    }, 500);
+  });
 };
 
-// UPDATE
-export const updateProduct = (id: number, data: Partial<Product>): Promise<Product | null> => {
-  const index = PRODUCTS.findIndex(p => p.id === id);
-  if (index === -1) return Promise.resolve(null);
-  
-  PRODUCTS[index] = { ...PRODUCTS[index], ...data };
-  saveProducts();
-  return Promise.resolve(PRODUCTS[index]);
-};
-
-// DELETE
-export const deleteProduct = (id: number): Promise<boolean> => {
-  const index = PRODUCTS.findIndex(p => p.id === id);
-  if (index === -1) return Promise.resolve(false);
-  
-  PRODUCTS.splice(index, 1);
-  saveProducts();
-  return Promise.resolve(true);
+// (Admin)
+/** (DELETE) Simula la eliminación de un producto */
+export const deleteProduct = async (): Promise<ProductDeleteProps> => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve({ ok: true, statusCode: 200, message: 'Producto eliminado exitosamente' });
+    }, 500);
+  });
 };
