@@ -27,7 +27,7 @@ export const loginUser = async ({ email, password }: LoginCredentials): Promise<
 };
 
 /** (CREATE) Simula el registro de un nuevo cliente */
-type RegisterData = Omit<UserProps, 'idUser' | 'idRole' | 'idStatus'>;
+type RegisterData = Omit<UserProps, 'userId' | 'roleId' | 'statusId'>;
 export const registerUser = async (data: RegisterData): Promise<UserRegisterProps> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -42,7 +42,7 @@ export const registerUser = async (data: RegisterData): Promise<UserRegisterProp
 };
 
 /** (UPDATE) Simula al cliente actualizando su propio perfil */
-type UpdateProfileData = Partial<Omit<UserProps, 'idUser' | 'idRole' | 'idStatus' | 'password'>>;
+type UpdateProfileData = Partial<Omit<UserProps, 'userId' | 'roleId' | 'statusId' | 'password'>>;
 export const updateUserProfile = async (userId: number, data: UpdateProfileData): Promise<UserUpdateProps> => {
   return new Promise(resolve => {
      const user = USERS.find(u => u.userId === userId);

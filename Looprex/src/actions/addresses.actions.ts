@@ -19,7 +19,7 @@ export const getAddressesByUserId = async (userId: number): Promise<AddressesByU
 
 // (Cliente)
 /** (CREATE) Simula un cliente añadiendo una dirección */
-type CreateAddressData = Omit<AddressProps, 'idAddress'>;
+type CreateAddressData = Omit<AddressProps, 'addressId'>;
 export const createAddress = async (data: CreateAddressData): Promise<AddressResponseProps> => {
   return new Promise(resolve => {
     const newAddress: AddressProps = {

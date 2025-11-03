@@ -19,7 +19,7 @@ export const getStatus = async (): Promise<StatusAllProps> => {
 
 // (Admin)
 /** (CREATE) Simula la creación de un nuevo estado */
-type CreateStatusData = Omit<StatusProps, 'idStatus'>;
+type CreateStatusData = Omit<StatusProps, 'statusId'>;
 export const createStatus = async (data: CreateStatusData): Promise<StatusResponseProps> => {
   console.log(`Simulando API (Admin): Creando estado ${data.name}`);
   return new Promise(resolve => {
@@ -28,7 +28,6 @@ export const createStatus = async (data: CreateStatusData): Promise<StatusRespon
         ...data,
         statusId: Math.floor(Math.random() * 100) + 20
       };
-      // Simulación: No modificamos el mock, solo devolvemos la respuesta.
       resolve({ ok: true, statusCode: 201, status: newStatus });
     }, 500);
   });

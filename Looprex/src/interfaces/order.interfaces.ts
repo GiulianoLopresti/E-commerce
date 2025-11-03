@@ -25,6 +25,13 @@ export interface OrdersByUserProps {
 /** Para la acción createOrder() */
 export interface OrderCreateProps {
   ok: boolean;
-  statusCode: number; // Debería ser 201 (Created)
+  statusCode: number; // 201 (Created)
   order: OrderProps; // Devuelve la orden recién creada
+}
+
+/** Para la acción updateOrderStatus() */
+export interface OrderUpdateProps {
+  ok: boolean;
+  statusCode: number; // 200 (OK)
+  order: OrderProps; // Devuelve la orden actualizada
 }

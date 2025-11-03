@@ -18,7 +18,7 @@ export const getCategories = async (): Promise<CategoriesAllProps> => {
 
 // (Admin)
 /** (CREATE) Simula la creación de una nueva categoría */
-type CreateCategoryData = Omit<CategoryProps, 'idCategory'>;
+type CreateCategoryData = Omit<CategoryProps, 'categoryId'>;
 export const createCategory = async (data: CreateCategoryData): Promise<CategoryResponseProps> => {
   return new Promise(resolve => {
     setTimeout(() => {

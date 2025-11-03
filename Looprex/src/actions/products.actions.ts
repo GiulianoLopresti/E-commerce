@@ -50,7 +50,7 @@ export const getProductsByName = async (query: string): Promise<ProductsByNamePr
 
 // (Admin)
 /** (CREATE) Simula la creación de un nuevo producto */
-type CreateProductData = Omit<ProductProps, 'idProduct'>;
+type CreateProductData = Omit<ProductProps, 'productId'>;
 export const createProduct = async (data: CreateProductData): Promise<ProductResponseProps> => {
   return new Promise(resolve => {
     setTimeout(() => {

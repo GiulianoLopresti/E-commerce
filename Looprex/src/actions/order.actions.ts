@@ -1,8 +1,9 @@
 import { ORDERS, PRODUCTS } from '../mocks'; // <-- Solo importamos ORDERS
-import type { 
-  OrderProps, 
-  OrdersByUserProps, 
+import type {
+  OrderProps,
+  OrdersByUserProps,
   OrderCreateProps,
+  OrderUpdateProps,
   CartItem,
   UserProps,
   OrderDetailProps
@@ -98,7 +99,7 @@ export const getAllOrders = async (): Promise<OrdersByUserProps> => {
 
 // (Admin)
 /** (UPDATE) Simula la actualización del estado de una orden */
-export const updateOrderStatus = async (orderId: number, statusId: number): Promise<OrderCreateProps> => {
+export const updateOrderStatus = async (orderId: number, statusId: number): Promise<OrderUpdateProps> => {
    return new Promise(resolve => {
      const order = ORDERS.find(o => o.orderId === orderId);
      if (order) {
