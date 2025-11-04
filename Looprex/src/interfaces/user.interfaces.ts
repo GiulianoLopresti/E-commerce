@@ -11,7 +11,7 @@ export interface UserProps {
   statusId: number;
 }
 
-export interface UsersAllProps { // (NUEVO, para el admin)
+export interface UsersAllProps {
   ok: boolean;
   statusCode: number;
   users: UserProps[];

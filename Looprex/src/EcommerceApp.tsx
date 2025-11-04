@@ -20,10 +20,6 @@ export const ECommerceApp = () => {
   // Usamos tu interfaz 'Cart' de cart.interfaces.ts
   const [cart, setCart] = useState<Cart>({ items: [] });
 
-  // === FUNCIONES (CALLBACKS) PARA MODIFICAR EL ESTADO ===
-  // Estas funciones se pasarán como props a las páginas que las necesiten.
-  // Es el mismo patrón que 'handleSearch' en RobotsApp.tsx.
-
   /** (Auth) Maneja el inicio de sesión */
   const handleLogin = useCallback(async (credentials: LoginCredentials) => {
     try {
@@ -34,12 +30,11 @@ export const ECommerceApp = () => {
       console.error('Error de login:', error);
       throw error; // Lanzamos el error para que la página de Login lo muestre
     }
-  }, []); // El array vacío significa que esta función nunca cambia
+  }, []);
 
   /** (Auth) Maneja el cierre de sesión */
   const handleLogout = useCallback(() => {
     setCurrentUser(null);
-    // Limpiar localStorage si se usó
   }, []);
 
   /** (Cart) Añade un producto al carrito */
@@ -63,7 +58,7 @@ export const ECommerceApp = () => {
       // Devolvemos el nuevo estado del carrito
       return { items: newItems };
     });
-  }, []); // El array vacío significa que esta función nunca cambia
+  }, []);
 
   /** (Cart) Elimina un producto del carrito */
   const handleRemoveFromCart = useCallback((productId: number) => {
