@@ -1,7 +1,6 @@
 import type { OrderProps, OrderDetailProps } from '../interfaces';
 
 // --- DETALLES DE ÓRDENES ---
-// (Conectados a idProduct de products.mocks.ts)
 const DETAILS_ORDER_901: OrderDetailProps[] = [
   {
     detailId: 1001,
@@ -38,7 +37,6 @@ export const ORDER_DETAILS: OrderDetailProps[] = [
 ];
 
 // --- ÓRDENES (COMPRAS) ---
-// (Conectadas a idUser, idAddress, idStatus y los detalles de arriba)
 export const ORDERS: OrderProps[] = [
   {
     orderId: 901,

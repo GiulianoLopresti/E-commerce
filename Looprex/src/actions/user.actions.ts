@@ -12,7 +12,7 @@ import type {
 // --- Acciones de Cliente ---
 
 /** (READ) Simula un Login */
-type LoginCredentials = Pick<UserProps, 'email' | 'password'>;
+export type LoginCredentials = Pick<UserProps, 'email' | 'password'>;
 export const loginUser = async ({ email, password }: LoginCredentials): Promise<UserLoginProps> => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {

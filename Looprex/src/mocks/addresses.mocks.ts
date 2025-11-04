@@ -1,6 +1,5 @@
 import type { AddressProps } from '../interfaces';
 
-// Usamos idUser (2=Juan, 3=María) y idComuna (101=Santiago, 201=Viña)
 export const ADDRESSES: AddressProps[] = [
   {
     addressId: 501,

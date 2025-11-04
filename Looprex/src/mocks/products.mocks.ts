@@ -1,7 +1,5 @@
 import type { ProductProps } from '../interfaces';
 
-// Usamos los idCategory de categories.mocks.ts (101-104)
-// Asumimos idStatus: 1 = Activo/En Stock
 export const PRODUCTS: ProductProps[] = [
   {
     productId: 1,

@@ -10,82 +10,55 @@ import type {
 
 // (Cliente & Admin)
 /** (READ) Simula la obtención de TODOS los productos */
-export const getProducts = async (): Promise<ProductsAllProps> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ ok: true, statusCode: 200, products: PRODUCTS });
-    }, 300);
-  });
+export const getProducts = (): ProductsAllProps => {
+  return { ok: true, statusCode: 200, products: PRODUCTS };
 };
 
 // (Cliente & Admin)
-/** (READ) Simula la obtención de un producto por su ID */
-export const getProductById = async (id: number): Promise<ProductByIdProps> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const product = PRODUCTS.find(p => p.productId === id);
-      if (product) {
-        resolve({ ok: true, statusCode: 200, product: product });
-      } else {
-        resolve({ ok: false, statusCode: 404 });
-      }
-    }, 200);
-  });
+/** (READ) Obtiene un producto por su ID */
+export const getProductById = (id: number): ProductByIdProps => {
+  const product = PRODUCTS.find(p => p.productId === id);
+  if (product) {
+    return { ok: true, statusCode: 200, product };
+  }
+  return { ok: false, statusCode: 404 };
 };
 
 // (Cliente & Admin)
-/** (READ) Simula la búsqueda de productos por nombre */
-export const getProductsByName = async (query: string): Promise<ProductsByNameProps> => {
+/** (READ) Busca productos por nombre */
+export const getProductsByName = (query: string): ProductsByNameProps => {
   const lowerQuery = query.toLowerCase().trim();
   if (lowerQuery === '') {
     return { ok: true, statusCode: 200, products: [] };
   }
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const results = PRODUCTS.filter(p => p.name.toLowerCase().includes(lowerQuery));
-      resolve({ ok: true, statusCode: 200, products: results });
-    }, 400);
-  });
+  const results = PRODUCTS.filter(p => p.name.toLowerCase().includes(lowerQuery));
+  return { ok: true, statusCode: 200, products: results };
 };
 
 // (Admin)
-/** (CREATE) Simula la creación de un nuevo producto */
+/** (CREATE) Crea un nuevo producto */
 type CreateProductData = Omit<ProductProps, 'productId'>;
-export const createProduct = async (data: CreateProductData): Promise<ProductResponseProps> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const newProduct: ProductProps = {
-        ...data,
-        productId: Math.floor(Math.random() * 1000) + 100 // ID aleatorio
-      };
-      // Simulación: No modificamos el mock, solo devolvemos la respuesta.
-      resolve({ ok: true, statusCode: 201, product: newProduct });
-    }, 500);
-  });
+export const createProduct = (data: CreateProductData): ProductResponseProps => {
+  const newProduct: ProductProps = {
+    ...data,
+    productId: Math.floor(Math.random() * 1000) + 100 // ID aleatorio
+  };
+  return { ok: true, statusCode: 201, product: newProduct };
 };
 
 // (Admin)
-/** (UPDATE) Simula la actualización de un producto */
-export const updateProduct = async (id: number, data: Partial<ProductProps>): Promise<ProductResponseProps> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const product = PRODUCTS.find(p => p.productId === id);
-      if (product) {
-        const updatedProduct = { ...product, ...data };
-        resolve({ ok: true, statusCode: 200, product: updatedProduct });
-      } else {
-        resolve({ ok: false, statusCode: 404, product: {} as ProductProps }); 
-      }
-    }, 500);
-  });
+/** (UPDATE) Actualiza un producto */
+export const updateProduct = (id: number, data: Partial<ProductProps>): ProductResponseProps => {
+  const product = PRODUCTS.find(p => p.productId === id);
+  if (product) {
+    const updatedProduct = { ...product, ...data };
+    return { ok: true, statusCode: 200, product: updatedProduct };
+  }
+  return { ok: false, statusCode: 404, product: {} as ProductProps };
 };
 
 // (Admin)
-/** (DELETE) Simula la eliminación de un producto */
-export const deleteProduct = async (): Promise<ProductDeleteProps> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ ok: true, statusCode: 200, message: 'Producto eliminado exitosamente' });
-    }, 500);
-  });
+/** (DELETE) Elimina un producto */
+export const deleteProduct = (): ProductDeleteProps => {
+  return { ok: true, statusCode: 200, message: 'Producto eliminado exitosamente' };
 };

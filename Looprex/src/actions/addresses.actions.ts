@@ -8,48 +8,35 @@ import type {
 
 // (Cliente)
 /** (READ) Simula la obtención de direcciones PARA UN USUARIO */
-export const getAddressesByUserId = async (userId: number): Promise<AddressesByUserProps> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const results = ADDRESSES.filter(a => a.userId === userId);
-      resolve({ ok: true, statusCode: 200, addresses: results });
-    }, 200);
-  });
+export const getAddressesByUserId = (userId: number): AddressesByUserProps => {
+  const addresses = ADDRESSES.filter(a => a.userId === userId);
+  return { ok: true, statusCode: 200, addresses };
 };
 
 // (Cliente)
 /** (CREATE) Simula un cliente añadiendo una dirección */
 type CreateAddressData = Omit<AddressProps, 'addressId'>;
-export const createAddress = async (data: CreateAddressData): Promise<AddressResponseProps> => {
-  return new Promise(resolve => {
-    const newAddress: AddressProps = {
-      ...data,
-      addressId: Math.floor(Math.random() * 100) + 50
-    };
-    resolve({ ok: true, statusCode: 201, address: newAddress });
-  });
+export const createAddress = (data: CreateAddressData): AddressResponseProps => {
+  const newAddress: AddressProps = {
+    ...data,
+    addressId: Math.floor(Math.random() * 100) + 50
+  };
+  return { ok: true, statusCode: 201, address: newAddress };
 };
 
 // (Cliente)
 /** (UPDATE) Simula un cliente actualizando su dirección */
-export const updateAddress = async (addressId: number, data: Partial<AddressProps>): Promise<AddressResponseProps> => {
-  return new Promise(resolve => {
-    const address = ADDRESSES.find(a => a.addressId === addressId);
-    if(address) {
-      const updatedAddress = { ...address, ...data };
-      resolve({ ok: true, statusCode: 200, address: updatedAddress });
-    } else {
-      resolve({ ok: false, statusCode: 404, address: {} as AddressProps });
-    }
-  });
+export const updateAddress = (addressId: number, data: Partial<AddressProps>): AddressResponseProps => {
+  const address = ADDRESSES.find(a => a.addressId === addressId);
+  if (address) {
+    const updatedAddress = { ...address, ...data };
+    return { ok: true, statusCode: 200, address: updatedAddress };
+  }
+  return { ok: false, statusCode: 404, address: {} as AddressProps };
 };
 
 // (Cliente)
 /** (DELETE) Simula un cliente eliminando una dirección */
-export const deleteAddress = async (): Promise<AddressDeleteProps> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve({ ok: true, statusCode: 200, message: 'Dirección eliminada' });
-    }, 40);
-  });
+export const deleteAddress = (): AddressDeleteProps => {
+  return { ok: true, statusCode: 200, message: 'Dirección eliminada' };
 };

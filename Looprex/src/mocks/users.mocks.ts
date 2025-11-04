@@ -1,7 +1,5 @@
 import type { UserProps } from '../interfaces';
 
-// Usamos los idRole de roles.mocks.ts (1 = Admin, 2 = Cliente)
-// Asumimos idStatus: 1 = Activo
 export const USERS: UserProps[] = [
   {
     userId: 1,
@@ -24,7 +22,7 @@ export const USERS: UserProps[] = [
     email: 'juan.perez@cliente.cl',
     password: 'cliente123',
     roleId: 2, // Cliente
-    statusId: 1,
+    statusId: 1, // Activo
     profilePhoto: ''
   },
   {
