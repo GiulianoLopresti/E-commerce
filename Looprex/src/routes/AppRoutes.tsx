@@ -1,7 +1,7 @@
 // src/routes/AppRoutes.tsx
 import { useRoutes } from 'react-router-dom';
 import type { UserProps, Cart } from '../interfaces';
-import type { LoginCredentials } from '../actions';
+import type { LoginCredentials } from '../actions/user.actions';
 
 // --- Importaciones de Páginas ---
 // (Crearemos estas páginas en el siguiente paso, por ahora las simulamos)

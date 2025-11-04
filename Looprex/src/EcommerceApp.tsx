@@ -6,7 +6,12 @@ import type { UserProps, Cart, CartItem } from './interfaces';
 import { loginUser } from './actions';
 import type { LoginCredentials } from './actions/user.actions';
 
-
+/**
+ * Este es el componente "Cerebro".
+ * Es el equivalente a 'RobotsApp.tsx' de breadsk.
+ * Aquí "levantamos el estado" (con useState) del carrito y del usuario
+ * para poder pasarlo a todas las demás páginas.
+ */
 export const ECommerceApp = () => {
   // (1) ESTADO GLOBAL: El usuario que ha iniciado sesión
   const [currentUser, setCurrentUser] = useState<UserProps | null>(null);
@@ -22,7 +27,7 @@ export const ECommerceApp = () => {
   /** (Auth) Maneja el inicio de sesión */
   const handleLogin = useCallback(async (credentials: LoginCredentials) => {
     try {
-      const { user } = await loginUser(credentials);
+      const { user } = loginUser(credentials);
       setCurrentUser(user);
       // Podríamos guardar en localStorage aquí si quisiéramos persistencia
     } catch (error) {
@@ -104,6 +109,7 @@ export const ECommerceApp = () => {
       
       <main>
         <AppRoutes 
+          // Pasamos todo como props:
           currentUser={currentUser}
           cart={cart}
           onLogin={handleLogin}
