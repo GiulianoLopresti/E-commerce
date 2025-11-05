@@ -1,0 +1,452 @@
+/* =========================================================================
+   PALETA Y VARIABLES
+   ========================================================================= */
+:root{
+  /* Paleta principal */
+  --c-bg-light: #DDDDDD;    /* fondo claro */
+  --c-text: #222831;        /* texto principal (carbón) */
+  --c-accent: #30475E;     /* primario azul grisáceo */
+  --c-primary: #F05454;      /* acento / CTA (rojo) */
+  --c-accent-dark: #a13333; /* acento oscuro */
+  /* Extensión útil */
+  --c-white: #FFFFFF;
+  --c-offwhite: #F6F7F9;
+  --c-muted: #BFC7CC;
+  --c-steel: #f15959;
+  --c-teal: #2BB6C9;
+  --c-cyan: #00D1E8;
+  --c-navy: #0F1724;
+  --c-gold: #FFC857;
+  --c-orange: #FF7B05;
+  --c-success: #2ECC71;
+  --c-warning: #E2A100;
+
+  /* Sombras / opacidades */
+  --shadow-1: 0 4px 12px rgba(16,22,26,0.10);
+  --shadow-2: 0 8px 24px rgba(16,22,26,0.16);
+  --glass: rgba(255,255,255,0.06);
+}
+
+/* =========================================================================
+   1. ESTILOS GLOBALES
+   ========================================================================= */
+* { box-sizing: border-box; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--c-bg-light);
+  background-image: url('/assets/img/cubos-fondo.jpg');
+  color: var(--c-text);
+  font-family: 'Ubuntu', system-ui, -apple-system;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+a:hover { text-decoration: none; }
+
+/* Mantener espacio para header fijo (mismo valor que tu HTML esperaba) */
+body {
+  padding-top: 185px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: 0; /* no requiere espacio extra */
+}
+
+header {
+    font-family: 'Ubuntu', system-ui, -apple-system;
+}
+
+/* Main para ocupar el espacio */
+main {
+    flex-grow: 1;
+}
+
+/* =========================================================================
+   2. HEADER (fijo) - Mantengo clases que usas en HTML
+   ========================================================================= */
+#header-fijo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1030;
+  background: linear-gradient(180deg, var(--c-text));
+  border-bottom: 1px solid rgba(34,34,34,0.04);
+  box-shadow: var(--shadow-1);
+}
+
+/* contenedor superior del header */
+#header-fijo .container.py-3 {
+  background: transparent; /* ya el header tiene fondo */
+}
+
+/* Marca / logo */
+.navbar-brand {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--c-primary) !important;
+  letter-spacing: 0.4px;
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+}
+.navbar-brand img { height: 35px; width: auto; }
+
+.navbar-brand:hover { 
+    text-decoration: none; 
+    background: linear-gradient(180deg, var(--c-offwhite));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transform: translateY(-1px);
+}
+/* Buscador */
+.input-group {
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+}
+.input-group .form-control {
+  border-radius: 24px 0 0 24px;
+  border: 1px solid rgba(34,34,34,0.08);
+  padding: 10px 14px;
+  box-shadow: none;
+  transition: border-color .18s ease, box-shadow .18s ease;
+  background: rgba(255,255,255,0.95);
+  color: var(--c-text);
+}
+.input-group .form-control::placeholder { color: rgba(0, 0, 0, 0.4); }
+
+.input-group .form-control:focus {
+  border-color: var(--c-primary);
+  outline: none;
+}
+
+/* Botón de búsqueda */
+.btn-buscar {
+  background: linear-gradient(180deg, var(--c-primary));
+  color: var(--c-white);
+  border-radius: 0 24px 24px 0;
+  border: none;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .16s ease, box-shadow .16s ease, filter .16s ease;
+  box-shadow: 0 6px 14px rgba(48,71,94,0.12);
+}
+.btn-buscar:hover {
+  transform: translateY(-1px);
+  filter: brightness(.96);
+  color: var(--c-offwhite);
+  background: linear-gradient(180deg, var(--c-primary));
+}
+
+/* Icon links (mi cuenta, seguimiento, carrito) */
+.icon-link {
+  color: var(--c-text);
+  text-align: center;
+  transition: color .15s ease, transform .12s ease;
+}
+
+.icon-link i { 
+  display: block;
+  margin-bottom: 8px;
+  color: var(--c-primary); 
+}
+
+.icon-link span {
+  color: var(--c-white);
+  display: block;
+}
+
+.icon-link:hover {
+  color: var(--c-bg-light);
+  transform: translateY(-3px);
+}
+
+.icon-link:hover i {
+  color: var(--c-bg-light);
+}
+
+/* =========================================================================
+   3. NAV DE CATEGORÍAS
+   ========================================================================= */
+nav.navbar {
+  background: rgba(255,255,255,0.98) !important;
+  border-top: 1px solid rgba(173, 68, 68, 0.04);
+  border-bottom: 1px solid rgba(34,34,34,0.04);
+}
+.navbar-nav .nav-link {
+  color: var(--c-text) !important;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: background .18s ease, color .18s ease, transform .12s ease;
+}
+.navbar-nav .nav-link:hover {
+  background: rgba(240,84,84,0.06);
+  color: var(--c-primary) !important;
+  transform: translateY(-2px);
+}
+/* dropdown menu look */
+.dropdown-menu {
+  border-radius: 10px;
+  border: 1px solid rgba(34,34,34,0.06);
+  box-shadow: var(--shadow-2);
+}
+.dropdown-item:hover { background: rgba(240,84,84,0.06); color: var(--c-primary); }
+
+/* =========================================================================
+   4. BANNER PRINCIPAL
+   ========================================================================= */
+.banner-principal {
+  background: linear-gradient(135deg, rgba(48,71,94,0.95), rgba(0, 0, 0, 0.9));
+  border-radius: 12px;
+  box-shadow: 0 4px 20px var(--c-text);
+  padding: 3rem;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Banner text */
+.banner-principal h1 {
+  color: var(--c-white);
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+.banner-principal p {
+  color: rgba(255, 255, 255, 0.85);
+  max-width: 60ch;
+}
+
+.text-center-1 {
+    color: var(--c-text);
+    text-align: center;
+}
+
+/* CTA opcional (si la activas) */
+.btn-comprar {
+  background: linear-gradient(180deg, var(--c-primary));
+  color: var(--c-white);
+  border: none;
+  padding: .9rem 1.3rem;
+  border-radius: 10px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.12);
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+.btn-comprar:hover {
+  background: linear-gradient(180deg, var(--c-accent));
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  color: var(--c-offwhite);
+}
+
+/* =========================================================================
+   5. GRILLA DE PRODUCTOS (product-card)
+   ========================================================================= */
+.product-card {
+  border-radius: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  background: linear-gradient(180deg, #fff, #fbfbfd);
+  transition: transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .22s ease, border-color .22s ease;
+  box-shadow: 0 6px 18px rgba(16,22,26,0.06);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* imagen contenedor (ajustado) */
+.product-card .card-img-top {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    padding: 1.2rem;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.4));
+    border-bottom: 1px solid rgba(48,71,94,0.12);
+}
+
+/* cuerpo */
+.product-card .card-body {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+/* titulo */
+.product-card .card-title {
+    font-size: 1.02rem;
+    font-weight: 700;
+    margin: 0;
+    transition: color .14s ease;
+}
+
+/* precio y boton */
+.product-card .card-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--c-navy);
+  margin: 0;
+  margin-top: auto;
+}
+
+.product-card .btn {
+  margin-top: .6rem;
+  border-radius: 8px;
+  background: linear-gradient(180deg, var(--c-primary));
+  color: var(--c-white);
+  border: none;
+  padding: .55rem .75rem;
+  font-weight: 700;
+  transition: transform .12s ease, filter .12s ease;
+}
+
+.product-card .btn:hover {
+  transform: translateY(-3px);
+  filter: brightness(.98);
+  background: linear-gradient(180deg, var(--c-accent));
+}
+
+/* hover general de la tarjeta */
+.product-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 22px 50px rgba(48,71,94,0.18);
+  border-radius: 12px;
+  border: 2px solid rgba(0, 0, 0, 0.5);
+}
+
+/* ======= NAV TABS SIMPLE ======= */
+.nav-tabs {
+    border-bottom: 2px var(--c-accent) solid;
+}
+
+.nav-tabs .nav-link {
+    color: var(--c-accent); /* texto negro */
+    font-weight: 700;
+    background-color: #ffffff; /* fondo blanco */
+    border: none;
+    border-bottom: 1px solid var(--c-accent);
+    margin-right: 4px;
+    transition: all 0.2s ease;
+}
+
+.nav-tabs .nav-link:hover {
+    background: rgba(240,84,84,0.06);
+    color: var(--c-primary) !important;
+    transform: translateY(-2px);
+}
+
+/* ======= CONTENIDO DE TABS ======= */
+.tab-content {
+    background-color: #fff;
+    color: #000; /* texto negro */
+    border: 1px solid #ddd;
+    padding: 1.5rem;
+    border-radius: 0 0 .5rem .5rem;
+} 
+
+.cua_num {
+  margin-top: .6rem;
+  border-radius: 8px;
+  font-weight: 700;
+  border: 2px solid var(--c-muted);
+  background-color: var(--c-white);
+  color: var(--c-text);
+  transition: all 0.2s ease;
+}
+
+.cua_num:focus {
+  border-color: var(--c-offwhite);
+  box-shadow: 0 0 0 2px var(--c-accent);
+  outline: none;
+}
+
+/* Remove default spinner buttons */
+.cua_num::-webkit-inner-spin-button,
+.cua_num::-webkit-outer-spin-button {
+  opacity: 1;
+  background: var(--c-offwhite);
+}
+
+
+/* =========================================================================
+   6. BOTONES GENERALES (ya usados .btn-sm etc.)
+   ========================================================================= */
+.btn-sm {
+  background: linear-gradient(180deg, var(--c-primary));
+  color: var(--c-white);
+  border: none;
+  padding: .6rem .9rem;
+  border-radius: 8px;
+  font-weight: 700;
+}
+.btn-sm:hover { transform: translateY(-3px); filter: brightness(.98);
+  background: linear-gradient(180deg, var(--c-accent));
+}
+
+/* botones outline / danger */
+.btn-outline-danger {
+  border: 2px solid rgba(240,84,84,0.95);
+  color: rgba(240,84,84,0.95);
+  background: transparent;
+}
+.btn-outline-danger:hover {
+  background: rgba(240,84,84,0.08);
+}
+
+.btn-sub {
+  color: var(--c-white);
+  border: none;
+  padding: .6rem 1.2rem;
+  border-radius: 24px;
+}
+
+/* =========================================================================
+   7. FOOTER
+   ========================================================================= */
+footer {
+    background: linear-gradient(180deg, var(--c-text), var(--c-navy));
+    color: rgba(255,255,255,0.95);
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+    font-size: .95rem;
+    font-family: 'Ubuntu', system-ui, -apple-system;
+    border-top: 1px solid rgba(255,255,255,0.1);
+
+}
+
+footer a { color: rgba(255,255,255,0.92); }
+footer a:hover { color: var(--c-accent); text-decoration: none; }
+footer address { color: rgba(255,255,255,0.8); }
+
+/* =========================================================================
+   8. RESPONSIVE (no cambiar estructura)
+   ========================================================================= */
+
+/* compensa header fijo en pantallas pequeñas */
+@media (max-width: 991.98px) {
+  body { padding-top: 320px; }
+  .input-group { max-width: 100%; }
+  .banner-principal { padding: 2rem; text-align: center; }
+  .banner-principal article { margin: 0 auto; }
+}
+
+/* cards en móviles */
+@media (max-width: 575.98px) {
+  .product-card .card-img-top { height: 160px; padding: .8rem; }
+  .product-card .card-text { font-size: 1.05rem; }
+}
+
+/* =========================================================================
+   9. UTILIDADES RAPIDAS (small tweaks)
+   ========================================================================= */
+.text-white { color: #fff !important; }
+.text-center { text-align: center !important; }
+.gap-3 { gap: 1rem; }
+.glow-cyan { box-shadow: 0 8px 30px rgba(0,209,232,0.12); }
+.glow-accent { box-shadow: 0 8px 30px rgba(240,84,84,0.12); }

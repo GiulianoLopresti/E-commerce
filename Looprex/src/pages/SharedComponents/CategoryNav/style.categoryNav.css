@@ -1,0 +1,30 @@
+.categoryNav {
+  width: 100%;
+  background-color: #343a40; /* Color 'dark' de Bootstrap */
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.container a {
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  transition: color 0.15s ease-in-out;
+}
+
+.container a:hover {
+  color: #fff;
+}

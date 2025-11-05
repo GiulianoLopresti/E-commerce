@@ -1,38 +1,23 @@
-// src/ECommerceApp.tsx
 import { useState, useCallback } from 'react';
 import { AppRoutes } from './routes/AppRoutes';
-//** */ import { NavBar } from './pages/shared/NavBar'; // <-- Importarás tu NavBar aquí
+import { NavBar } from './pages/Components/NavBar/NavBar';
+import { CategoryNav } from './pages/Components/CategoryNav/Category';
 import type { UserProps, Cart, CartItem } from './interfaces';
 import { loginUser } from './actions';
-import type { LoginCredentials } from './actions/user.actions';
 
-/**
- * Este es el componente "Cerebro".
- * Es el equivalente a 'RobotsApp.tsx' de breadsk.
- * Aquí "levantamos el estado" (con useState) del carrito y del usuario
- * para poder pasarlo a todas las demás páginas.
- */
+type LoginCredentials = Pick<UserProps, 'email' | 'password'>;
+
 export const ECommerceApp = () => {
-  // (1) ESTADO GLOBAL: El usuario que ha iniciado sesión
-  const [currentUser, setCurrentUser] = useState<UserProps | null>(null);
 
-  // (2) ESTADO GLOBAL: El carrito de compras
-  // Usamos tu interfaz 'Cart' de cart.interfaces.ts
+  const [currentUser, setCurrentUser] = useState<UserProps | null>(null);
   const [cart, setCart] = useState<Cart>({ items: [] });
 
-  /** (Auth) Maneja el inicio de sesión */
-  const handleLogin = useCallback(async (credentials: LoginCredentials) => {
-    try {
-      const { user } = loginUser(credentials);
-      setCurrentUser(user);
-      // Podríamos guardar en localStorage aquí si quisiéramos persistencia
-    } catch (error) {
-      console.error('Error de login:', error);
-      throw error; // Lanzamos el error para que la página de Login lo muestre
-    }
+  const handleLogin = useCallback((credentials: LoginCredentials) => {
+    // Llamamos a la acción de login que ya creamos
+    const { user } =  loginUser(credentials);
+    setCurrentUser(user);
   }, []);
 
-  /** (Auth) Maneja el cierre de sesión */
   const handleLogout = useCallback(() => {
     setCurrentUser(null);
   }, []);
@@ -54,11 +39,9 @@ export const ECommerceApp = () => {
         // Si no existe, añádelo
         newItems = [...prevCart.items, { productId, quantity }];
       }
-
-      // Devolvemos el nuevo estado del carrito
       return { items: newItems };
     });
-  }, []);
+  }, []); // El array vacío significa que esta función nunca cambia
 
   /** (Cart) Elimina un producto del carrito */
   const handleRemoveFromCart = useCallback((productId: number) => {
@@ -81,30 +64,35 @@ export const ECommerceApp = () => {
           : item
       )
     }));
-  }, [handleRemoveFromCart]); // Depende de handleRemoveFromCart
+  }, [handleRemoveFromCart]); // Esta función depende de 'handleRemoveFromCart'
 
   /** (Cart) Vacía el carrito (ej. después de una compra) */
   const handleClearCart = useCallback(() => {
     setCart({ items: [] });
   }, []);
 
-  // (3) RENDERIZADO
-  // Pasamos todos los estados y funciones al "Cartero" (AppRoutes)
-  // que se encargará de distribuirlos.
+  
+  // --- (C) RENDERIZADO ---
   return (
     <>
-      {/* Aquí renderizamos el NavBar directamente 
-        para que siempre reciba el 'currentUser' y el 'cart'
+      {/* Renderizamos el NavBar y CategoryNav aquí, por encima de las rutas.
+        Así se mostrarán en TODAS las páginas.
       */}
-      {/* <NavBar 
-        user={currentUser} 
-        cartItemCount={cart.items.length} 
-        onLogout={handleLogout}
-      /> */}
+      <header>
+        <NavBar 
+          currentUser={currentUser} 
+          cartItemCount={cart.items.length} 
+          onLogout={handleLogout}
+        />
+        <CategoryNav />
+      </header>
       
+      {/* Aquí renderizamos el "Cartero" (AppRoutes).
+        Le pasamos el paquete completo de estados y funciones 
+        para que él los distribuya a las páginas correctas.
+      */}
       <main>
         <AppRoutes 
-          // Pasamos todo como props:
           currentUser={currentUser}
           cart={cart}
           onLogin={handleLogin}

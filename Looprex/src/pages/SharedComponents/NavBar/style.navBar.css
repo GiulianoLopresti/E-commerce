@@ -1,0 +1,133 @@
+.logo {
+  font-size: 2.2rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #212529; /* Color de texto principal */
+  line-height: 1;
+}
+.logo:hover {
+  color: #0d6efd; /* Azul principal */
+}
+
+.searchBar {
+  display: flex;
+  width: 100%;
+  max-width: 500px;
+}
+
+.searchInput {
+  flex-grow: 1;
+  padding: 0.6rem 1rem;
+  border: 1px solid #ced4da; /* Gris */
+  border-right: none;
+  border-radius: 0.25rem 0 0 0.25rem;
+  font-size: 0.9rem;
+}
+.searchInput:focus {
+  outline: none;
+  border-color: #86b7fe; /* Sombra de foco */
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.searchButton {
+  border: 1px solid #0d6efd; /* Azul */
+  background-color: #0d6efd;
+  color: white;
+  padding: 0 1.2rem;
+  cursor: pointer;
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+.searchButton:hover {
+  background-color: #0b5ed7;
+}
+
+.userActions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.actionLink {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.actionLink:hover {
+  color: #0d6efd;
+}
+
+.accountMenu {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.logoutButton {
+  background: none;
+  border: none;
+  color: #6c757d; /* Color 'secondary' */
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0;
+}
+.logoutButton:hover {
+  color: #dc3545; /* Rojo 'danger' */
+  text-decoration: underline;
+}
+
+.cartLink {
+  position: relative;
+  padding: 0.5rem;
+}
+
+.cartCount {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: #dc3545; /* Rojo 'danger' */
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.navContainer {
+  width: 100%;
+  padding: 1.5rem 0;
+  background-color: #fff;
+  border-bottom: 1px solid #dee2e6; /* Gris de Bootstrap */
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px; /* Ancho máximo del contenido */
+  padding: 0 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logoWrapper {
+  flex-shrink: 0; /* El logo no se achica */
+}
+
+.searchWrapper {
+  flex-grow: 1; /* La barra de búsqueda ocupa el espacio */
+  min-width: 200px;
+}
+
+.actionsWrapper {
+  flex-shrink: 0; /* Las acciones no se achican */
+}
