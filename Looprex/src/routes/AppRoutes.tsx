@@ -1,42 +1,18 @@
-// src/routes/AppRoutes.tsx
 import { useRoutes } from 'react-router-dom';
 import type { UserProps, Cart } from '../interfaces';
-import type { LoginCredentials  } from '../actions/user.actions';
+import type { LoginCredentials } from '../actions/user.actions';
 
-// --- Importaciones de Páginas ---
-// (Crearemos estas páginas en el siguiente paso, por ahora las simulamos)
-// import { HomePage } from '../pages/home/HomePage';
-// import { LoginPage } from '../pages/login/LoginPage';
-// import { CartPage } from '../pages/cart/CartPage';
-// import { ProductDetailPage } from '../pages/productDetail/ProductDetailPage';
-// import { RegisterPage } from '../pages/register/RegisterPage';
-// import { AccountPage } from '../pages/account/AccountPage';
+// Pages
+import { HomePage } from '../pages/HomePages';
+import { ProductDetailPage } from '../pages/ProductDetailPage';
+import { CartPage } from '../pages/CartPage';
+import { CheckoutPage } from '../pages/CheckoutPage';
+import { LoginPage } from '../pages/LoginPage';
+import { RegisterPage } from '../pages/RegisterPage';
+import { AccountPage } from '../pages/AccountPage';
+import { OrdersPage } from '../pages/OrderPage';
+import { NotFoundPage } from '../pages/NotFoundPage';
 
-// --- (Simulación temporal de las páginas) ---
-// (Borraremos esto cuando creemos las páginas reales)
-const HomePage = ({ onAddToCart }: { onAddToCart: (id: number) => void }) => (
-  <div>Página de Inicio (HomePage) - <button onClick={() => onAddToCart(1)}>Añadir Prod 1</button></div>
-);
-const LoginPage = ({ onLogin }: { onLogin: (c: LoginCredentials) => void }) => (
-  <div>Página de Login (LoginPage) - <button onClick={() => onLogin({ email: 'test', password: '123' })}>Login</button></div>
-);
-const CartPage = ({ cart }: { cart: Cart }) => (
-  <div>Página de Carrito (CartPage) - Items: {cart.items.length}</div>
-);
-const ProductDetailPage = ({ onAddToCart }: { onAddToCart: (id: number) => void }) => (
-  <div>Página de Detalle de Producto (ProductDetailPage) - <button onClick={() => onAddToCart(2)}>Añadir Prod 2</button></div>
-);
-const RegisterPage = () => <div>Página de Registro (RegisterPage)</div>;
-const AccountPage = ({ user }: { user: UserProps | null }) => (
-  <div>Página de Mi Cuenta (AccountPage) - Usuario: {user?.name}</div>
-);
-// --- (Fin de la simulación) ---
-
-
-/**
- * Estas son todas las props que el "Cerebro" (ECommerceApp)
- * le pasa al "Cartero" (AppRoutes).
- */
 interface AppRoutesProps {
   currentUser: UserProps | null;
   cart: Cart;
@@ -48,12 +24,7 @@ interface AppRoutesProps {
   onClearCart: () => void;
 }
 
-/**
- * Este es el "Cartero", idéntico al AppRoutes de breadsk.
- * Recibe las props globales y las distribuye a las páginas.
- */
 export const AppRoutes = (props: AppRoutesProps) => {
-
   const routes = useRoutes([
     {
       path: '/',
@@ -65,8 +36,24 @@ export const AppRoutes = (props: AppRoutesProps) => {
     },
     {
       path: '/carrito',
-      element: <CartPage cart={props.cart} />
-      // (También pasaremos onRemoveFromCart, onUpdateCartQuantity)
+      element: (
+        <CartPage 
+          cart={props.cart}
+          onRemoveFromCart={props.onRemoveFromCart}
+          onUpdateCartQuantity={props.onUpdateCartQuantity}
+          onClearCart={props.onClearCart}
+        />
+      )
+    },
+    {
+      path: '/checkout',
+      element: (
+        <CheckoutPage 
+          currentUser={props.currentUser}
+          cart={props.cart}
+          onClearCart={props.onClearCart}
+        />
+      )
     },
     {
       path: '/login',
@@ -78,17 +65,21 @@ export const AppRoutes = (props: AppRoutesProps) => {
     },
     {
       path: '/mi-cuenta',
-      element: <AccountPage user={props.currentUser} />
-      // (También pasaremos onLogout)
+      element: (
+        <AccountPage 
+          currentUser={props.currentUser}
+          onLogout={props.onLogout}
+        />
+      )
     },
-    // {
-    //   path: '/checkout',
-    //   element: <CheckoutPage user={props.currentUser} cart={props.cart} />
-    // },
-    // {
-    //   path: '/*',
-    //   element: <div>Página 404 No Encontrada</div>
-    // }
+    {
+      path: '/mis-pedidos',
+      element: <OrdersPage currentUser={props.currentUser} />
+    },
+    {
+      path: '*',
+      element: <NotFoundPage />
+    }
   ]);
 
   return routes;

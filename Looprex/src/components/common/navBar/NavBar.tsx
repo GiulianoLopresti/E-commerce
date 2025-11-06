@@ -2,7 +2,7 @@ import { Logo } from './Logo';
 import { SearchBar } from './SearchBar';
 import { UserActions } from './UserActions';
 import type { UserProps } from '../../../interfaces';
-import styles from './style.navBar.css.module.css';
+import styles from './Style.navBar.css.module.css';
 
 // Estas son las props que vienen del "Cerebro" (ECommerceApp)
 interface NavBarProps {

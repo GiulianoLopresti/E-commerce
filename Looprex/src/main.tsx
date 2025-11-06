@@ -1,16 +1,13 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { ECommerceApp } from './EcommerceApp';
-import './index.css'; // O tus estilos
-import './styles/global.css'; // Estilos globales personalizados
+import { ECommerceApp } from './App';
+import './style/global.css';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
     <BrowserRouter>
-      <ECommerceApp /> {/* <-- (2) Renderizamos el Cerebro */}
+      <ECommerceApp />
     </BrowserRouter>
-  </React.StrictMode>
+  </StrictMode>
 );
