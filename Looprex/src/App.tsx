@@ -1,33 +1,53 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { BrowserRouter } from 'react-router-dom';
+import { NavBar } from './components/common/navBar/NavBar';
+import { CategoryNav } from './components/common/categoryNav/Category';
 import { AppRoutes } from './routes/AppRoutes';
-import { Header } from './components/layout/Header';
-import { Footer } from './components/layout/Footer';
-import type { UserProps, Cart } from './interfaces';
-import type { LoginCredentials } from './actions/user.actions';
+import { getProducts } from './actions/products.actions';
+import type { UserProps, Cart, ProductProps } from './interfaces';
 
-export const ECommerceApp = () => {
-  // ==================== ESTADO GLOBAL ====================
+export const EcommerceApp = () => {
   const [currentUser, setCurrentUser] = useState<UserProps | null>(null);
   const [cart, setCart] = useState<Cart>({ items: [] });
+  const [allProducts, setAllProducts] = useState<ProductProps[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductProps[]>([]);
 
-  // ==================== AUTH HANDLERS ====================
-  const handleLogin = useCallback(async (credentials: LoginCredentials) => {
-    const { loginUser } = await import('./actions/user.actions');
-    const response = loginUser(credentials);
-    
-    if (response.ok && response.user) {
-      setCurrentUser(response.user);
-    } else {
-      throw new Error(response.token || 'Error al iniciar sesión');
+  // Cargar productos al inicio
+  useEffect(() => {
+    const response = getProducts();
+    if (response.ok) {
+      setAllProducts(response.products);
+      setFilteredProducts(response.products);
     }
   }, []);
 
-  const handleLogout = useCallback(() => {
-    setCurrentUser(null);
-  }, []);
+  // Función de búsqueda
+  const handleSearch = useCallback((query: string) => {
+    query = query.trim().toLowerCase();
+
+    if (query.length === 0) {
+      setFilteredProducts(allProducts);
+      return;
+    }
+
+    const filtered = allProducts.filter(product =>
+      product.name.toLowerCase().includes(query) ||
+      product.description.toLowerCase().includes(query)
+    );
+
+    setFilteredProducts(filtered);
+  }, [allProducts]);
+
+  const handleLogin = async (credentials: { email: string; password: string }) => {
+    // Tu lógica de login aquí
+  };
 
   // ==================== CART HANDLERS ====================
-  const handleAddToCart = useCallback((productId: number, quantity: number = 1) => {
+  const handleLogout = () => {
+    setCurrentUser(null);
+  };
+
+  const handleAddToCart = (productId: number, quantity: number = 1) => {
     setCart(prevCart => {
       const existingItem = prevCart.items.find(item => item.productId === productId);
       
@@ -45,15 +65,15 @@ export const ECommerceApp = () => {
         items: [...prevCart.items, { productId, quantity }]
       };
     });
-  }, []);
+  };
 
-  const handleRemoveFromCart = useCallback((productId: number) => {
+  const handleRemoveFromCart = (productId: number) => {
     setCart(prevCart => ({
       items: prevCart.items.filter(item => item.productId !== productId)
     }));
-  }, []);
+  };
 
-  const handleUpdateCartQuantity = useCallback((productId: number, newQuantity: number) => {
+  const handleUpdateCartQuantity = (productId: number, newQuantity: number) => {
     if (newQuantity <= 0) {
       handleRemoveFromCart(productId);
       return;
@@ -66,35 +86,32 @@ export const ECommerceApp = () => {
           : item
       )
     }));
-  }, [handleRemoveFromCart]);
+  };
 
-  const handleClearCart = useCallback(() => {
+  const handleClearCart = () => {
     setCart({ items: [] });
-  }, []);
+  };
 
   // ==================== RENDER ====================
   return (
-    <div className="app-container">
-      <Header 
-        currentUser={currentUser} 
+    <BrowserRouter>
+      <NavBar
+        currentUser={currentUser}
         cartItemCount={cart.items.reduce((sum, item) => sum + item.quantity, 0)}
         onLogout={handleLogout}
+        onSearch={handleSearch}
       />
-      
-      <main className="main-content">
-        <AppRoutes 
-          currentUser={currentUser}
-          cart={cart}
-          onLogin={handleLogin}
-          onLogout={handleLogout}
-          onAddToCart={handleAddToCart}
-          onRemoveFromCart={handleRemoveFromCart}
-          onUpdateCartQuantity={handleUpdateCartQuantity}
-          onClearCart={handleClearCart}
-        />
-      </main>
-      
-      <Footer />
-    </div>
+      <CategoryNav />
+      <AppRoutes
+        currentUser={currentUser}
+        cart={cart}
+        onLogin={handleLogin}
+        onLogout={handleLogout}
+        onAddToCart={handleAddToCart}
+        onRemoveFromCart={handleRemoveFromCart}
+        onUpdateCartQuantity={handleUpdateCartQuantity}
+        onClearCart={handleClearCart}
+      />
+    </BrowserRouter>
   );
 };

@@ -38,7 +38,7 @@ export const Footer = () => {
 
           {/* Newsletter Column */}
           <div className={styles.footerColumn}>
-            <h4 className={styles.footerSubtitle}>¡Suscríbete para recibir las mejores ofertas!</h4>
+            <h4 className={styles.footerTitle}>¡Suscríbete para recibir las mejores ofertas!</h4>
             <div className={styles.newsletter}>
               <input 
                 type="email" 

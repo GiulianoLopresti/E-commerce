@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import type { UserProps } from '../../../interfaces'; // Asegúrate que tu index de interfaces exporte 'User'
-import styles from './style.navBar.css.module.css';
+import styles from './Style.navBar.module.css';
 
 interface UserActionsProps {
   currentUser: UserProps | null;

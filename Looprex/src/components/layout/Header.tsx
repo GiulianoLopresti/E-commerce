@@ -1,65 +1,107 @@
-import { Link } from 'react-router-dom';
-import { CategoryNav } from '../common/categoryNav/Category';
-import type { UserProps } from '../../interfaces';
-import styles from '../../style/layout.module.css';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { getCategories } from '../../actions/categories.actions';
+import styles from '../../styles/Header.module.css';
 
 interface HeaderProps {
-  currentUser: UserProps | null;
-  cartItemCount: number;
+  currentUser: any;
   onLogout: () => void;
 }
 
-export const Header = ({ currentUser, cartItemCount, onLogout }: HeaderProps) => {
+const Header = ({ currentUser, onLogout }: HeaderProps) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const categories = getCategories().categories;
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/productos?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery('');
+    }
+  };
+
+  const handleCategoryClick = (categoryId: number) => {
+    navigate(`/productos?category=${categoryId}`);
+  };
+
   return (
     <header className={styles.header}>
-      {/* Top Bar */}
       <div className={styles.topBar}>
-        <div className={styles.container}>
+        <div className="container">
           <div className={styles.topBarContent}>
-            {/* Logo */}
             <Link to="/" className={styles.logo}>
-              <i className="fa-solid fa-tower-broadcast"></i>
-              <span>Looprex</span>
+              <i className="fas fa-store"></i>{' '}
+              Looprex
             </Link>
 
-            {/* Search Bar */}
-            <div className={styles.searchBar}>
-              <input 
-                type="text" 
+            <form className={styles.searchBar} onSubmit={handleSearch}>
+              <input
+                type="text"
                 placeholder="Buscar producto..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className={styles.searchInput}
               />
-              <button className={styles.searchButton}>
-                <i className="fa-solid fa-magnifying-glass"></i>
+              <button type="submit" className={styles.searchButton}>
+                <i className="fas fa-search"></i>
               </button>
-            </div>
+            </form>
 
-            {/* Actions */}
-            <div className={styles.headerActions}>
-              <Link to={currentUser ? "/mi-cuenta" : "/login"} className={styles.headerLink}>
-                <i className="fa-solid fa-user"></i>
-                <span>{currentUser ? currentUser.name : 'Mi Cuenta'}</span>
-              </Link>
-
-              <Link to="/mis-pedidos" className={styles.headerLink}>
-                <i className="fa-solid fa-truck"></i>
+            <div className={styles.topBarIcons}>
+              {currentUser ? (
+                <>
+                  <Link to="/mi-cuenta" className={styles.iconLink}>
+                    <i className="fas fa-user"></i>
+                    <span>Mi Cuenta</span>
+                  </Link>
+                  <button onClick={onLogout} className={styles.iconLink} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                    <i className="fas fa-sign-out-alt"></i>
+                    <span>Salir</span>
+                  </button>
+                </>
+              ) : (
+                <Link to="/login" className={styles.iconLink}>
+                  <i className="fas fa-sign-in-alt"></i>
+                  <span>Ingresar</span>
+                </Link>
+              )}
+              <Link to="/seguimiento" className={styles.iconLink}>
+                <i className="fas fa-truck"></i>
                 <span>Seguimiento</span>
               </Link>
-
-              <Link to="/carrito" className={styles.headerLink}>
-                <i className="fa-solid fa-cart-shopping"></i>
+              <Link to="/carrito" className={styles.iconLink}>
+                <i className="fas fa-shopping-cart"></i>
                 <span>Carrito</span>
-                {cartItemCount > 0 && (
-                  <span className={styles.badge}>{cartItemCount}</span>
-                )}
               </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Category Navigation */}
-      <CategoryNav/>
+      <nav className={styles.categoryNav}>
+        <div className="container">
+          <ul className={styles.categoryList}>
+            <li className={styles.categoryItem}>
+              <Link to="/productos" className={styles.categoryButton}>
+                Todos
+              </Link>
+            </li>
+            {categories.map(category => (
+              <li key={category.categoryId} className={styles.categoryItem}>
+                <button
+                  onClick={() => handleCategoryClick(category.categoryId)}
+                  className={styles.categoryButton}
+                >
+                  {category.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </nav>
     </header>
   );
 };
+
+export default Header;

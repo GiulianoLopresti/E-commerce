@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import styles from "./style.navBar.css.module.css";
+import styles from "./Style.navBar.module.css";
 
 export const Logo = () => {
   return (

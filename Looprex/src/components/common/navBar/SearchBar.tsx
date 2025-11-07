@@ -1,25 +1,32 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-import styles from "./style.navBar.css.module.css";
+import { useState, useEffect } from "react";
+import styles from "./Style.navBar.module.css";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-export const SearchBar = () => {
+interface SearchBarProps {
+  onSearch: (query: string) => void;
+}
 
-    const [query, setQuery] = useState('');
-  const navigate = useNavigate();
+export const SearchBar = ({ onSearch }: SearchBarProps) => {
+  const [query, setQuery] = useState('');
 
-  const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      onSearch(query);
+    });
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
+  }, [query, onSearch]);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (query.trim()) {
-      navigate(`/buscar?q=${query}`);
-      setQuery('');
-    }
+    onSearch(query);
   };
 
   return (
-    <form className={styles.searchBar} onSubmit={handleSearch}>
+    <form className={styles.searchBar} onSubmit={handleSubmit}>
       <input
         type="text"
         className={styles.searchInput}

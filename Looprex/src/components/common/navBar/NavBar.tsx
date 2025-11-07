@@ -2,25 +2,24 @@ import { Logo } from './Logo';
 import { SearchBar } from './SearchBar';
 import { UserActions } from './UserActions';
 import type { UserProps } from '../../../interfaces';
-import styles from './Style.navBar.css.module.css';
+import styles from './Style.navBar.module.css';
 
-// Estas son las props que vienen del "Cerebro" (ECommerceApp)
 interface NavBarProps {
   currentUser: UserProps | null;
   cartItemCount: number;
   onLogout: () => void;
+  onSearch: (query: string) => void;
 }
 
-export const NavBar = ({ currentUser, cartItemCount, onLogout }: NavBarProps) => {
-    
-    return (
+export const NavBar = ({ currentUser, cartItemCount, onLogout, onSearch }: NavBarProps) => {
+  return (
     <div className={styles.navContainer}>
       <div className={styles.container}>
         <div className={styles.logoWrapper}>
           <Logo />
         </div>
         <div className={styles.searchWrapper}>
-          <SearchBar />
+          <SearchBar onSearch={onSearch} />
         </div>
         <div className={styles.actionsWrapper}>
           <UserActions 
