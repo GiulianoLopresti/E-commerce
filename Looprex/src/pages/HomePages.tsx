@@ -1,102 +1,137 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
+import { ProductGrid } from '../components/common/product/ProductGrid';
 import { getProducts } from '../actions/products.actions';
-import { ProductCard } from '../components/common/product/ProductCard';
-import type { ProductProps } from '../interfaces';
+import { getCategories } from '../actions/categories.actions';
+import type { ProductProps, CategoryProps, UserProps } from '../interfaces';
 import styles from '../style/pages.module.css';
 
 interface HomePageProps {
   onAddToCart: (productId: number, quantity?: number) => void;
-  currentUser?: any; // Agregamos currentUser para verificar si es admin
+  currentUser?: UserProps | null;
 }
 
 export const HomePage = ({ onAddToCart, currentUser }: HomePageProps) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState<ProductProps[]>([]);
+  const [categories, setCategories] = useState<CategoryProps[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<ProductProps[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
 
   useEffect(() => {
-    const response = getProducts();
-    if (response.ok) {
-      setProducts(response.products);
+    const productsResponse = getProducts();
+    const categoriesResponse = getCategories();
+
+    if (productsResponse.ok) {
+      setProducts(productsResponse.products);
+      setFilteredProducts(productsResponse.products);
+    }
+
+    if (categoriesResponse.ok) {
+      setCategories(categoriesResponse.categories);
     }
   }, []);
 
-  // Mostrar solo los primeros 4 productos en home
-  const featuredProducts = products.slice(0, 4);
+  useEffect(() => {
+    const categoryParam = searchParams.get('categoria');
+    if (categoryParam) {
+      const category = categories.find(c => c.name === categoryParam);
+      if (category) {
+        setSelectedCategory(category.categoryId);
+      }
+    } else {
+      setSelectedCategory(null);
+    }
+  }, [searchParams, categories]);
+
+  useEffect(() => {
+    if (selectedCategory === null) {
+      setFilteredProducts(products);
+    } else {
+      setFilteredProducts(
+        products.filter(p => p.categoryId === selectedCategory)
+      );
+    }
+  }, [selectedCategory, products]);
+
+  const handleCategoryChange = (categoryId: number | null) => {
+    setSelectedCategory(categoryId);
+    if (categoryId === null) {
+      setSearchParams({});
+    } else {
+      const category = categories.find(c => c.categoryId === categoryId);
+      if (category) {
+        setSearchParams({ categoria: category.name });
+      }
+    }
+  };
 
   return (
     <div className={styles.homePage}>
-      {/* Hero Section */}
-      <section className={styles.hero}>
-        <div className={styles.container}>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>Tienda Gamer</h1>
-            <p className={styles.heroSubtitle}>
-              Bienvenido a Looprex. Encuentra los mejores componentes
-              y periféricos para llevar tu experiencia de juego al siguiente nivel.
-            </p>
-            <Link to="/productos" className={styles.heroButton}>
-              Ver Catálogo <i className="fa-solid fa-arrow-right"></i>
+      {/* ✅ BOTÓN ADMIN - Solo visible para administradores */}
+      {currentUser && currentUser.roleId === 1 && (
+        <div className={styles.adminBanner}>
+          <div className={styles.container}>
+            <Link to="/admin" className={styles.adminButton}>
+              <i className="fa-solid fa-shield-halved"></i>
+              <span>Acceder al Panel de Administración</span>
+              <i className="fa-solid fa-arrow-right"></i>
             </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Sección principal de productos */}
+      <div className={styles.container}>
+        <div className={styles.productsLayout}>
+          {/* Sidebar de Filtros */}
+          <aside className={styles.sidebar}>
+            <div className={styles.filterSection}>
+              <h3 className={styles.filterTitle}>Categorías</h3>
+              <ul className={styles.filterList}>
+                <li>
+                  <button
+                    onClick={() => handleCategoryChange(null)}
+                    className={selectedCategory === null ? styles.filterActive : ''}
+                  >
+                    Todas las categorías
+                  </button>
+                </li>
+                {categories.map(category => (
+                  <li key={category.categoryId}>
+                    <button
+                      onClick={() => handleCategoryChange(category.categoryId)}
+                      className={selectedCategory === category.categoryId ? styles.filterActive : ''}
+                    >
+                      {category.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+
+          {/* Grid de Productos */}
+          <div className={styles.productsContent}>
+            <div className={styles.pageHeader}>
+              <h1 className={styles.pageTitle}>
+                {selectedCategory === null 
+                  ? 'Todos los Productos' 
+                  : categories.find(c => c.categoryId === selectedCategory)?.name
+                }
+              </h1>
+              <p className={styles.pageSubtitle}>
+                {filteredProducts.length} productos encontrados
+              </p>
+            </div>
             
-            {/* Botón Admin - Solo visible para administradores */}
-            {currentUser && currentUser.roleId === 1 && (
-              <Link to="/admin" className={styles.adminButton}>
-                <i className="fa-solid fa-shield-halved"></i> Panel Admin
-              </Link>
-            )}
+            <ProductGrid 
+              products={filteredProducts}
+              onAddToCart={onAddToCart}
+            />
           </div>
         </div>
-      </section>
-
-      {/* Featured Products */}
-      <section className={styles.section}>
-        <div className={styles.container}>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Productos Destacados</h2>
-            <Link to="/productos" className={styles.sectionLink}>
-              Ver todos <i className="fa-solid fa-arrow-right"></i>
-            </Link>
-          </div>
-
-          <div className={styles.productsGrid}>
-            {featuredProducts.map(product => (
-              <ProductCard 
-                key={product.productId}
-                product={product}
-                onAddToCart={onAddToCart}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features */}
-      <section className={styles.features}>
-        <div className={styles.container}>
-          <div className={styles.featuresGrid}>
-            <div className={styles.featureCard}>
-              <i className="fa-solid fa-truck-fast"></i>
-              <h3>Envío Rápido</h3>
-              <p>Recibe tus productos en 24-48 horas</p>
-            </div>
-            <div className={styles.featureCard}>
-              <i className="fa-solid fa-shield-check"></i>
-              <h3>Compra Segura</h3>
-              <p>Tus datos protegidos</p>
-            </div>
-            <div className={styles.featureCard}>
-              <i className="fa-solid fa-headset"></i>
-              <h3>Soporte 24/7</h3>
-              <p>Te ayudamos cuando lo necesites</p>
-            </div>
-            <div className={styles.featureCard}>
-              <i className="fa-solid fa-award"></i>
-              <h3>Garantía de Calidad</h3>
-              <p>Productos de marcas reconocidas</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
   );
 };

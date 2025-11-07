@@ -1303,72 +1303,49 @@
 }
 
 /* ==================== ADMIN BUTTON IN HERO ==================== */
+.adminBanner {
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  padding: var(--spacing-lg) 0;
+  margin-bottom: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+}
+
 .adminButton {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-xl);
-  background-color: #e74c3c;
-  color: var(--c-white);
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-2xl);
+  background-color: var(--c-white);
+  color: #e74c3c;
   text-decoration: none;
   border-radius: var(--radius-lg);
-  font-weight: 600;
+  font-weight: 700;
   font-size: var(--font-size-lg);
   transition: all var(--transition-fast);
-  margin-left: var(--spacing-md);
   box-shadow: var(--shadow-lg);
 }
 
 .adminButton:hover {
-  background-color: #c0392b;
   transform: translateY(-2px);
   box-shadow: var(--shadow-xl);
-  color: var(--c-white);
+  color: #c0392b;
+  background-color: #f8f9fa;
 }
 
-/* Features Grid */
-.features {
-  background-color: var(--c-white);
-  padding: var(--spacing-4xl) 0;
-}
-
-.featuresGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-2xl);
-}
-
-.featureCard {
-  text-align: center;
-  padding: var(--spacing-2xl);
-  border-radius: var(--radius-lg);
-  transition: transform var(--transition-fast);
-}
-
-.featureCard:hover {
-  transform: translateY(-5px);
-}
-
-.featureCard i {
-  font-size: 48px;
-  color: var(--c-primary);
-  margin-bottom: var(--spacing-lg);
-}
-
-.featureCard h3 {
+.adminButton i {
   font-size: var(--font-size-xl);
-  margin-bottom: var(--spacing-sm);
-  color: var(--c-text);
 }
 
-.featureCard p {
-  color: var(--c-gray-600);
-  font-size: var(--font-size-base);
-}
+/* Responsive */
+@media (max-width: 768px) {
+  .adminButton {
+    width: 100%;
+    justify-content: center;
+    font-size: var(--font-size-base);
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
 
-.productsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--spacing-xl);
-  margin-top: var(--spacing-xl);
+  .adminBanner {
+    padding: var(--spacing-md) 0;
+  }
 }

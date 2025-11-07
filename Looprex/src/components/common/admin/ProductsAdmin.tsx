@@ -85,7 +85,7 @@ export const ProductsAdmin = () => {
   };
 
   const handleDelete = (productId: number, productName: string) => {
-    if (globalThis.confirm(`¿Estás seguro de eliminar el producto "${productName}"?`)) {
+    if (window.confirm(`¿Estás seguro de eliminar el producto "${productName}"?`)) {
       const response = deleteProduct(productId);
       if (response.ok) {
         alert('Producto eliminado exitosamente');
