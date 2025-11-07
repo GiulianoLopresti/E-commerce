@@ -2,7 +2,7 @@ import { Logo } from './Logo';
 import { SearchBar } from './SearchBar';
 import { UserActions } from './UserActions';
 import type { UserProps } from '../../../interfaces';
-import styles from './Style.navBar.module.css';
+import styles from "./navBar.module.css";
 
 interface NavBarProps {
   currentUser: UserProps | null;

@@ -1,53 +1,31 @@
-import { useState, useCallback, useEffect } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { NavBar } from './components/common/navBar/NavBar';
-import { CategoryNav } from './components/common/categoryNav/Category';
+import { useState, useCallback } from 'react';
 import { AppRoutes } from './routes/AppRoutes';
-import { getProducts } from './actions/products.actions';
-import type { UserProps, Cart, ProductProps } from './interfaces';
+import { NavBar } from './components/common/navBar/NavBar'; 
+import { CategoryNav } from './components/common/categoryNav/Category'; 
+import { Footer } from './components/layout/Footer';
+import type { UserProps, Cart } from './interfaces';
+import type { LoginCredentials } from './actions/user.actions';
 
-export const EcommerceApp = () => {
+export const ECommerceApp = () => {
   const [currentUser, setCurrentUser] = useState<UserProps | null>(null);
   const [cart, setCart] = useState<Cart>({ items: [] });
-  const [allProducts, setAllProducts] = useState<ProductProps[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<ProductProps[]>([]);
 
-  // Cargar productos al inicio
-  useEffect(() => {
-    const response = getProducts();
-    if (response.ok) {
-      setAllProducts(response.products);
-      setFilteredProducts(response.products);
+  const handleLogin = useCallback(async (credentials: LoginCredentials) => {
+    const { loginUser } = await import('./actions/user.actions');
+    const response = loginUser(credentials);
+    
+    if (response.ok && response.user) {
+      setCurrentUser(response.user);
+    } else {
+      throw new Error(response.token || 'Error al iniciar sesión');
     }
   }, []);
 
-  // Función de búsqueda
-  const handleSearch = useCallback((query: string) => {
-    query = query.trim().toLowerCase();
-
-    if (query.length === 0) {
-      setFilteredProducts(allProducts);
-      return;
-    }
-
-    const filtered = allProducts.filter(product =>
-      product.name.toLowerCase().includes(query) ||
-      product.description.toLowerCase().includes(query)
-    );
-
-    setFilteredProducts(filtered);
-  }, [allProducts]);
-
-  const handleLogin = async (credentials: { email: string; password: string }) => {
-    // Tu lógica de login aquí
-  };
-
-  // ==================== CART HANDLERS ====================
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     setCurrentUser(null);
-  };
+  }, []);
 
-  const handleAddToCart = (productId: number, quantity: number = 1) => {
+  const handleAddToCart = useCallback((productId: number, quantity: number = 1) => {
     setCart(prevCart => {
       const existingItem = prevCart.items.find(item => item.productId === productId);
       
@@ -65,15 +43,15 @@ export const EcommerceApp = () => {
         items: [...prevCart.items, { productId, quantity }]
       };
     });
-  };
+  }, []);
 
-  const handleRemoveFromCart = (productId: number) => {
+  const handleRemoveFromCart = useCallback((productId: number) => {
     setCart(prevCart => ({
       items: prevCart.items.filter(item => item.productId !== productId)
     }));
-  };
+  }, []);
 
-  const handleUpdateCartQuantity = (productId: number, newQuantity: number) => {
+  const handleUpdateCartQuantity = useCallback((productId: number, newQuantity: number) => {
     if (newQuantity <= 0) {
       handleRemoveFromCart(productId);
       return;
@@ -86,32 +64,38 @@ export const EcommerceApp = () => {
           : item
       )
     }));
-  };
+  }, [handleRemoveFromCart]);
 
-  const handleClearCart = () => {
+  const handleClearCart = useCallback(() => {
     setCart({ items: [] });
-  };
+  }, []);
 
-  // ==================== RENDER ====================
   return (
-    <BrowserRouter>
-      <NavBar
-        currentUser={currentUser}
-        cartItemCount={cart.items.reduce((sum, item) => sum + item.quantity, 0)}
-        onLogout={handleLogout}
-        onSearch={handleSearch}
-      />
-      <CategoryNav />
-      <AppRoutes
-        currentUser={currentUser}
-        cart={cart}
-        onLogin={handleLogin}
-        onLogout={handleLogout}
-        onAddToCart={handleAddToCart}
-        onRemoveFromCart={handleRemoveFromCart}
-        onUpdateCartQuantity={handleUpdateCartQuantity}
-        onClearCart={handleClearCart}
-      />
-    </BrowserRouter>
+    <div className="app-container">
+      <header>
+        <NavBar 
+          currentUser={currentUser}
+          cartItemCount={cart.items.reduce((sum, item) => sum + item.quantity, 0)}
+          onLogout={handleLogout} onSearch={function (query: string): void {
+            throw new Error('Function not implemented.');
+          } }        />
+        <CategoryNav />
+      </header>
+      
+      <main className="main-content">
+        <AppRoutes 
+          currentUser={currentUser}
+          cart={cart}
+          onLogin={handleLogin}
+          onLogout={handleLogout}
+          onAddToCart={handleAddToCart}
+          onRemoveFromCart={handleRemoveFromCart}
+          onUpdateCartQuantity={handleUpdateCartQuantity}
+          onClearCart={handleClearCart}
+        />
+      </main>
+      
+      <Footer />
+    </div>
   );
 };
