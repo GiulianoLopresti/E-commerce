@@ -12,6 +12,7 @@ import { RegisterPage } from '../pages/RegisterPage';
 import { AccountPage } from '../pages/AccountPage';
 import { OrdersPage } from '../pages/OrderPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
+import { AdminPage } from '../pages/AdminPage';
 
 interface AppRoutesProps {
   currentUser: UserProps | null;
@@ -28,7 +29,7 @@ export const AppRoutes = (props: AppRoutesProps) => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <HomePage onAddToCart={props.onAddToCart} />
+      element: <HomePage onAddToCart={props.onAddToCart} currentUser={props.currentUser} />
     },
     {
       path: '/producto/:id',
@@ -75,6 +76,10 @@ export const AppRoutes = (props: AppRoutesProps) => {
     {
       path: '/mis-pedidos',
       element: <OrdersPage currentUser={props.currentUser} />
+    },
+    {
+      path: '/admin',
+      element: <AdminPage currentUser={props.currentUser} />
     },
     {
       path: '*',

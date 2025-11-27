@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { getProducts, createProduct, updateProduct, deleteProduct } from '../../../actions/products.actions';
 import { getCategories } from '../../../actions/categories.actions';
 import type { ProductProps, CategoryProps } from '../../../interfaces';
-import styles from '../../style/admin.module.css';
+import styles from '../../../style/admin.module.css';
 
 export const ProductsAdmin = () => {
   const [products, setProducts] = useState<ProductProps[]>([]);

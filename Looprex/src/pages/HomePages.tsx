@@ -12,6 +12,13 @@ interface HomePageProps {
 }
 
 export const HomePage = ({ onAddToCart, currentUser }: HomePageProps) => {
+
+  console.log('=== DEBUG HOMEPAGE ===');
+  console.log('currentUser:', currentUser);
+  console.log('roleId:', currentUser?.roleId);
+  console.log('Es admin?', currentUser?.roleId === 1);
+  console.log('=====================');
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState<ProductProps[]>([]);
   const [categories, setCategories] = useState<CategoryProps[]>([]);
@@ -68,7 +75,7 @@ export const HomePage = ({ onAddToCart, currentUser }: HomePageProps) => {
 
   return (
     <div className={styles.homePage}>
-      {/* ✅ BOTÓN ADMIN - Solo visible para administradores */}
+      {/* - Solo visible para administradores */}
       {currentUser && currentUser.roleId === 1 && (
         <div className={styles.adminBanner}>
           <div className={styles.container}>

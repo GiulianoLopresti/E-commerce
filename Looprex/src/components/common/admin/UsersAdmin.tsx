@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { getAllUsers, getRoles } from '../../../actions/user.actions';
 import type { UserProps, RoleProps } from '../../../interfaces';
-import styles from '../../style/admin.module.css';
+import styles from '../../../style/admin.module.css';
 
 export const UsersAdmin = () => {
   const [users, setUsers] = useState<UserProps[]>([]);
