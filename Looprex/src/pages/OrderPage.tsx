@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { getOrdersByUserId } from '../actions/order.actions';
-import type { UserProps, OrderProps } from '../interfaces';
+import type { UserProps, BuyProps } from '../interfaces';
 import styles from '../style/pages.module.css';
 
 interface OrdersPageProps {
@@ -9,7 +9,7 @@ interface OrdersPageProps {
 }
 
 export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
-  const [orders, setOrders] = useState<OrderProps[]>([]);
+  const [orders, setOrders] = useState<BuyProps[]>([]);
 
   useEffect(() => {
     if (currentUser) {

@@ -1,21 +1,21 @@
 import { ORDERS, PRODUCTS } from '../mocks';
 import type {
-  OrderProps,
+  BuyProps,
   OrdersByUserProps,
   OrderCreateProps,
   OrderUpdateProps,
   CartItem,
   UserProps,
-  OrderDetailProps
+  DetailProps
 } from '../interfaces';
 
-const cloneOrderDetail = (detail: OrderDetailProps): OrderDetailProps => ({ ...detail });
-const cloneOrder = (order: OrderProps): OrderProps => ({
+const cloneOrderDetail = (detail: DetailProps): DetailProps => ({ ...detail });
+const cloneOrder = (order: BuyProps): BuyProps => ({
   ...order,
   details: order.details.map(cloneOrderDetail)
 });
 
-let ORDERS_STATE: OrderProps[] = ORDERS.map(cloneOrder);
+let ORDERS_STATE: BuyProps[] = ORDERS.map(cloneOrder);
 
 const getNextOrderId = (): number => {
   if (ORDERS_STATE.length === 0) {
@@ -42,7 +42,7 @@ export const createOrder = (
   addressId: number
 ): OrderCreateProps => {
   let calculatedSubtotal = 0;
-  const details: OrderDetailProps[] = [];
+  const details: DetailProps[] = [];
   let nextDetailId = getNextOrderDetailId();
 
   for (const item of cartItems) {
@@ -71,7 +71,7 @@ export const createOrder = (
   const total = calculatedSubtotal + iva + shipping;
 
   const newOrderId = getNextOrderId();
-  const newOrder: OrderProps = {
+  const newOrder: BuyProps = {
     orderId: newOrderId,
     orderNumber: generateOrderNumber(newOrderId),
     purchaseDate: new Date().toISOString(),
@@ -109,7 +109,7 @@ export const getAllOrders = (): OrdersByUserProps => {
 export const updateOrderStatus = (orderId: number, statusId: number): OrderUpdateProps => {
   const orderIndex = ORDERS_STATE.findIndex(o => o.orderId === orderId);
   if (orderIndex !== -1) {
-    const updatedOrder: OrderProps = {
+    const updatedOrder: BuyProps = {
       ...ORDERS_STATE[orderIndex],
       statusId
     };
@@ -120,5 +120,5 @@ export const updateOrderStatus = (orderId: number, statusId: number): OrderUpdat
     ];
     return { ok: true, statusCode: 200, order: cloneOrder(updatedOrder) };
   }
-  return { ok: false, statusCode: 404, order: {} as OrderProps };
+  return { ok: false, statusCode: 404, order: {} as BuyProps };
 };

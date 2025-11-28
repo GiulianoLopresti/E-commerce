@@ -1,6 +1,6 @@
-import type { OrderDetailProps } from '../interfaces/orderDetail.interfaces';
+import type { DetailProps } from './detail.interfaces';
 
-export interface OrderProps {
+export interface BuyProps {
   orderId: number;
   orderNumber: string;   
   purchaseDate: string; 
@@ -12,26 +12,26 @@ export interface OrderProps {
   addressId: number;
   statusId: number;
   userId: number;
-  details: OrderDetailProps[];
+  details: DetailProps[];
 }
 
 /** Para la acción getOrdersByUserId() */
 export interface OrdersByUserProps {
   ok: boolean;
   statusCode: number;
-  orders: OrderProps[];
+  orders: BuyProps[];
 }
 
 /** Para la acción createOrder() */
 export interface OrderCreateProps {
   ok: boolean;
   statusCode: number; // 201 (Created)
-  order: OrderProps; // Devuelve la orden recién creada
+  order: BuyProps; // Devuelve la orden recién creada
 }
 
 /** Para la acción updateOrderStatus() */
 export interface OrderUpdateProps {
   ok: boolean;
   statusCode: number; // 200 (OK)
-  order: OrderProps; // Devuelve la orden actualizada
+  order: BuyProps; // Devuelve la orden actualizada
 }

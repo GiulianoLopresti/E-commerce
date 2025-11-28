@@ -35,19 +35,26 @@ export const loginUser = ({ email, password }: LoginCredentials): UserLoginProps
 
 /** (CREATE) Registra un nuevo cliente */
 type RegisterData = Omit<UserProps, 'userId' | 'roleId' | 'statusId'>;
+
 export const registerUser = (data: RegisterData): UserRegisterProps => {
+
   const emailExists = USERS_STATE.some(u => u.email === data.email);
+
   if (emailExists) {
     throw new Error('El correo ya está registrado');
   }
+
   const newUser: UserProps = {
     ...data,
     userId: getNextUserId(),
     roleId: 2,
     statusId: 1
   };
+
   USERS_STATE = [...USERS_STATE, newUser];
+
   return { ok: true, statusCode: 201, user: cloneUser(newUser) };
+
 };
 
 /** (UPDATE) Actualiza el propio perfil del cliente */

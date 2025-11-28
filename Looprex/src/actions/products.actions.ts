@@ -58,41 +58,55 @@ export const getProductsByName = (query: string): ProductsByNameProps => {
 /** (CREATE) Crea un nuevo producto */
 type CreateProductData = Omit<ProductProps, 'productId'>;
 export const createProduct = (data: CreateProductData): ProductResponseProps => {
+
   const newProduct: ProductProps = {
     ...data,
     productId: getNextProductId()
   };
+
   PRODUCTS_STATE = [...PRODUCTS_STATE, newProduct];
+
   return { ok: true, statusCode: 201, product: cloneProduct(newProduct) };
 };
 
 // (Admin)
 /** (UPDATE) Actualiza un producto */
 export const updateProduct = (id: number, data: Partial<ProductProps>): ProductResponseProps => {
+
   const productIndex = PRODUCTS_STATE.findIndex(p => p.productId === id);
+
   if (productIndex !== -1) {
+
     const updatedProduct: ProductProps = {
       ...PRODUCTS_STATE[productIndex],
       ...data,
       productId: PRODUCTS_STATE[productIndex].productId
     };
+
     PRODUCTS_STATE = [
       ...PRODUCTS_STATE.slice(0, productIndex),
       updatedProduct,
       ...PRODUCTS_STATE.slice(productIndex + 1)
     ];
+
     return { ok: true, statusCode: 200, product: cloneProduct(updatedProduct) };
+
   }
+
   return { ok: false, statusCode: 404, product: {} as ProductProps };
 };
 
 // (Admin)
 /** (DELETE) Elimina un producto */
 export const deleteProduct = (productId: number): ProductDeleteProps => {
+
   const initialLength = PRODUCTS_STATE.length;
+
   PRODUCTS_STATE = PRODUCTS_STATE.filter(p => p.productId !== productId);
+
   if (PRODUCTS_STATE.length === initialLength) {
     return { ok: false, statusCode: 404, message: 'Producto no encontrado' };
   }
+  
   return { ok: true, statusCode: 200, message: 'Producto eliminado exitosamente' };
 };

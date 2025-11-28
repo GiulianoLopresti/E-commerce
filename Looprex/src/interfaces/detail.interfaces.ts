@@ -1,4 +1,4 @@
-export interface OrderDetailProps {
+export interface DetailProps {
   detailId: number;
   orderId: number;
   productId: number;
