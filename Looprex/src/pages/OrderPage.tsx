@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Navigate, Link } from 'react-router-dom';
-import { getOrdersByUserId } from '../actions/order.actions';
+import { getBuysByUserId } from '../actions/buy.actions';
 import type { UserProps, BuyProps } from '../interfaces';
 import styles from '../style/pages.module.css';
 
@@ -9,16 +9,32 @@ interface OrdersPageProps {
 }
 
 export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
-  const [orders, setOrders] = useState<BuyProps[]>([]);
+  const [buys, setBuys] = useState<BuyProps[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (currentUser) {
-      const response = getOrdersByUserId(currentUser.userId);
-      if (response.ok) {
-        setOrders(response.orders);
-      }
+      loadOrders();
     }
   }, [currentUser]);
+
+  const loadOrders = async () => {
+    if (!currentUser) return;
+
+    setLoading(true);
+    setError('');
+
+    const response = await getBuysByUserId(currentUser.userId);
+    
+    if (response.ok) {
+      setBuys(response.buys);
+    } else {
+      setError('Error al cargar tus pedidos');
+    }
+    
+    setLoading(false);
+  };
 
   if (!currentUser) {
     return <Navigate to="/login" replace />;
@@ -26,15 +42,27 @@ export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
 
   const getStatusBadge = (statusId: number) => {
     const statusMap: Record<number, { label: string; className: string }> = {
-      1: { label: 'Pendiente', className: styles.statusPending },
-      2: { label: 'Procesando', className: styles.statusProcessing },
-      3: { label: 'Enviado', className: styles.statusShipped },
-      4: { label: 'Entregado', className: styles.statusDelivered },
-      5: { label: 'Cancelado', className: styles.statusCancelled }
+      1: { label: 'Activo', className: styles.statusDelivered },
+      2: { label: 'Inactivo', className: styles.statusCancelled },
+      3: { label: 'Pendiente', className: styles.statusPending },
+      4: { label: 'Completado', className: styles.statusDelivered },
+      5: { label: 'Cancelado', className: styles.statusCancelled },
+      6: { label: 'En envío', className: styles.statusShipped }
     };
 
     const status = statusMap[statusId] || { label: 'Desconocido', className: '' };
     return <span className={`${styles.statusBadge} ${status.className}`}>{status.label}</span>;
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('es-CL', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   return (
@@ -43,12 +71,28 @@ export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
         <div className={styles.pageHeader}>
           <h1 className={styles.pageTitle}>Mis Pedidos</h1>
           <Link to="/mi-cuenta" className={styles.backLink}>
-            <i className="fa-solid fa-arrow-left"></i> {' '}
+            <i className="fa-solid fa-arrow-left"></i>
             Volver a Mi Cuenta
           </Link>
         </div>
 
-        {orders.length === 0 ? (
+        {error && (
+          <div className={styles.errorMessage}>
+            <i className="fa-solid fa-circle-exclamation"></i> {error}
+            <button onClick={loadOrders} className={styles.retryButton}>
+              <i className="fa-solid fa-rotate-right"></i> Reintentar
+            </button>
+          </div>
+        )}
+
+        {loading && (
+          <div className={styles.loadingState}>
+            <i className="fa-solid fa-spinner fa-spin"></i>
+            <p>Cargando tus pedidos...</p>
+          </div>
+        )}
+
+        {!loading && !error && buys.length === 0 && (
           <div className={styles.emptyState}>
             <i className="fa-solid fa-box-open"></i>
             <h3>No tienes pedidos aún</h3>
@@ -57,40 +101,44 @@ export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
               Ver Productos
             </Link>
           </div>
-        ) : (
+        )}
+
+        {!loading && !error && buys.length > 0 && (
           <div className={styles.ordersList}>
-            {orders.map(order => (
-              <div key={order.orderId} className={styles.orderCard}>
+            {buys.map(buy => (
+              <div key={buy.buyId} className={styles.orderCard}>
                 <div className={styles.orderHeader}>
                   <div className={styles.orderInfo}>
-                    <h3 className={styles.orderNumber}>Pedido #{order.orderId}</h3>
+                    <h3 className={styles.orderNumber}>
+                      Pedido #LPX-{buy.buyId.toString().padStart(5, '0')}
+                    </h3>
                     <p className={styles.orderDate}>
-                      {new Date(order.purchaseDate).toLocaleDateString('es-CL')}
+                      {formatDate(buy.date)}
                     </p>
                   </div>
-                  {getStatusBadge(order.statusId)}
+                  {getStatusBadge(buy.statusId)}
                 </div>
 
                 <div className={styles.orderBody}>
                   <div className={styles.orderItemsCount}>
-                    <i className="fa-solid fa-box"></i>
-                    {order.details?.length || 0} productos
+                    <i className="fa-solid fa-location-dot"></i>
+                    Dirección ID: {buy.addressId}
                   </div>
 
                   <div className={styles.orderTotal}>
                     <span>Total:</span>
                     <span className={styles.orderTotalAmount}>
-                      ${order.total.toLocaleString('es-CL')}
+                      ${buy.total.toLocaleString('es-CL')}
                     </span>
                   </div>
                 </div>
 
                 <div className={styles.orderFooter}>
                   <Link 
-                    to={`/pedido/${order.orderNumber}`}
+                    to={`/pedido/${buy.buyId}`}
                     className={styles.viewOrderButton}
                   >
-                    Ver Detalles{}
+                    Ver Detalles
                     <i className="fa-solid fa-arrow-right"></i>
                   </Link>
                 </div>

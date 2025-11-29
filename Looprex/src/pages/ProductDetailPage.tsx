@@ -15,32 +15,65 @@ export const ProductDetailPage = ({ onAddToCart }: ProductDetailPageProps) => {
   const [product, setProduct] = useState<ProductProps | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'specifications'>('description');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (id) {
-      const response = getProductById(Number.parseInt(id));
-      if (response.ok && response.product) {
-        setProduct(response.product);
-      } else {
-        navigate('/404');
-      }
+      loadProduct(Number.parseInt(id));
     }
-  }, [id, navigate]);
+  }, [id]);
+
+  const loadProduct = async (productId: number) => {
+    setLoading(true);
+    setError('');
+
+    const response = await getProductById(productId);
+    
+    if (response.ok && response.product) {
+      setProduct(response.product);
+    } else {
+      setError('Producto no encontrado');
+      setTimeout(() => navigate('/'), 2000);
+    }
+    
+    setLoading(false);
+  };
 
   const handleAddToCart = () => {
     if (product) {
       onAddToCart(product.productId, quantity);
       setQuantity(1);
+      // Opcional: Mostrar mensaje de éxito
+      alert('Producto agregado al carrito');
     }
   };
 
-  if (!product) {
+  if (loading) {
     return (
-      <div className={styles.loading}>
-        <i className="fa-solid fa-spinner fa-spin"></i>
-        <p>Cargando producto...</p>
+      <div className={styles.loadingState}>
+        <div className={styles.container}>
+          <i className="fa-solid fa-spinner fa-spin"></i>
+          <p>Cargando producto...</p>
+        </div>
       </div>
     );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.errorState}>
+        <div className={styles.container}>
+          <i className="fa-solid fa-circle-exclamation"></i>
+          <h2>{error}</h2>
+          <p>Redirigiendo al inicio...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!product) {
+    return null;
   }
 
   return (
@@ -59,11 +92,20 @@ export const ProductDetailPage = ({ onAddToCart }: ProductDetailPageProps) => {
         <div className={styles.productDetail}>
           <div className={styles.productDetailImage}>
             <img src={product.productPhoto} alt={product.name} />
+            {product.stock === 0 && (
+              <div className={styles.outOfStockBadge}>Agotado</div>
+            )}
           </div>
 
           <div className={styles.productDetailInfo}>
             <h1 className={styles.productDetailTitle}>{product.name}</h1>
             
+            {/* Mostrar categoría */}
+            <div className={styles.productDetailCategory}>
+              <i className="fa-solid fa-tag"></i>
+              <span>{product.category.name}</span>
+            </div>
+
             <div className={styles.productDetailPrice}>
               ${product.price.toLocaleString('es-CL')}
             </div>
@@ -99,10 +141,17 @@ export const ProductDetailPage = ({ onAddToCart }: ProductDetailPageProps) => {
                   onClick={handleAddToCart}
                   className={styles.addToCartButtonLarge}
                 >
-                  <i className="fa-solid fa-cart-plus"></i>{' '}
+                  <i className="fa-solid fa-cart-plus"></i>{}
                   Agregar al Carrito
                 </button>
               </>
+            )}
+
+            {product.stock === 0 && (
+              <div className={styles.outOfStockMessage}>
+                <i className="fa-solid fa-info-circle"></i>{}
+                Este producto no está disponible en este momento
+              </div>
             )}
           </div>
         </div>
@@ -127,12 +176,27 @@ export const ProductDetailPage = ({ onAddToCart }: ProductDetailPageProps) => {
           <div className={styles.tabContent}>
             {activeTab === 'description' && (
               <div className={styles.tabPanel}>
+                <h3>Descripción del Producto</h3>
                 <p>{product.description || 'Sin descripción disponible.'}</p>
               </div>
             )}
             {activeTab === 'specifications' && (
               <div className={styles.tabPanel}>
-                <p>Especificaciones técnicas disponibles próximamente.</p>
+                <h3>Especificaciones Técnicas</h3>
+                <ul className={styles.specsList}>
+                  <li>
+                    <strong>Categoría:</strong> {product.category.name}
+                  </li>
+                  <li>
+                    <strong>Estado:</strong> {product.status.name}
+                  </li>
+                  <li>
+                    <strong>Stock Disponible:</strong> {product.stock} unidades
+                  </li>
+                  <li>
+                    <strong>Código de Producto:</strong> LPX-{product.productId.toString().padStart(5, '0')}
+                  </li>
+                </ul>
               </div>
             )}
           </div>

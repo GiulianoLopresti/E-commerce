@@ -1,18 +1,15 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import type { LoginCredentials } from '../actions/user.actions';
 import styles from '../style/pages.module.css';
 
 interface LoginPageProps {
-  onLogin: (credentials: LoginCredentials) => Promise<void>;
+  onLogin: (email: string, password: string) => Promise<void>;
 }
 
 export const LoginPage = ({ onLogin }: LoginPageProps) => {
   const navigate = useNavigate();
-  const [credentials, setCredentials] = useState<LoginCredentials>({
-    email: '',
-    password: ''
-  });
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,8 +19,8 @@ export const LoginPage = ({ onLogin }: LoginPageProps) => {
     setIsLoading(true);
 
     try {
-      await onLogin(credentials);
-      navigate('/mi-cuenta');
+      await onLogin(email, password);
+      navigate('/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Error al iniciar sesión');
     } finally {
@@ -50,10 +47,11 @@ export const LoginPage = ({ onLogin }: LoginPageProps) => {
               <input
                 id="email"
                 type="email"
-                value={credentials.email}
-                onChange={(e) => setCredentials({ ...credentials, email: e.target.value })}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="tu@email.com"
+                autoComplete="email"
               />
             </div>
 
@@ -62,10 +60,11 @@ export const LoginPage = ({ onLogin }: LoginPageProps) => {
               <input
                 id="password"
                 type="password"
-                value={credentials.password}
-                onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 placeholder="••••••••"
+                autoComplete="current-password"
               />
             </div>
 
@@ -76,17 +75,23 @@ export const LoginPage = ({ onLogin }: LoginPageProps) => {
             >
               {isLoading ? (
                 <>
-                  <i className="fa-solid fa-spinner fa-spin"></i>{' '}
+                  <i className="fa-solid fa-spinner fa-spin"></i>{}
                   Iniciando sesión...
                 </>
               ) : (
                 <>
-                  <i className="fa-solid fa-right-to-bracket"></i>{' '}
+                  <i className="fa-solid fa-right-to-bracket"></i>{}
                   Iniciar Sesión
                 </>
               )}
             </button>
           </form>
+
+          <div className={styles.authLinks}>
+            <Link to="/recuperar-contrasena" className={styles.forgotPassword}>
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
 
           <p className={styles.authFooter}>
             ¿No tienes una cuenta?{' '}

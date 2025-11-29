@@ -1,68 +1,204 @@
-import { ADDRESSES } from '../mocks';
-import type {
-  AddressProps,
-  AddressesByUserProps,
-  AddressResponseProps,
-  AddressDeleteProps
-} from '../interfaces';
+/**
+ * Actions de Direcciones
+ * ACTUALIZADO: Ahora usa servicios API reales en vez de mocks
+ */
 
-let ADDRESSES_STATE: AddressProps[] = [...ADDRESSES];
+import { AddressesService } from '@/services';
+import type { AddressesAllProps } from '@/interfaces';
 
-const cloneAddress = (address: AddressProps): AddressProps => ({ ...address });
+/**
+ * Obtener todas las direcciones (ADMIN)
+ */
+export const getAddresses = async (): Promise<AddressesAllProps> => {
+  try {
+    const response = await AddressesService.getAll();
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        addresses: [],
+      };
+    }
 
-const getNextAddressId = (): number => {
-  if (ADDRESSES_STATE.length === 0) {
-    return 1;
-  }
-  return Math.max(...ADDRESSES_STATE.map(address => address.addressId)) + 1;
-};
-
-// (Cliente)
-/** (READ) Obtiene las direcciones PARA UN USUARIO */
-export const getAddressesByUserId = (userId: number): AddressesByUserProps => {
-  const addresses = ADDRESSES_STATE.filter(a => a.userId === userId).map(cloneAddress);
-  return { ok: true, statusCode: 200, addresses };
-};
-
-// (Cliente)
-/** (CREATE) Añade una dirección para un cliente */
-type CreateAddressData = Omit<AddressProps, 'addressId'>;
-export const createAddress = (data: CreateAddressData): AddressResponseProps => {
-  const newAddress: AddressProps = {
-    ...data,
-    addressId: getNextAddressId()
-  };
-  ADDRESSES_STATE = [...ADDRESSES_STATE, newAddress];
-  return { ok: true, statusCode: 201, address: cloneAddress(newAddress) };
-};
-
-// (Cliente)
-/** (UPDATE) Actualiza una dirección */
-export const updateAddress = (addressId: number, data: Partial<AddressProps>): AddressResponseProps => {
-  const addressIndex = ADDRESSES_STATE.findIndex(a => a.addressId === addressId);
-  if (addressIndex !== -1) {
-    const updatedAddress: AddressProps = {
-      ...ADDRESSES_STATE[addressIndex],
-      ...data,
-      addressId: ADDRESSES_STATE[addressIndex].addressId
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      addresses: response.data,
     };
-    ADDRESSES_STATE = [
-      ...ADDRESSES_STATE.slice(0, addressIndex),
-      updatedAddress,
-      ...ADDRESSES_STATE.slice(addressIndex + 1)
-    ];
-    return { ok: true, statusCode: 200, address: cloneAddress(updatedAddress) };
+  } catch (error: any) {
+    console.error('Error al obtener direcciones:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      addresses: [],
+    };
   }
-  return { ok: false, statusCode: 404, address: {} as AddressProps };
 };
 
-// (Cliente)
-/** (DELETE) Elimina una dirección */
-export const deleteAddress = (addressId: number): AddressDeleteProps => {
-  const initialLength = ADDRESSES_STATE.length;
-  ADDRESSES_STATE = ADDRESSES_STATE.filter(address => address.addressId !== addressId);
-  if (ADDRESSES_STATE.length === initialLength) {
-    return { ok: false, statusCode: 404, message: 'Dirección no encontrada' };
+/**
+ * Obtener direcciones de un usuario
+ */
+export const getAddressesByUserId = async (userId: number): Promise<AddressesAllProps> => {
+  try {
+    const response = await AddressesService.getByUserId(userId);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        addresses: [],
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      addresses: response.data,
+    };
+  } catch (error: any) {
+    console.error('Error al obtener direcciones del usuario:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      addresses: [],
+    };
   }
-  return { ok: true, statusCode: 200, message: 'Dirección eliminada' };
+};
+
+/**
+ * Obtener una dirección por ID
+ */
+export const getAddressById = async (id: number): Promise<{ ok: boolean; statusCode: number; address: any }> => {
+  try {
+    const response = await AddressesService.getById(id);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        address: null,
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      address: response.data,
+    };
+  } catch (error: any) {
+    console.error('Error al obtener dirección:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      address: null,
+    };
+  }
+};
+
+/**
+ * Crear una dirección
+ */
+export const createAddress = async (addressData: {
+  userId: number;
+  street: string;
+  number: string;
+  apartment?: string;
+  comunaId: number;
+}): Promise<{ ok: boolean; statusCode: number; message: string; address?: any }> => {
+  try {
+    const response = await AddressesService.create(addressData);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        message: response.message,
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      message: 'Dirección creada exitosamente',
+      address: response.data,
+    };
+  } catch (error: any) {
+    console.error('Error al crear dirección:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      message: 'Error al crear la dirección',
+    };
+  }
+};
+
+/**
+ * Actualizar una dirección
+ */
+export const updateAddress = async (
+  id: number,
+  addressData: {
+    userId: number;
+    street: string;
+    number: string;
+    apartment?: string;
+    comunaId: number;
+  }
+): Promise<{ ok: boolean; statusCode: number; message: string; address?: any }> => {
+  try {
+    const response = await AddressesService.update(id, addressData);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        message: response.message,
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      message: 'Dirección actualizada exitosamente',
+      address: response.data,
+    };
+  } catch (error: any) {
+    console.error('Error al actualizar dirección:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      message: 'Error al actualizar la dirección',
+    };
+  }
+};
+
+/**
+ * Eliminar una dirección
+ */
+export const deleteAddress = async (id: number): Promise<{ ok: boolean; statusCode: number; message: string }> => {
+  try {
+    const response = await AddressesService.delete(id);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        message: response.message,
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      message: 'Dirección eliminada exitosamente',
+    };
+  } catch (error: any) {
+    console.error('Error al eliminar dirección:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      message: 'Error al eliminar la dirección',
+    };
+  }
 };

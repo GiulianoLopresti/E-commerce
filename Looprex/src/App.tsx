@@ -1,73 +1,160 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { AppRoutes } from './routes/AppRoutes';
 import { NavBar } from './components/common/navBar/NavBar'; 
 import { CategoryNav } from './components/common/categoryNav/Category'; 
 import { Footer } from './components/layout/Footer';
 import type { UserProps, Cart } from './interfaces';
-import type { LoginCredentials } from './actions/user.actions';
 
 export const ECommerceApp = () => {
   const [currentUser, setCurrentUser] = useState<UserProps | null>(null);
   const [cart, setCart] = useState<Cart>({ items: [] });
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleLogin = useCallback(async (credentials: LoginCredentials) => {
-    const { loginUser } = await import('./actions/user.actions');
-    const response = loginUser(credentials);
-    
-    if (response.ok && response.user) {
-      setCurrentUser(response.user);
-    } else {
-      throw new Error(response.token || 'Error al iniciar sesión');
+  // Recuperar usuario de localStorage al montar (opcional)
+  useEffect(() => {
+    const savedUser = localStorage.getItem('currentUser');
+    if (savedUser) {
+      try {
+        setCurrentUser(JSON.parse(savedUser));
+      } catch (error) {
+        console.error('Error al recuperar usuario:', error);
+        localStorage.removeItem('currentUser');
+      }
     }
   }, []);
 
-  const handleLogout = useCallback(() => {
-    setCurrentUser(null);
+  /**
+   * Handler para login
+   */
+  const handleLogin = useCallback(async (email: string, password: string) => {
+    const { loginUser } = await import('./actions/user.actions');
+    const response = await loginUser(email, password);
+    
+    if (response.ok && response.user) {
+      setCurrentUser(response.user);
+      localStorage.setItem('currentUser', JSON.stringify(response.user));
+    } else {
+      throw new Error(response.message || 'Error al iniciar sesión');
+    }
   }, []);
 
-  const handleAddToCart = useCallback((productId: number, quantity: number = 1) => {
+  /**
+   * Handler para logout
+   */
+  const handleLogout = useCallback(() => {
+    setCurrentUser(null);
+    localStorage.removeItem('currentUser');
+  }, []);
+
+  /**
+   * Handler para agregar al carrito
+   * IMPORTANTE: Ahora obtiene la información completa del producto
+   */
+  const handleAddToCart = useCallback(async (productId: number, quantity: number = 1) => {
+    const { getProductById } = await import('./actions/products.actions');
+    const response = await getProductById(productId);
+    
+    if (!response.ok || !response.product) {
+      console.error('Error al obtener producto');
+      alert('Error al agregar producto al carrito');
+      return;
+    }
+
+    const product = response.product;
+
+    // Validar stock
+    if (product.stock < quantity) {
+      alert(`Solo hay ${product.stock} unidades disponibles`);
+      return;
+    }
+
     setCart(prevCart => {
       const existingItem = prevCart.items.find(item => item.productId === productId);
       
       if (existingItem) {
+        // Verificar que no exceda el stock
+        const newQuantity = existingItem.quantity + quantity;
+        if (newQuantity > product.stock) {
+          alert(`Solo hay ${product.stock} unidades disponibles`);
+          return prevCart;
+        }
+
         return {
           items: prevCart.items.map(item =>
             item.productId === productId
-              ? { ...item, quantity: item.quantity + quantity }
+              ? { ...item, quantity: newQuantity }
               : item
           )
         };
       }
       
+      // Crear nuevo item con toda la información
       return {
-        items: [...prevCart.items, { productId, quantity }]
+        items: [
+          ...prevCart.items, 
+          {
+            productId: product.productId,
+            productName: product.name,
+            productPhoto: product.productPhoto,
+            price: product.price,
+            quantity: quantity,
+            stock: product.stock
+          }
+        ]
       };
     });
   }, []);
 
+  /**
+   * Handler para remover del carrito
+   */
   const handleRemoveFromCart = useCallback((productId: number) => {
     setCart(prevCart => ({
       items: prevCart.items.filter(item => item.productId !== productId)
     }));
   }, []);
 
+  /**
+   * Handler para actualizar cantidad en carrito
+   */
   const handleUpdateCartQuantity = useCallback((productId: number, newQuantity: number) => {
     if (newQuantity <= 0) {
       handleRemoveFromCart(productId);
       return;
     }
-    
-    setCart(prevCart => ({
-      items: prevCart.items.map(item =>
-        item.productId === productId
-          ? { ...item, quantity: newQuantity }
-          : item
-      )
-    }));
+
+    setCart(prevCart => {
+      const item = prevCart.items.find(i => i.productId === productId);
+      
+      // Validar stock
+      if (item && newQuantity > item.stock) {
+        alert(`Solo hay ${item.stock} unidades disponibles`);
+        return prevCart;
+      }
+
+      return {
+        items: prevCart.items.map(item =>
+          item.productId === productId
+            ? { ...item, quantity: newQuantity }
+            : item
+        )
+      };
+    });
   }, [handleRemoveFromCart]);
 
+  /**
+   * Handler para limpiar carrito
+   */
   const handleClearCart = useCallback(() => {
     setCart({ items: [] });
+  }, []);
+
+  /**
+   * Handler para búsqueda
+   */
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+    console.log('Búsqueda:', query);
   }, []);
 
   return (
@@ -76,9 +163,9 @@ export const ECommerceApp = () => {
         <NavBar 
           currentUser={currentUser}
           cartItemCount={cart.items.reduce((sum, item) => sum + item.quantity, 0)}
-          onLogout={handleLogout} onSearch={function (query: string): void {
-            throw new Error('Function not implemented.');
-          } }        />
+          onLogout={handleLogout}
+          onSearch={handleSearch}
+        />
         <CategoryNav />
       </header>
       

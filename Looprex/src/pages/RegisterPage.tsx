@@ -7,7 +7,7 @@ export const RegisterPage = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
-    lastName: '',
+    lastname: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -21,30 +21,38 @@ export const RegisterPage = () => {
     e.preventDefault();
     setError('');
 
+    // Validación de contraseñas
     if (formData.password !== formData.confirmPassword) {
       setError('Las contraseñas no coinciden');
+      return;
+    }
+
+    // Validación de longitud de contraseña
+    if (formData.password.length < 6) {
+      setError('La contraseña debe tener al menos 6 caracteres');
       return;
     }
 
     setIsLoading(true);
 
     try {
-      const response = registerUser({
+      const response = await registerUser({
         name: formData.name,
+        lastname: formData.lastname,
         email: formData.email,
         password: formData.password,
         phone: formData.phone,
         rut: formData.rut,
-        lastName: formData.lastName
       });
 
       if (response.ok) {
+        alert('¡Cuenta creada exitosamente! Ahora puedes iniciar sesión.');
         navigate('/login');
       } else {
-        setError( 'Error al crear la cuenta');
+        setError(response.message || 'Error al crear la cuenta');
       }
-    } catch (err) {
-      setError('Error al crear la cuenta');
+    } catch (err: any) {
+      setError('Error de conexión con el servidor');
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -65,16 +73,32 @@ export const RegisterPage = () => {
           )}
 
           <form onSubmit={handleSubmit} className={styles.authForm}>
-            <div className={styles.formGroup}>
-              <label htmlFor="name">Nombre Completo</label>
-              <input
-                id="name"
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                required
-                placeholder="Juan Pérez"
-              />
+            <div className={styles.formRow}>
+              <div className={styles.formGroup}>
+                <label htmlFor="name">Nombre</label>
+                <input
+                  id="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  required
+                  placeholder="Juan"
+                  autoComplete="given-name"
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label htmlFor="lastname">Apellido</label>
+                <input
+                  id="lastname"
+                  type="text"
+                  value={formData.lastname}
+                  onChange={(e) => setFormData({ ...formData, lastname: e.target.value })}
+                  required
+                  placeholder="Pérez"
+                  autoComplete="family-name"
+                />
+              </div>
             </div>
 
             <div className={styles.formGroup}>
@@ -86,6 +110,7 @@ export const RegisterPage = () => {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
                 placeholder="tu@email.com"
+                autoComplete="email"
               />
             </div>
 
@@ -111,6 +136,7 @@ export const RegisterPage = () => {
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   required
                   placeholder="+56 9 1234 5678"
+                  autoComplete="tel"
                 />
               </div>
             </div>
@@ -124,7 +150,10 @@ export const RegisterPage = () => {
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 required
                 placeholder="••••••••"
+                autoComplete="new-password"
+                minLength={6}
               />
+              <small className={styles.formHint}>Mínimo 6 caracteres</small>
             </div>
 
             <div className={styles.formGroup}>
@@ -136,6 +165,8 @@ export const RegisterPage = () => {
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 required
                 placeholder="••••••••"
+                autoComplete="new-password"
+                minLength={6}
               />
             </div>
 
@@ -146,12 +177,12 @@ export const RegisterPage = () => {
             >
               {isLoading ? (
                 <>
-                  <i className="fa-solid fa-spinner fa-spin"></i>{' '}
+                  <i className="fa-solid fa-spinner fa-spin"></i>{}
                   Creando cuenta...
                 </>
               ) : (
                 <>
-                  <i className="fa-solid fa-user-plus"></i>{''}
+                  <i className="fa-solid fa-user-plus"></i>{}
                   Crear Cuenta
                 </>
               )}

@@ -219,7 +219,6 @@
 }
 
 /* ==================== PRODUCT DETAIL PAGE ==================== */
-/* ==================== PRODUCT DETAIL PAGE ==================== */
 .productDetailPage {
   padding: var(--spacing-xl) 0;
 }
@@ -1055,6 +1054,195 @@
   cursor: not-allowed;
 }
 
+/* ==================== CHECKOUT - ESTILOS ADICIONALES ==================== */
+
+/* Dirección del usuario */
+.addressCard {
+  background-color: var(--c-gray-100);
+  border: 1px solid var(--c-gray-300);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+}
+
+.addressInfo p {
+  margin: var(--spacing-xs) 0;
+  font-size: var(--font-size-sm);
+}
+
+.addressInfo strong {
+  color: var(--c-accent);
+  margin-right: var(--spacing-sm);
+}
+
+.changeAddressLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--c-primary);
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  transition: color var(--transition-fast);
+}
+
+.changeAddressLink:hover {
+  text-decoration: underline;
+  color: var(--c-accent-dark);
+}
+
+/* Cuando no hay dirección */
+.noAddress {
+  text-align: center;
+  padding: var(--spacing-2xl);
+  background-color: rgba(255, 193, 7, 0.1);
+  border: 1px solid var(--c-warning);
+  border-radius: var(--radius-md);
+}
+
+.noAddress i {
+  font-size: var(--font-size-3xl);
+  color: var(--c-warning);
+  margin-bottom: var(--spacing-md);
+  display: block;
+}
+
+.noAddress p {
+  margin-bottom: var(--spacing-md);
+  color: var(--c-text);
+}
+
+.addAddressButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background-color: var(--c-primary);
+  color: var(--c-white);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.addAddressButton:hover {
+  background-color: var(--c-accent-dark);
+  transform: translateY(-2px);
+}
+
+/* Loading de dirección */
+.loadingAddress {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--c-accent);
+}
+
+/* Inputs deshabilitados (info del usuario) */
+.disabledInput {
+  background-color: var(--c-gray-100);
+  cursor: not-allowed;
+  color: var(--c-gray-600);
+  opacity: 0.8;
+}
+
+/* Warning cuando no puede hacer checkout */
+.checkoutWarning {
+  background-color: rgba(255, 193, 7, 0.1);
+  border: 1px solid var(--c-warning);
+  color: #473601;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  text-align: center;
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.checkoutWarning i {
+  font-size: var(--font-size-md);
+}
+
+/* Nota final */
+.checkoutNote {
+  text-align: center;
+  font-size: var(--font-size-xs);
+  color: var(--c-gray-600);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--c-gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.checkoutNote i {
+  color: var(--c-accent);
+}
+
+/* Envío gratis badge */
+.freeShipping {
+  color: var(--c-success);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+/* Link de error */
+.errorLink {
+  background-color: var(--c-white);
+  color: var(--c-primary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: var(--spacing-md);
+  transition: background-color var(--transition-fast);
+}
+
+.errorLink:hover {
+  background-color: var(--c-gray-100);
+}
+
+/* Loading state general */
+.loadingState {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  color: var(--c-accent);
+}
+
+.loadingState i {
+  font-size: var(--font-size-3xl);
+  margin-bottom: var(--spacing-md);
+  display: block;
+  color: var(--c-primary);
+}
+
+.loadingState p {
+  font-size: var(--font-size-lg);
+  font-weight: 500;
+}
+
+.errorMessage i {
+  font-size: var(--font-size-lg);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .checkoutLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .checkoutSummary {
+    position: static;
+  }
+}
+
 /* ==================== ORDERS PAGE ==================== */
 .ordersPage {
   padding: var(--spacing-xl) 0;
@@ -1123,7 +1311,7 @@
 
 .statusShipped {
   background-color: rgba(155, 89, 182, 0.1);
-  color: #9B59B6;
+  color: #ffffff;
 }
 
 .statusDelivered {
@@ -1187,6 +1375,52 @@
   background-color: var(--c-accent-dark);
   gap: var(--spacing-md);
   color: var(--c-white);
+}
+
+/* ==================== ORDERS PAGE - ADICIONALES ==================== */
+
+/* Retry button */
+.retryButton {
+  background-color: #c00;
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.retryButton:hover {
+  background-color: #a00;
+}
+
+/* Empty state */
+.emptyState {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  color: var(--c-gray-500);
+}
+
+.emptyState i {
+  font-size: var(--font-size-4xl);
+  color: var(--c-gray-400);
+  margin-bottom: var(--spacing-lg);
+  display: block;
+}
+
+.emptyState h3 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-sm);
+  color: var(--c-text);
+}
+
+.emptyState p {
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 /* ==================== NOT FOUND PAGE ==================== */
@@ -1348,4 +1582,99 @@
   .adminBanner {
     padding: var(--spacing-md) 0;
   }
+}
+
+/* ==================== PRODUCT DETAIL PAGE - ADICIONALES ==================== */
+
+/* Category badge */
+.productDetailCategory {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background-color: var(--c-gray-100);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  color: var(--c-accent);
+  margin-bottom: var(--spacing-md);
+}
+
+.productDetailCategory i {
+  color: var(--c-primary);
+}
+
+/* Out of stock badge */
+.outOfStockBadge {
+  position: absolute;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  background-color: var(--c-danger);
+  color: var(--c-white);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  z-index: 10;
+}
+
+/* Out of stock message */
+.outOfStockMessage {
+  background-color: rgba(231, 76, 60, 0.1);
+  border: 1px solid var(--c-danger);
+  color: var(--c-danger);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+}
+
+/* Specifications list */
+.specsList {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-md) 0;
+}
+
+.specsList li {
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--c-gray-200);
+}
+
+.specsList li:last-child {
+  border-bottom: none;
+}
+
+.specsList strong {
+  color: var(--c-accent);
+  margin-right: var(--spacing-sm);
+}
+
+/* Error state */
+.errorState {
+  text-align: center;
+  padding: var(--spacing-3xl);
+  color: var(--c-danger);
+}
+
+.errorState i {
+  font-size: var(--font-size-4xl);
+  margin-bottom: var(--spacing-md);
+  display: block;
+}
+
+.errorState h2 {
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+/* ==================== REGISTER PAGE - ADICIONALES ==================== */
+
+/* Form hint */
+.formHint {
+  display: block;
+  font-size: var(--font-size-xs);
+  color: var(--c-gray-600);
+  margin-top: var(--spacing-xs);
 }

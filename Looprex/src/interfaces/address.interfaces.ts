@@ -1,28 +1,40 @@
+/**
+ * Interfaces de Direcciones
+ */
+
+/**
+ * Estructura de una dirección (coincide con AddressApiResponse del backend)
+ */
 export interface AddressProps {
   addressId: number;
+  userId: number;
   street: string;
   number: string;
-  comunaId: number;
-  userId: number;
+  apartment?: string;
+  // Objeto anidado (como viene del backend)
+  comuna: {
+    comunaId: number;
+    name: string;
+    regionId: number;
+  };
 }
 
-/** Para la acción getAddressesByUserId() */
-export interface AddressesByUserProps {
+/**
+ * Request para crear/actualizar dirección
+ */
+export interface AddressRequest {
+  userId: number;
+  street: string;
+  number: string;
+  apartment?: string;
+  comunaId: number;  // Solo ID
+}
+
+/**
+ * Respuesta al obtener direcciones
+ */
+export interface AddressesAllProps {
   ok: boolean;
   statusCode: number;
   addresses: AddressProps[];
-}
-
-/** Para la acción createAddress() o updateAddress() */
-export interface AddressResponseProps {
-  ok: boolean;
-  statusCode: number;
-  address: AddressProps;
-}
-
-/** Para la acción deleteAddress() */
-export interface AddressDeleteProps {
-  ok: boolean;
-  statusCode: number;
-  message: string;
 }

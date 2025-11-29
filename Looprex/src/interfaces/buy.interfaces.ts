@@ -1,37 +1,59 @@
-import type { DetailProps } from './detail.interfaces';
+/**
+ * Interfaces de Compras
+ * NOTA: En el backend se llaman "Buys", no "Orders"
+ */
+import type { 
+  DetailProps  // ← AGREGAR ESTE IMPORT
+} from '@/interfaces';
 
+/**
+ * Estructura de una compra
+ */
 export interface BuyProps {
-  orderId: number;
-  orderNumber: string;   
-  purchaseDate: string; 
-  subtotal: number;
-  iva: number;          
-  shipping: number;     
-  total: number;
-  paymentMethod: string;
+  buyId: number;
+  userId: number;
   addressId: number;
   statusId: number;
-  userId: number;
-  details: DetailProps[];
+  date: string; // ISO format
+  total: number;
 }
 
-/** Para la acción getOrdersByUserId() */
-export interface OrdersByUserProps {
+/**
+ * Respuesta al obtener todas las compras
+ */
+export interface BuysAllProps {
   ok: boolean;
   statusCode: number;
-  orders: BuyProps[];
+  buys: BuyProps[];
 }
 
-/** Para la acción createOrder() */
-export interface OrderCreateProps {
+/**
+ * Respuesta al obtener una compra por ID
+ */
+export interface BuyByIdProps {
   ok: boolean;
-  statusCode: number; // 201 (Created)
-  order: BuyProps; // Devuelve la orden recién creada
+  statusCode: number;
+  buy: BuyProps | null;
 }
 
-/** Para la acción updateOrderStatus() */
-export interface OrderUpdateProps {
+/**
+ * Respuesta al crear una compra
+ */
+export interface BuyCreateProps {
   ok: boolean;
-  statusCode: number; // 200 (OK)
-  order: BuyProps; // Devuelve la orden actualizada
+  statusCode: number;
+  message: string;
+  buy?: BuyProps;
+  details?: DetailProps[];
+}
+
+/**
+ * Respuesta al actualizar una compra
+ */
+export interface BuyUpdateProps {
+  ok: boolean;
+  statusCode: number;
+  message: string;
+  buy?: BuyProps;
+  
 }

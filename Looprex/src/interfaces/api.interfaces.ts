@@ -188,7 +188,8 @@ export interface DetailApiResponse {
   buyId: number;
   productId: number;
   quantity: number;
-  price: number;
+  unitPrice: number;
+  subtotal: number; 
 }
 
 /**
@@ -198,7 +199,8 @@ export interface CreateDetailRequest {
   buyId: number;
   productId: number;
   quantity: number;
-  price: number;
+  unitPrice: number; 
+  subtotal: number;
 }
 
 /**

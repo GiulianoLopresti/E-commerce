@@ -1,6 +1,5 @@
 import { useRoutes } from 'react-router-dom';
 import type { UserProps, Cart } from '../interfaces';
-import type { LoginCredentials } from '../actions/user.actions';
 
 // Pages
 import { HomePage } from '../pages/HomePages';
@@ -17,9 +16,9 @@ import { AdminPage } from '../pages/AdminPage';
 interface AppRoutesProps {
   currentUser: UserProps | null;
   cart: Cart;
-  onLogin: (credentials: LoginCredentials) => Promise<void>;
+  onLogin: (email: string, password: string) => Promise<void>;
   onLogout: () => void;
-  onAddToCart: (productId: number, quantity?: number) => void;
+  onAddToCart: (productId: number, quantity?: number) => Promise<void>;
   onRemoveFromCart: (productId: number) => void;
   onUpdateCartQuantity: (productId: number, newQuantity: number) => void;
   onClearCart: () => void;

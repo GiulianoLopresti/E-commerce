@@ -15,7 +15,7 @@ export const AdminPage = ({ currentUser }: AdminPageProps) => {
   const [activeView, setActiveView] = useState<AdminView>('products');
 
   // Verificar que el usuario sea admin (roleId: 1)
-  if (!currentUser || currentUser.roleId !== 1) {
+  if (currentUser?.role?.roleId !== 1) {
     return <Navigate to="/" replace />;
   }
 

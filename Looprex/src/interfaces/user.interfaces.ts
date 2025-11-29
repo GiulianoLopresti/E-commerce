@@ -1,46 +1,62 @@
+/**
+ * Interfaces de Usuarios
+ */
+
+/**
+ * Estructura de un usuario (coincide con UserApiResponse del backend)
+ */
 export interface UserProps {
   userId: number;
+  email: string;
   rut: string;
   name: string;
-  lastName: string;
+  lastname: string;
   phone: string;
-  email: string;
-  password: string;     
-  profilePhoto?: string; 
-  roleId: number;
-  statusId: number;
+  profilePhoto: string;
+  // Objeto anidado (como viene del backend)
+  role: {
+    roleId: number;
+    name: string;
+  };
 }
 
+/**
+ * Request para crear usuario (registro)
+ */
+export interface UserRegisterRequest {
+  email: string;
+  password: string;
+  rut: string;
+  name: string;
+  lastname: string;
+  phone: string;
+  profilePhoto?: string;
+  roleId: number;  // Solo ID
+}
+
+/**
+ * Request para login
+ */
+export interface UserLoginRequest {
+  email: string;
+  password: string;
+}
+
+/**
+ * Respuesta de login
+ */
+export interface UserLoginProps {
+  ok: boolean;
+  statusCode: number;
+  user: UserProps | null;
+  message?: string;
+}
+
+/**
+ * Respuesta al obtener usuarios
+ */
 export interface UsersAllProps {
   ok: boolean;
   statusCode: number;
   users: UserProps[];
-}
-
-/** Para la acción loginUser() */
-export interface UserLoginProps {
-  ok: boolean;
-  statusCode: number;
-  user: UserProps;
-  token?: string;
-}
-
-/** Para la acción registerUser() */
-export interface UserRegisterProps {
-  ok: boolean;
-  statusCode: number;
-  user: UserProps;
-}
-
-/** Para la acción updateUser() */
-export interface UserUpdateProps {
-  ok: boolean;
-  statusCode: number;
-  user: UserProps;
-}
-
-export interface UserDeleteProps {
-  ok: boolean;
-  statusCode: number;
-  message: string;
 }

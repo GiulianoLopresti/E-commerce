@@ -1,22 +1,29 @@
+/**
+ * Interfaces de Estados
+ */
+
+/**
+ * Estructura de un estado
+ */
 export interface StatusProps {
   statusId: number;
   name: string;
 }
 
-export interface StatusAllProps {
+/**
+ * Respuesta al obtener todos los estados
+ */
+export interface StatusesAllProps {
   ok: boolean;
   statusCode: number;
-  status: StatusProps[];
+  statuses: StatusProps[];
 }
 
-export interface StatusResponseProps {
+/**
+ * Respuesta al obtener un estado por ID
+ */
+export interface StatusByIdProps {
   ok: boolean;
   statusCode: number;
-  status: StatusProps;
-}
-
-export interface StatusDeleteProps {
-  ok: boolean;
-  statusCode: number;
-  message: string;
+  status: StatusProps | null;
 }

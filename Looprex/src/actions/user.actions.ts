@@ -1,127 +1,279 @@
-import { USERS, ROLES } from '../mocks';
-import type {
-  UserProps,
-  RolesAllProps,
-  UsersAllProps,
-  UserLoginProps,
-  UserRegisterProps,
-  UserUpdateProps,
-  UserDeleteProps
-} from '../interfaces';
+/**
+ * Actions de Usuarios
+ * ACTUALIZADO: Ahora usa servicios API reales en vez de mocks
+ */
 
-let USERS_STATE: UserProps[] = [...USERS];
-const ROLES_STATE: typeof ROLES = [...ROLES];
+import { UsersService } from '@/services';
+import type { UserLoginProps, UsersAllProps } from '@/interfaces';
 
-const cloneUser = (user: UserProps): UserProps => ({ ...user });
+/**
+ * Login de usuario
+ */
+export const loginUser = async (email: string, password: string): Promise<UserLoginProps> => {
+  try {
+    const response = await UsersService.login({ email, password });
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        user: null,
+        message: response.message || 'Credenciales incorrectas',
+      };
+    }
 
-const getNextUserId = (): number => {
-  if (USERS_STATE.length === 0) {
-    return 1;
-  }
-  return Math.max(...USERS_STATE.map(user => user.userId)) + 1;
-};
-
-// --- Acciones de Cliente ---
-
-/** (READ) Login */
-export type LoginCredentials = Pick<UserProps, 'email' | 'password'>;
-export const loginUser = ({ email, password }: LoginCredentials): UserLoginProps => {
-  const user = USERS_STATE.find(u => u.email === email && u.password === password);
-  if (!user) {
-    throw new Error('Credenciales incorrectas');
-  }
-  return { ok: true, statusCode: 200, user: cloneUser(user) };
-};
-
-/** (CREATE) Registra un nuevo cliente */
-type RegisterData = Omit<UserProps, 'userId' | 'roleId' | 'statusId'>;
-
-export const registerUser = (data: RegisterData): UserRegisterProps => {
-
-  const emailExists = USERS_STATE.some(u => u.email === data.email);
-
-  if (emailExists) {
-    throw new Error('El correo ya está registrado');
-  }
-
-  const newUser: UserProps = {
-    ...data,
-    userId: getNextUserId(),
-    roleId: 2,
-    statusId: 1
-  };
-
-  USERS_STATE = [...USERS_STATE, newUser];
-
-  return { ok: true, statusCode: 201, user: cloneUser(newUser) };
-
-};
-
-/** (UPDATE) Actualiza el propio perfil del cliente */
-type UpdateProfileData = Partial<Omit<UserProps, 'userId' | 'roleId' | 'statusId' | 'password'>>;
-export const updateUserProfile = (userId: number, data: UpdateProfileData): UserUpdateProps => {
-  const userIndex = USERS_STATE.findIndex(u => u.userId === userId);
-  if (userIndex !== -1) {
-    const updatedUser: UserProps = {
-      ...USERS_STATE[userIndex],
-      ...data,
-      userId: USERS_STATE[userIndex].userId,
-      roleId: USERS_STATE[userIndex].roleId,
-      statusId: USERS_STATE[userIndex].statusId,
-      password: USERS_STATE[userIndex].password
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      user: response.data,
     };
-    USERS_STATE = [
-      ...USERS_STATE.slice(0, userIndex),
-      updatedUser,
-      ...USERS_STATE.slice(userIndex + 1)
-    ];
-    return { ok: true, statusCode: 200, user: cloneUser(updatedUser) };
+  } catch (error: any) {
+    console.error('Error al iniciar sesión:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      user: null,
+      message: 'Error al conectar con el servidor',
+    };
   }
-  return { ok: false, statusCode: 404, user: {} as UserProps };
 };
 
+/**
+ * Obtener todos los usuarios (ADMIN)
+ */
+export const getUsers = async (): Promise<UsersAllProps> => {
+  try {
+    const response = await UsersService.getAll();
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        users: [],
+      };
+    }
 
-
-// --- Acciones de Admin ---
-
-/** (READ) Obtiene TODOS los roles */
-export const getRoles = (): RolesAllProps => {
-  return { ok: true, statusCode: 200, roles: [...ROLES_STATE] };
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      users: response.data,
+    };
+  } catch (error: any) {
+    console.error('Error al obtener usuarios:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      users: [],
+    };
+  }
 };
 
-/** (READ) Obtiene TODOS los usuarios */
-export const getAllUsers = (): UsersAllProps => {
-  return { ok: true, statusCode: 200, users: USERS_STATE.map(cloneUser) };
+/**
+ * Obtener un usuario por ID
+ */
+export const getUserById = async (id: number): Promise<UserLoginProps> => {
+  try {
+    const response = await UsersService.getById(id);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        user: null,
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      user: response.data,
+    };
+  } catch (error: any) {
+    console.error('Error al obtener usuario:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      user: null,
+    };
+  }
 };
 
-/** (UPDATE) El admin actualiza a cualquier usuario (ej. cambiar rol) */
-export const updateUserByAdmin = (userId: number, data: Partial<UserProps>): UserUpdateProps => {
-  const userIndex = USERS_STATE.findIndex(u => u.userId === userId);
-  if (userIndex === -1) {
-    return { ok: false, statusCode: 404, user: {} as UserProps };
+/**
+ * Registrar un nuevo usuario
+ */
+export const registerUser = async (userData: {
+  email: string;
+  password: string;
+  rut: string;
+  name: string;
+  lastname: string;
+  phone: string;
+  profilePhoto?: string;
+}): Promise<UserLoginProps> => {
+  try {
+    const response = await UsersService.create({
+      ...userData,
+      roleId: 2, // 2 = Cliente por defecto
+    });
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        user: null,
+        message: response.message,
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      user: response.data,
+      message: 'Usuario registrado exitosamente',
+    };
+  } catch (error: any) {
+    console.error('Error al registrar usuario:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      user: null,
+      message: 'Error al registrar el usuario',
+    };
   }
-  if (data.roleId && !ROLES_STATE.some(role => role.roleId === data.roleId)) {
-    throw new Error('Invalid role ID');
-  }
-  const updatedUser: UserProps = {
-    ...USERS_STATE[userIndex],
-    ...data,
-    userId: USERS_STATE[userIndex].userId
-  };
-  USERS_STATE = [
-    ...USERS_STATE.slice(0, userIndex),
-    updatedUser,
-    ...USERS_STATE.slice(userIndex + 1)
-  ];
-  return { ok: true, statusCode: 200, user: cloneUser(updatedUser) };
 };
 
-/** (DELETE) Elimina un usuario */
-export const deleteUser = (userId: number): UserDeleteProps => {
-  const initialLength = USERS_STATE.length;
-  USERS_STATE = USERS_STATE.filter(user => user.userId !== userId);
-  if (USERS_STATE.length === initialLength) {
-    return { ok: false, statusCode: 404, message: 'Usuario no encontrado' };
+/**
+ * Actualizar datos personales
+ */
+export const updateUserPersonalData = async (
+  userId: number,
+  data: { rut: string; name: string; lastname: string; phone: string }
+): Promise<UserLoginProps> => {
+  try {
+    const response = await UsersService.updatePersonalData(userId, data);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        user: null,
+        message: response.message,
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      user: response.data,
+      message: 'Datos actualizados exitosamente',
+    };
+  } catch (error: any) {
+    console.error('Error al actualizar datos:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      user: null,
+      message: 'Error al actualizar los datos',
+    };
   }
-  return { ok: true, statusCode: 200, message: 'Usuario eliminado' };
+};
+
+/**
+ * Actualizar foto de perfil
+ */
+export const updateUserProfilePhoto = async (
+  userId: number,
+  profilePhoto: string
+): Promise<UserLoginProps> => {
+  try {
+    const response = await UsersService.updateProfilePhoto(userId, profilePhoto);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        user: null,
+        message: response.message,
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      user: response.data,
+      message: 'Foto actualizada exitosamente',
+    };
+  } catch (error: any) {
+    console.error('Error al actualizar foto:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      user: null,
+      message: 'Error al actualizar la foto',
+    };
+  }
+};
+
+/**
+ * Cambiar contraseña
+ */
+export const updateUserPassword = async (
+  userId: number,
+  oldPassword: string,
+  newPassword: string
+): Promise<{ ok: boolean; statusCode: number; message: string }> => {
+  try {
+    const response = await UsersService.updatePassword(userId, oldPassword, newPassword);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        message: response.message || 'Error al cambiar la contraseña',
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      message: 'Contraseña actualizada exitosamente',
+    };
+  } catch (error: any) {
+    console.error('Error al cambiar contraseña:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      message: 'Error al cambiar la contraseña',
+    };
+  }
+};
+
+/**
+ * Eliminar un usuario (ADMIN)
+ */
+export const deleteUser = async (userId: number): Promise<{ ok: boolean; statusCode: number; message: string }> => {
+  try {
+    const response = await UsersService.delete(userId);
+    
+    if (!response.success) {
+      return {
+        ok: false,
+        statusCode: response.statusCode,
+        message: response.message,
+      };
+    }
+
+    return {
+      ok: true,
+      statusCode: response.statusCode,
+      message: 'Usuario eliminado exitosamente',
+    };
+  } catch (error: any) {
+    console.error('Error al eliminar usuario:', error);
+    return {
+      ok: false,
+      statusCode: 500,
+      message: 'Error al eliminar el usuario',
+    };
+  }
 };

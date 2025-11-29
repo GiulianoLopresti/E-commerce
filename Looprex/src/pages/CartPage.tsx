@@ -25,17 +25,30 @@ export const CartPage = ({
   onClearCart 
 }: CartPageProps) => {
   const [cartItems, setCartItems] = useState<CartItemWithProduct[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const itemsWithProducts = cart.items.map(item => {
-      const response = getProductById(item.productId);
-      return {
-        ...item,
-        product: response.product!
-      };
-    });
-    setCartItems(itemsWithProducts);
+    loadCartItems();
   }, [cart.items]);
+
+  const loadCartItems = async () => {
+    setLoading(true);
+    const itemsWithProducts: CartItemWithProduct[] = [];
+
+    for (const item of cart.items) {
+      const response = await getProductById(item.productId);
+      if (response.ok && response.product) {
+        itemsWithProducts.push({
+          productId: item.productId,
+          quantity: item.quantity,
+          product: response.product
+        });
+      }
+    }
+
+    setCartItems(itemsWithProducts);
+    setLoading(false);
+  };
 
   const calculateTotal = () => {
     return cartItems.reduce((total, item) => {
@@ -43,6 +56,19 @@ export const CartPage = ({
     }, 0);
   };
 
+  // Loading state
+  if (loading) {
+    return (
+      <div className={styles.loadingState}>
+        <div className={styles.container}>
+          <i className="fa-solid fa-spinner fa-spin"></i>
+          <p>Cargando carrito...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Empty cart
   if (cartItems.length === 0) {
     return (
       <div className={styles.emptyCart}>
@@ -116,7 +142,7 @@ export const CartPage = ({
               onClick={onClearCart}
               className={styles.clearCartButton}
             >
-              <i className="fa-solid fa-trash-can"></i> {''}
+              <i className="fa-solid fa-trash-can"></i>{' '}
               Vaciar Carrito
             </button>
           </div>
@@ -146,8 +172,8 @@ export const CartPage = ({
             </Link>
 
             <Link to="/" className={styles.continueShoppingLink}>
-                Continuar Comprando{' '}
-                <i className="fa-solid fa-arrow-left"></i>
+              Continuar Comprando{' '}
+              <i className="fa-solid fa-arrow-left"></i>
             </Link>
           </div>
         </div>
