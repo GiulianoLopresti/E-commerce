@@ -66,7 +66,7 @@ async function apiRequest<T>(
     method = 'GET',
     headers = {},
     body,
-    timeout = 10000, // 10 segundos por defecto
+    timeout = 30000, // 30 segundos por defecto
   } = options;
 
   // Configurar headers
@@ -80,9 +80,9 @@ async function apiRequest<T>(
 
   // Logging en desarrollo
   if (isDevelopment) {
-    console.log(`🌐 API Request: ${method} ${url}`);
+    console.log(`API Request: ${method} ${url}`);
     if (requestBody) {
-      console.log('📦 Body:', JSON.parse(requestBody));
+      console.log('Body:', JSON.parse(requestBody));
     }
   }
 
@@ -106,7 +106,7 @@ async function apiRequest<T>(
     
     try {
       data = await response.json();
-    } catch (parseError) {
+    } catch {
       // Si no es JSON válido, crear respuesta de error
       throw new ApiRequestError(
         'La respuesta del servidor no es JSON válido',
@@ -117,7 +117,7 @@ async function apiRequest<T>(
 
     // Logging en desarrollo
     if (isDevelopment) {
-      console.log(`✅ API Response (${response.status}):`, data);
+      console.log(`API Response (${response.status}):`, data);
     }
 
     // Si el status HTTP es error (4xx, 5xx), lanzar excepción

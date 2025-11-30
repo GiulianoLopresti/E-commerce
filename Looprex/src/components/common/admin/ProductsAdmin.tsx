@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getProducts, createProduct, updateProduct, deleteProduct } from '../../../actions/products.actions';
 import { getCategories } from '../../../actions/categories.actions';
 import type { ProductProps, CategoryProps } from '../../../interfaces';
+import { CloudinaryUpload } from '../Cloudinary/CloudinaryUpload';
 import styles from '../../../style/admin.module.css';
 
 export const ProductsAdmin = () => {
@@ -318,17 +319,19 @@ export const ProductsAdmin = () => {
               </div>
 
               <div className={styles.formGroup}>
-                <label htmlFor="productPhoto">URL de la Imagen *</label>
-                <input
-                  id="productPhoto"
-                  type="text"
-                  value={formData.productPhoto}
-                  onChange={(e) => setFormData({ ...formData, productPhoto: e.target.value })}
-                  required
-                  placeholder="https://ejemplo.com/imagen.jpg"
-                  disabled={loading}
+                <label htmlFor="productPhoto">Imagen del Producto *</label>
+                <CloudinaryUpload
+                currentImageUrl={formData.productPhoto}
+                onImageUploaded={(url) => setFormData({ ...formData, productPhoto: url })}
                 />
-              </div>
+                {/* Input oculto para guardar la URL */}
+                <input
+                id="productPhoto"
+                type="hidden"
+                value={formData.productPhoto}
+                required
+                />
+                </div>
 
               <div className={styles.formGroup}>
                 <label htmlFor="description">Descripción *</label>
