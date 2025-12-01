@@ -1,7 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getCategories } from '../../actions/categories.actions';
-import type { CategoryProps } from '../../interfaces';
 import styles from '../../styles/Header.module.css';
 
 interface HeaderProps {
@@ -11,23 +9,7 @@ interface HeaderProps {
 
 const Header = ({ currentUser, onLogout }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [categories, setCategories] = useState<CategoryProps[]>([]);
-  const [loadingCategories, setLoadingCategories] = useState(false);
   const navigate = useNavigate();
-
-  // Cargar categorías al montar el componente
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
-  const loadCategories = async () => {
-    setLoadingCategories(true);
-    const response = await getCategories();
-    if (response.ok) {
-      setCategories(response.categories);
-    }
-    setLoadingCategories(false);
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,10 +17,6 @@ const Header = ({ currentUser, onLogout }: HeaderProps) => {
       navigate(`/productos?search=${encodeURIComponent(searchQuery)}`);
       setSearchQuery('');
     }
-  };
-
-  const handleCategoryClick = (categoryId: number) => {
-    navigate(`/productos?category=${categoryId}`);
   };
 
   return (
@@ -98,37 +76,6 @@ const Header = ({ currentUser, onLogout }: HeaderProps) => {
           </div>
         </div>
       </div>
-
-      <nav className={styles.categoryNav}>
-        <div className="container">
-          <ul className={styles.categoryList}>
-            <li className={styles.categoryItem}>
-              <Link to="/productos" className={styles.categoryButton}>
-                Todos
-              </Link>
-            </li>
-            
-            {loadingCategories ? (
-              <li className={styles.categoryItem}>
-                <span className={styles.categoryButton}>
-                  <i className="fas fa-spinner fa-spin"></i> Cargando...
-                </span>
-              </li>
-            ) : (
-              categories.map(category => (
-                <li key={category.categoryId} className={styles.categoryItem}>
-                  <button
-                    onClick={() => handleCategoryClick(category.categoryId)}
-                    className={styles.categoryButton}
-                  >
-                    {category.name}
-                  </button>
-                </li>
-              ))
-            )}
-          </ul>
-        </div>
-      </nav>
     </header>
   );
 };

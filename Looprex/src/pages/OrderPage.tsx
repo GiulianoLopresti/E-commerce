@@ -37,8 +37,17 @@ export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
   };
 
   if (!currentUser) {
-    return <Navigate to="/login" replace />;
-  }
+  return (
+    <div className={styles.container}>
+      <div className={styles.errorMessage}>
+        Debes iniciar sesión para ver tus pedidos
+      </div>
+      <Link to="/login" className={styles.button}>
+        Iniciar Sesión
+      </Link>
+    </div>
+  );
+}
 
   const getStatusBadge = (statusId: number) => {
     const statusMap: Record<number, { label: string; className: string }> = {
@@ -54,7 +63,7 @@ export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
     return <span className={`${styles.statusBadge} ${status.className}`}>{status.label}</span>;
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString: string | number) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('es-CL', {
       year: 'numeric',
@@ -110,10 +119,10 @@ export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
                 <div className={styles.orderHeader}>
                   <div className={styles.orderInfo}>
                     <h3 className={styles.orderNumber}>
-                      Pedido #LPX-{buy.buyId.toString().padStart(5, '0')}
+                      Pedido #LPX-{buy.buyId?.toString().padStart(5, '0') || '00000'}
                     </h3>
                     <p className={styles.orderDate}>
-                      {formatDate(buy.date)}
+                      {formatDate(buy.buyDate)}
                     </p>
                   </div>
                   {getStatusBadge(buy.statusId)}
@@ -122,7 +131,7 @@ export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
                 <div className={styles.orderBody}>
                   <div className={styles.orderItemsCount}>
                     <i className="fa-solid fa-location-dot"></i>
-                    Dirección ID: {buy.addressId}
+                    Método de pago: {buy.paymentMethod}
                   </div>
 
                   <div className={styles.orderTotal}>
@@ -131,16 +140,6 @@ export const OrdersPage = ({ currentUser }: OrdersPageProps) => {
                       ${buy.total.toLocaleString('es-CL')}
                     </span>
                   </div>
-                </div>
-
-                <div className={styles.orderFooter}>
-                  <Link 
-                    to={`/pedido/${buy.buyId}`}
-                    className={styles.viewOrderButton}
-                  >
-                    Ver Detalles
-                    <i className="fa-solid fa-arrow-right"></i>
-                  </Link>
                 </div>
               </div>
             ))}

@@ -266,3 +266,42 @@ export const deleteProduct = async (id: number): Promise<ProductMutationProps> =
     };
   }
 };
+
+/**
+ * Reducir stock de un producto
+ */
+export const reduceProductStock = async (productId: number, quantity: number): Promise<boolean> => {
+  try {
+    // Primero obtener el producto actual
+    const productResponse = await getProductById(productId);
+    
+    if (!productResponse.ok || !productResponse.product) {
+      return false;
+    }
+
+    const product = productResponse.product;
+    const newStock = product.stock - quantity;
+
+    if (newStock < 0) {
+      console.error(`Stock insuficiente para producto ${productId}`);
+      return false;
+    }
+
+    const updateData = {
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      productPhoto: product.productPhoto,
+      stock: newStock, 
+      categoryId: product.category.categoryId,
+      statusId: product.status.statusId
+    };
+
+    const response = await ProductsService.update(productId, updateData);
+    return response.success;
+    
+  } catch (error) {
+    console.error('Error al reducir stock:', error);
+    return false;
+  }
+};

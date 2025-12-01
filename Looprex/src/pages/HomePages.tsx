@@ -155,69 +155,39 @@ export const HomePage = ({ onAddToCart, currentUser }: HomePageProps) => {
 
         {/* Contenido principal */}
         {!loading && !error && (
-          <div className={styles.productsLayout}>
-            {/* Sidebar de Filtros */}
-            <aside className={styles.sidebar}>
-              <div className={styles.filterSection}>
-                <h3 className={styles.filterTitle}>Categorías</h3>
-                <ul className={styles.filterList}>
-                  <li>
-                    <button
-                      onClick={() => handleCategoryChange(null)}
-                      className={selectedCategory === null ? styles.filterActive : ''}
-                    >
-                      Todas las categorías
-                    </button>
-                  </li>
-                  {categories.map(category => (
-                    <li key={category.categoryId}>
-                      <button
-                        onClick={() => handleCategoryChange(category.categoryId)}
-                        className={selectedCategory === category.categoryId ? styles.filterActive : ''}
-                      >
-                        {category.name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </aside>
-
-            {/* Grid de Productos */}
-            <div className={styles.productsContent}>
-              <div className={styles.pageHeader}>
-                <h1 className={styles.pageTitle}>
-                  {getCurrentTitle()}
-                </h1>
-                <p className={styles.pageSubtitle}>
-                  {filteredProducts.length} producto{filteredProducts.length === 1 ? '' : 's'} encontrado{filteredProducts.length === 1 ? '' : 's'}
-                </p>
-              </div>
-              
-              {filteredProducts.length === 0 && !loading && (
-                <div className={styles.emptyState}>
-                  <i className="fa-solid fa-magnifying-glass"></i>
-                  <h3>No se encontraron productos</h3>
-                  <p>Intenta con otra búsqueda o categoría</p>
-                  <button 
-                    onClick={() => {
-                      setSearchParams({});
-                      setSelectedCategory(null);
-                    }}
-                    className={styles.button}
-                  >
-                    Ver todos los productos
-                  </button>
-                </div>
-              )}
-
-              {filteredProducts.length > 0 && (
-                <ProductGrid 
-                  products={filteredProducts}
-                  onAddToCart={onAddToCart}
-                />
-              )}
+          <div className={styles.productsContent}>
+            <div className={styles.pageHeader}>
+              <h1 className={styles.pageTitle}>
+                {getCurrentTitle()}
+              </h1>
+              <p className={styles.pageSubtitle}>
+                {filteredProducts.length} producto{filteredProducts.length === 1 ? '' : 's'} encontrado{filteredProducts.length === 1 ? '' : 's'}
+              </p>
             </div>
+
+            {filteredProducts.length === 0 && !loading && (
+              <div className={styles.emptyState}>
+                <i className="fa-solid fa-magnifying-glass"></i>
+                <h3>No se encontraron productos</h3>
+                <p>Intenta con otra búsqueda o categoría</p>
+                <button 
+                  onClick={() => {
+                    setSearchParams({});
+                    setSelectedCategory(null);
+                  }}
+                  className={styles.button}
+                >
+                  Ver todos los productos
+                </button>
+              </div>
+            )}
+
+            {filteredProducts.length > 0 && (
+              <ProductGrid 
+                products={filteredProducts}
+                onAddToCart={onAddToCart}
+              />
+            )}
           </div>
         )}
       </div>

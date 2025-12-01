@@ -8,7 +8,45 @@
  */
 
 import { BuysService, DetailsService } from '@/services';
-import type { BuyCreateProps, CartItemProps } from '@/interfaces';
+import type { BuyCreateProps, CartItemProps, CreateBuyRequest, CreateDetailRequest } from '@/interfaces';
+import { reduceProductStock } from './products.actions';
+
+const toSnakeCase = (obj: any): any => {
+  const snakeObj: any = {};
+  
+  const camelToSnake = (str: string): string => {
+    return str.replaceAll(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+  };
+  
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      snakeObj[camelToSnake(key)] = obj[key];
+    }
+  }
+  
+  return snakeObj;
+};
+
+/**
+ * Transforma objeto snake_case a camelCase (respuesta del backend)
+ */
+const toCamelCase = (obj: any): any => {
+  if (!obj || typeof obj !== 'object') return obj;
+  
+  const camelObj: any = {};
+  
+  const snakeToCamel = (str: string): string => {
+    return str.replaceAll(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+  };
+  
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      camelObj[snakeToCamel(key)] = obj[key];
+    }
+  }
+  
+  return camelObj;
+};
 
 /**
  * Obtener todas las compras (ADMIN)
@@ -25,10 +63,13 @@ export const getAllBuys = async (): Promise<any> => {
       };
     }
 
+    // MAPEAR CADA BUY A CAMELCASE
+    const buys = response.data?.map((buy: any) => toCamelCase(buy)) || [];
+
     return {
       ok: true,
       statusCode: response.statusCode,
-      buys: response.data,
+      buys: buys,
     };
   } catch (error: any) {
     console.error('Error al obtener compras:', error);
@@ -47,6 +88,8 @@ export const getBuysByUserId = async (userId: number): Promise<any> => {
   try {
     const response = await BuysService.getByUserId(userId);
     
+    console.log('🔍 Respuesta raw getBuysByUserId:', response);
+    
     if (!response.success) {
       return {
         ok: false,
@@ -55,10 +98,19 @@ export const getBuysByUserId = async (userId: number): Promise<any> => {
       };
     }
 
+    // MAPEAR CADA BUY A CAMELCASE
+    const buys = response.data?.map((buy: any) => {
+      const mapped = toCamelCase(buy);
+      console.log('Buy mapeado:', mapped);
+      return mapped;
+    }) || [];
+
+    console.log('Todos los buys mapeados:', buys);
+
     return {
       ok: true,
       statusCode: response.statusCode,
-      buys: response.data,
+      buys: buys,
     };
   } catch (error: any) {
     console.error('Error al obtener compras del usuario:', error);
@@ -75,8 +127,12 @@ export const getBuysByUserId = async (userId: number): Promise<any> => {
  */
 export const getBuyById = async (buyId: number): Promise<any> => {
   try {
+    console.log('🔍 Obteniendo buy con ID:', buyId);
+    
     // Obtener el Buy
     const buyResponse = await BuysService.getById(buyId);
+    
+    console.log('🔍 Respuesta raw getBuyById:', buyResponse);
     
     if (!buyResponse.success) {
       return {
@@ -87,14 +143,25 @@ export const getBuyById = async (buyId: number): Promise<any> => {
       };
     }
 
+    // MAPEAR BUY A CAMELCASE
+    const buy = toCamelCase(buyResponse.data);
+    console.log('Buy mapeado:', buy);
+
     // Obtener los Details
     const detailsResponse = await DetailsService.getByBuyId(buyId);
+    
+    // MAPEAR CADA DETAIL A CAMELCASE
+    const details = detailsResponse.success 
+      ? detailsResponse.data?.map((detail: any) => toCamelCase(detail)) || []
+      : [];
+
+    console.log('Details mapeados:', details);
     
     return {
       ok: true,
       statusCode: 200,
-      buy: buyResponse.data,
-      details: detailsResponse.success ? detailsResponse.data : [],
+      buy: buy,
+      details: details,
     };
   } catch (error: any) {
     console.error('Error al obtener compra:', error);
@@ -108,32 +175,49 @@ export const getBuyById = async (buyId: number): Promise<any> => {
 };
 
 /**
- * Crear una compra (Checkout)
- * 
- * PROCESO:
- * 1. Crear el Buy con userId, addressId, statusId, total
- * 2. Con el buyId devuelto, crear cada Detail (producto del carrito)
+ * Crear compra desde carrito
  */
 export const createBuyFromCart = async (
-  cart: CartItemProps[],
+  cartItems: CartItemProps[],
   userId: number,
   addressId: number
 ): Promise<BuyCreateProps> => {
   try {
-    // PASO 1: Calcular el total
-    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    // Calcular montos
+    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const iva = Math.round(subtotal * 0.19);
+    const shipping = subtotal > 50000 ? 0 : 5990;
+    const total = subtotal + iva + shipping;
 
-    // PASO 2: Crear el Buy
-    const buyData = {
-      userId,
-      addressId,
-      statusId: 3, // 3 = "Pendiente" (VERIFICA EN TU BD)
-      date: new Date().toISOString(),
-      total,
+    // Generar número de orden único
+    const now = new Date();
+    const year = now.getFullYear();
+    const timestamp = now.getTime();
+    const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+    const orderNumber = `ORD-${year}-${random}-${timestamp.toString().slice(-4)}`;
+
+    // Crear objeto en camelCase
+    const buyData: CreateBuyRequest = {
+      orderNumber: orderNumber,
+      buyDate: now.getTime(),
+      subtotal: subtotal,
+      iva: iva,
+      shipping: shipping,
+      total: total,
+      paymentMethod: "Webpay",
+      statusId: 3,
+      addressId: addressId,
+      userId: userId
     };
 
-    const buyResponse = await BuysService.create(buyData);
-    
+    // Transformar a snake_case antes de enviar
+    const buyDataSnakeCase = toSnakeCase(buyData);
+
+    console.log('Enviando Buy:', buyDataSnakeCase);
+
+    // Crear Buy primero
+    const buyResponse = await BuysService.create(buyDataSnakeCase);
+
     if (!buyResponse.success) {
       return {
         ok: false,
@@ -142,42 +226,61 @@ export const createBuyFromCart = async (
       };
     }
 
-    const buyId = buyResponse.data.buyId;
+    console.log('Respuesta del backend:', buyResponse.data);
 
-    // PASO 3: Crear los Details (uno por cada item del carrito)
-    const detailPromises = cart.map((item) => {
-      const subtotal = item.price * item.quantity;
-      return DetailsService.create({
-        buyId,
+    const createdBuy = toCamelCase(buyResponse.data);
+
+    console.log('Buy creado y mapeado:', createdBuy);
+    console.log('buyId:', createdBuy.buyId);
+
+    if (!createdBuy?.buyId) {
+      console.error('Error: No se obtuvo buyId');
+      return {
+        ok: false,
+        statusCode: 500,
+        message: 'La compra se creó pero no se obtuvo el ID',
+      };
+    }
+
+    // Crear detalles de la compra
+    const details = [];
+    for (const item of cartItems) {
+      const detailData: CreateDetailRequest = {
+        buyId: createdBuy.buyId,
         productId: item.productId,
         quantity: item.quantity,
         unitPrice: item.price,
-        subtotal,
-      });
-    });
+        subtotal: item.price * item.quantity
+      };
 
-    // Esperar a que se creen todos los details
-    const detailResults = await Promise.all(detailPromises);
-    
-    // Verificar si algún detail falló
-    const failedDetails = detailResults.filter(r => !r.success);
-    if (failedDetails.length > 0) {
-      console.warn('Algunos detalles no se crearon correctamente:', failedDetails);
+      const detailDataSnakeCase = toSnakeCase(detailData);
+      const detailResponse = await DetailsService.create(detailDataSnakeCase);
+
+      if (detailResponse.success && detailResponse.data) {
+        details.push(toCamelCase(detailResponse.data));
+
+        // REDUCIR STOCK DESPUÉS DE CREAR EL DETALLE
+        await reduceProductStock(item.productId, item.quantity);
+      }
     }
+
+    console.log('Compra creada exitosamente:', createdBuy);
+    console.log('Detalles creados:', details);
 
     return {
       ok: true,
       statusCode: 201,
-      message: 'Compra realizada exitosamente',
-      buy: buyResponse.data,
-      details: detailResults.filter(r => r.success).map(r => r.data),
+      message: 'Compra creada exitosamente',
+      buy: createdBuy,
+      details: details
     };
+
   } catch (error: any) {
     console.error('Error al crear compra:', error);
     return {
       ok: false,
-      statusCode: 500,
-      message: 'Error al procesar la compra',
+      statusCode: error.response?.status || 500,
+      message: error.message || 'Error al procesar la compra',
     };
   }
 };

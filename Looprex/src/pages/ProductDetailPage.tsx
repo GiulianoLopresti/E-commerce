@@ -83,8 +83,6 @@ export const ProductDetailPage = ({ onAddToCart }: ProductDetailPageProps) => {
         <nav className={styles.breadcrumbs}>
           <Link to="/">Inicio</Link>
           <span>/</span>
-          <Link to="/productos">Productos</Link>
-          <span>/</span>
           <span>{product.name}</span>
         </nav>
 
@@ -126,36 +124,38 @@ export const ProductDetailPage = ({ onAddToCart }: ProductDetailPageProps) => {
 
             {product.stock > 0 && (
               <>
-                <div className={styles.productDetailQuantity}>
-                  <label>
-                    Cantidad:
-                    <QuantitySelector 
-                      quantity={quantity}
-                      onChange={setQuantity}
-                      max={product.stock}
-                    />
-                  </label>
-                </div>
+              {/* Selector de cantidad - SIEMPRE VISIBLE */}
+                  <div className={styles.productDetailQuantity}>
+                    <label>
+                      Cantidad:
+                      <QuantitySelector 
+                        quantity={quantity}
+                        onChange={setQuantity}
+                        max={Math.max(product.stock, 0)}
+                      />
+                    </label>
+                  </div>
 
-                <button 
-                  onClick={handleAddToCart}
-                  className={styles.addToCartButtonLarge}
-                >
-                  <i className="fa-solid fa-cart-plus"></i>{}
-                  Agregar al Carrito
-                </button>
-              </>
-            )}
+                  {/* Botón añadir al carrito */}
+                  <button 
+                    onClick={handleAddToCart}
+                    className={styles.addToCartButtonLarge}
+                    disabled={product.stock === 0}
+                  >
+                    <i className="fa-solid fa-cart-plus"></i>
+                    {product.stock === 0 ? 'Fuera de Stock' : 'Agregar al Carrito'}
+                  </button>
 
-            {product.stock === 0 && (
-              <div className={styles.outOfStockMessage}>
-                <i className="fa-solid fa-info-circle"></i>{}
-                Este producto no está disponible en este momento
-              </div>
+                  {/* Mensaje informativo si está agotado */}
+                  {product.stock === 0 && (
+                    <div className={styles.outOfStockMessage}>
+                      Este producto no está disponible en este momento
+                    </div>
+                  )}
+                  </>
             )}
           </div>
         </div>
-
         {/* Tabs */}
         <div className={styles.productTabs}>
           <div className={styles.tabButtons}>

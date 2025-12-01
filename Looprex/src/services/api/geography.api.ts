@@ -10,10 +10,10 @@ import type {
   AddressApiResponse, 
   RegionApiResponse,
   ComunaApiResponse,
-  CreateAddressRequest,
   ApiResponse 
 } from '@/interfaces/api.interfaces';
 
+import type {CreateAddressRequest} from '@/interfaces/address.interfaces';
 /**
  * Direcciones
  */

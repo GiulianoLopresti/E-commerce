@@ -31,7 +31,10 @@ export interface UserRegisterRequest {
   lastname: string;
   phone: string;
   profilePhoto?: string;
-  roleId: number;  // Solo ID
+  role: {             
+    roleId: number;
+  };
+  statusId: number;
 }
 
 /**
@@ -59,4 +62,14 @@ export interface UsersAllProps {
   ok: boolean;
   statusCode: number;
   users: UserProps[];
+}
+
+/**
+ * Respuesta al crear usuario (registro)
+ */
+export interface UserCreateProps {  // ← AGREGAR ESTO
+  ok: boolean;
+  statusCode: number;
+  user?: UserProps;
+  message?: string;
 }

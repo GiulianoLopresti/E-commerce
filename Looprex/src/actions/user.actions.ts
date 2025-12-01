@@ -4,7 +4,7 @@
  */
 
 import { UsersService } from '@/services';
-import type { UserLoginProps, UsersAllProps } from '@/interfaces';
+import type { UserLoginProps, UsersAllProps, UserCreateProps } from '@/interfaces';
 
 /**
  * Login de usuario
@@ -108,19 +108,19 @@ export const registerUser = async (userData: {
   name: string;
   lastname: string;
   phone: string;
-  profilePhoto?: string;
-}): Promise<UserLoginProps> => {
+}): Promise<UserCreateProps> => {
   try {
     const response = await UsersService.create({
       ...userData,
-      roleId: 2, // 2 = Cliente por defecto
+      role: { roleId: 2 }, 
+      statusId: 1,
     });
     
     if (!response.success) {
       return {
         ok: false,
         statusCode: response.statusCode,
-        user: null,
+        user: undefined,
         message: response.message,
       };
     }
@@ -136,7 +136,7 @@ export const registerUser = async (userData: {
     return {
       ok: false,
       statusCode: 500,
-      user: null,
+      user: undefined,
       message: 'Error al registrar el usuario',
     };
   }

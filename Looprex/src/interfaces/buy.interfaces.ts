@@ -2,20 +2,21 @@
  * Interfaces de Compras
  * NOTA: En el backend se llaman "Buys", no "Orders"
  */
-import type { 
-  DetailProps  // ← AGREGAR ESTE IMPORT
-} from '@/interfaces';
-
 /**
  * Estructura de una compra
  */
 export interface BuyProps {
   buyId: number;
-  userId: number;
-  addressId: number;
-  statusId: number;
-  date: string; // ISO format
+  orderNumber: string;      // ← AGREGAR
+  buyDate: number;          // ← AGREGAR
+  subtotal: number;
+  iva: number;
+  shipping: number;
   total: number;
+  paymentMethod: string;    // ← AGREGAR
+  statusId: number;
+  addressId: number;
+  userId: number;
 }
 
 /**
@@ -42,9 +43,9 @@ export interface BuyByIdProps {
 export interface BuyCreateProps {
   ok: boolean;
   statusCode: number;
-  message: string;
   buy?: BuyProps;
-  details?: DetailProps[];
+  details?: any[];
+  message?: string;
 }
 
 /**

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import { getProductById } from '../actions/products.actions';
 import { createBuyFromCart } from '../actions/buy.actions';
 import { getAddressesByUserId } from '../actions/addresses.actions';
@@ -39,7 +39,7 @@ export const CheckoutPage = ({ currentUser, cart, onClearCart }: CheckoutPagePro
     return <Navigate to="/login" replace />;
   }
 
-  if (cart.items.length === 0) {
+  if (cart.items.length === 0 && !isProcessing) {
     return <Navigate to="/carrito" replace />;
   }
 
@@ -110,10 +110,16 @@ export const CheckoutPage = ({ currentUser, cart, onClearCart }: CheckoutPagePro
         userAddress.addressId // Usar la dirección cargada
       );
 
+      console.log('Respuesta de createBuyFromCart:', response);
+
       if (response.ok) {
-        alert('¡Pedido realizado con éxito!');
-        onClearCart();
-        navigate('/mis-pedidos');
+
+        navigate(`/confirmacion-pedido?orderId=${response.buy?.buyId}`);
+        console.log('Redirigiendo a confirmación con buyId:', response.buy?.buyId);
+
+        setTimeout(() => {
+           onClearCart();
+          }, 100);
       } else {
         setError(response.message || 'Error al procesar el pedido');
       }
@@ -149,9 +155,9 @@ export const CheckoutPage = ({ currentUser, cart, onClearCart }: CheckoutPagePro
           <div className={styles.errorMessage}>
             <i className="fa-solid fa-circle-exclamation"></i> {error}
             {error.includes('dirección') && (
-              <a href="/mi-cuenta" className={styles.errorLink}>
-                Ir a Mi Cuenta
-              </a>
+              <Link to="/mi-cuenta" className={styles.errorLink}>
+                Ir a mi cuenta
+              </Link>
             )}
           </div>
         )}
@@ -232,15 +238,11 @@ export const CheckoutPage = ({ currentUser, cart, onClearCart }: CheckoutPagePro
                   <div className={styles.addressInfo}>
                     <p><strong>Calle:</strong> {userAddress.street}</p>
                     <p><strong>Número:</strong> {userAddress.number}</p>
-                    {userAddress.apartment && (
-                      <p><strong>Departamento:</strong> {userAddress.apartment}</p>
-                    )}
                     <p><strong>Comuna:</strong> {userAddress.comuna.name}</p>
-                    <p><strong>Región:</strong> {userAddress.comuna.regionId}</p>
                   </div>
-                  <a href="/mi-cuenta" className={styles.changeAddressLink}>
-                    <i className="fa-solid fa-pen"></i> Cambiar dirección
-                  </a>
+                  <Link to="/agregar-direccion" className={styles.changeAddressLink}>
+                      <i className="fa-solid fa-pen"></i> Cambiar dirección
+                  </Link>
                 </div>
               )}
 
@@ -248,9 +250,9 @@ export const CheckoutPage = ({ currentUser, cart, onClearCart }: CheckoutPagePro
                 <div className={styles.noAddress}>
                   <i className="fa-solid fa-location-dot"></i>
                   <p>No tienes direcciones registradas</p>
-                  <a href="/mi-cuenta" className={styles.addAddressButton}>
-                    <i className="fa-solid fa-plus"></i> Agregar Dirección
-                  </a>
+                  <Link to="/agregar-direccion" className={styles.addAddressButton}>
+                      <i className="fa-solid fa-plus"></i> Agregar Dirección
+                  </Link>
                 </div>
               )}
             </div>
@@ -290,7 +292,9 @@ export const CheckoutPage = ({ currentUser, cart, onClearCart }: CheckoutPagePro
                   <img src={item.product.productPhoto} alt={item.product.name} />
                   <div className={styles.orderItemInfo}>
                     <p className={styles.orderItemName}>{item.product.name}</p>
-                    <p className={styles.orderItemQuantity}>Cantidad: {item.quantity}</p>
+                    <p className={styles.orderItemQuantity}>
+                      Cantidad: {item.quantity} × ${item.product.price.toLocaleString('es-CL')}
+                    </p>
                   </div>
                   <p className={styles.orderItemPrice}>
                     ${(item.product.price * item.quantity).toLocaleString('es-CL')}
@@ -298,25 +302,56 @@ export const CheckoutPage = ({ currentUser, cart, onClearCart }: CheckoutPagePro
                 </div>
               ))}
             </div>
-
+            
             <div className={styles.orderTotals}>
+              {/* Subtotal */}
               <div className={styles.orderTotalRow}>
                 <span>Subtotal</span>
                 <span>${calculateTotal().toLocaleString('es-CL')}</span>
               </div>
-
+            
+              {/* IVA (19%) */}
+              <div className={styles.orderTotalRow}>
+                <span>IVA (19%)</span>
+                <span>${Math.round(calculateTotal() * 0.19).toLocaleString('es-CL')}</span>
+              </div>
+            
+              {/* Envío */}
               <div className={styles.orderTotalRow}>
                 <span>Envío</span>
                 <span className={styles.freeShipping}>
-                  <i className="fa-solid fa-truck"></i> Gratis
+                  {calculateTotal() > 50000 ? (
+                    <>
+                      <i className="fa-solid fa-truck"></i> Gratis
+                    </>
+                  ) : (
+                    '$5.990'
+                  )}
                 </span>
               </div>
-
+                
+              {/* Total Final */}
               <div className={styles.orderTotalFinal}>
                 <span>Total</span>
-                <span>${calculateTotal().toLocaleString('es-CL')}</span>
+                <span>
+                  ${(
+                    calculateTotal() + 
+                    Math.round(calculateTotal() * 0.19) + 
+                    (calculateTotal() > 50000 ? 0 : 5990)
+                  ).toLocaleString('es-CL')}
+                </span>
               </div>
             </div>
+                
+            {/* Información adicional de envío */}
+            {calculateTotal() <= 50000 && (
+              <div className={styles.shippingInfo}>
+                <i className="fa-solid fa-info-circle"></i>
+                <span>
+                  Compra ${(50000 - calculateTotal()).toLocaleString('es-CL')} más para envío gratis
+                </span>
+              </div>
+            )}
 
             <button 
               type="submit" 
@@ -335,7 +370,7 @@ export const CheckoutPage = ({ currentUser, cart, onClearCart }: CheckoutPagePro
                 </>
               )}
             </button>
-
+            
             {!userAddress && (
               <p className={styles.checkoutWarning}>
                 <i className="fa-solid fa-triangle-exclamation"></i>{}

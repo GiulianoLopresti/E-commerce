@@ -47,7 +47,7 @@ export const UsersService = {
    * POST /api/users
    */
   async create(user: CreateUserRequest): Promise<ApiResponse<UserApiResponse>> {
-    return usersClient.post<UserApiResponse>('/api/users', user);
+    return usersClient.post<UserApiResponse>('/api/users/register', user);
   },
 
   /**

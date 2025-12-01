@@ -12,6 +12,7 @@ export const CloudinaryUpload = ({ onImageUploaded, currentImageUrl }: Cloudinar
   const [error, setError] = useState('');
 
   const CLOUDINARY_CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+  const CLOUDINARY_UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -36,7 +37,7 @@ export const CloudinaryUpload = ({ onImageUploaded, currentImageUrl }: Cloudinar
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'ml_default');
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
     try {
       const response = await fetch(
@@ -63,6 +64,12 @@ export const CloudinaryUpload = ({ onImageUploaded, currentImageUrl }: Cloudinar
     }
   };
 
+  // ← NUEVA FUNCIÓN: Eliminar imagen
+  const handleRemoveImage = () => {
+    setPreview(null);
+    onImageUploaded(''); // Limpia la URL
+  };
+
   return (
     <div className={styles.uploadContainer}>
       <label htmlFor="imageInput" className={styles.uploadLabel}>
@@ -73,6 +80,18 @@ export const CloudinaryUpload = ({ onImageUploaded, currentImageUrl }: Cloudinar
               <i className="fa-solid fa-camera"></i>
               <span>Cambiar imagen</span>
             </div>
+            {/* ← NUEVO BOTÓN: Eliminar */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                handleRemoveImage();
+              }}
+              className={styles.removeButton}
+              title="Eliminar imagen"
+            >
+              <i className="fa-solid fa-trash"></i>
+            </button>
           </div>
         ) : (
           <div className={styles.uploadPlaceholder}>

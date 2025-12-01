@@ -12,6 +12,8 @@ import { AccountPage } from '../pages/AccountPage';
 import { OrdersPage } from '../pages/OrderPage';
 import { NotFoundPage } from '../pages/NotFoundPage';
 import { AdminPage } from '../pages/AdminPage';
+import { AddAddressPage } from '../pages/AddressPage';
+import { DetailOrderPage } from '../pages/DetailOrderPage';
 
 interface AppRoutesProps {
   currentUser: UserProps | null;
@@ -83,7 +85,15 @@ export const AppRoutes = (props: AppRoutesProps) => {
     {
       path: '*',
       element: <NotFoundPage />
-    }
+    },
+    {
+      path: '/agregar-direccion',
+      element: <AddAddressPage currentUser={props.currentUser} />
+    },
+    {
+      path: '/confirmacion-pedido',
+      element: <DetailOrderPage />
+    },
   ]);
 
   return routes;

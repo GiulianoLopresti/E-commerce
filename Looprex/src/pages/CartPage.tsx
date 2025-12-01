@@ -158,7 +158,7 @@ export const CartPage = ({
 
             <div className={styles.cartSummaryRow}>
               <span>Envío</span>
-              <span>Calculado en checkout</span>
+              <span>$0</span>
             </div>
 
             <div className={styles.cartSummaryTotal}>

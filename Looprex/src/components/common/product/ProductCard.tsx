@@ -25,14 +25,7 @@ export const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
         {product.stock === 0 && (
           <div className={styles.outOfStock}>Agotado</div>
         )}
-        {/* OPCIONAL: Mostrar badge de categoría */}
-        {product.category?.name && (
-          <div className={styles.categoryBadge}>
-            {product.category.name}
-          </div>
-        )}
       </div>
-
       <div className={styles.productInfo}>
         <h3 className={styles.productName}>{product.name}</h3>
         <p className={styles.productPrice}>
@@ -41,11 +34,21 @@ export const ProductCard = ({ product, onAddToCart }: ProductCardProps) => {
 
         {product.stock > 0 && isActive && (
           <button 
-            onClick={handleAddToCart}
+            onClick={() => onAddToCart?.(product.productId)}
             className={styles.addToCartButton}
+            disabled={product.stock === 0 || !onAddToCart}  
           >
-            <i className="fa-solid fa-cart-plus"></i>{' '}
-            Agregar al Carrito
+            {product.stock === 0 ? (
+              <>
+                <i className="fa-solid fa-ban"></i>{}
+                Fuera de Stock
+              </>
+            ) : (
+              <>
+                <i className="fa-solid fa-cart-plus"></i>{}
+                Añadir al carrito
+              </>
+            )}
           </button>
         )}
 

@@ -91,14 +91,14 @@ export interface LoginRequest {
  * Request para crear usuario
  */
 export interface CreateUserRequest {
-  email: string;
-  password: string;
-  rut: string;
   name: string;
   lastname: string;
+  email: string;
+  password: string;
   phone: string;
-  profilePhoto?: string;
-  roleId: number;
+  rut: string;
+  role: { roleId: number };    // ← AGREGAR
+  statusId: number; 
 }
 
 /**
@@ -119,7 +119,6 @@ export interface AddressApiResponse {
   userId: number;
   street: string;
   number: string;
-  apartment?: string;
   comuna: {
     comunaId: number;
     name: string;
@@ -129,14 +128,16 @@ export interface AddressApiResponse {
 
 /**
  * Request para crear dirección
- */
+ 
 export interface CreateAddressRequest {
   userId: number;
   street: string;
   number: string;
-  apartment?: string;
-  comunaId: number;
+  comuna: {           // ← CAMBIO: objeto anidado
+    comunaId: number;
+  };
 }
+*/
 
 /**
  * Respuesta de región desde la API
@@ -172,11 +173,24 @@ export interface BuyApiResponse {
  * Request para crear compra (Buy)
  */
 export interface CreateBuyRequest {
-  userId: number;
-  addressId: number;
-  statusId: number;
-  date: string;
+  orderNumber: string;
+  buyDate: number;
+  subtotal: number;
+  iva: number;
+  shipping: number;
   total: number;
+  paymentMethod: string;
+  statusId: number;
+  addressId: number;
+  userId: number;
+}
+
+export interface CreateDetailRequest {
+  buyId: number;
+  productId: number;
+  quantity: number;
+  unitPrice: number;
+  subtotal: number;
 }
 
 /**

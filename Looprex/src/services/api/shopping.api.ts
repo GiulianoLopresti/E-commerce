@@ -4,7 +4,7 @@
  * Este servicio reemplaza los mocks de órdenes.
  * Hace peticiones HTTP reales al microservicio de shopping (puerto 8083)
  * 
- * IMPORTANTE: El backend usa "Buy" y "Detail", no "Order" y "OrderItem"
+ * IMPORTANTE: El backend usa "Buy" y "Detail"
  */
 
 import { shoppingClient } from './client.api';
