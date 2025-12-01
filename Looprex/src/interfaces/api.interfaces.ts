@@ -137,7 +137,7 @@ export interface CreateAddressRequest {
     comunaId: number;
   };
 }
-*/
+
 
 /**
  * Respuesta de región desde la API

@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config' 
 import react from '@vitejs/plugin-react'
 import path from 'node:path'
 
@@ -11,6 +11,14 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    // CORS está manejado por el backend, no por Vite
+  },
+  test: {
+    globals: true,
+    environment: 'happy-dom',
+    setupFiles: './src/__tests__/setup.ts',
+    css: true,
+  },
+  esbuild: {
+    jsx: 'automatic',
   },
 })
