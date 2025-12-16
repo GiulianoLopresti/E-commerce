@@ -24,13 +24,20 @@ interface AppRoutesProps {
   onRemoveFromCart: (productId: number) => void;
   onUpdateCartQuantity: (productId: number, newQuantity: number) => void;
   onClearCart: () => void;
+  searchQuery?: string; // ← NUEVO
 }
 
 export const AppRoutes = (props: AppRoutesProps) => {
   const routes = useRoutes([
     {
       path: '/',
-      element: <HomePage onAddToCart={props.onAddToCart} currentUser={props.currentUser} />
+      element: (
+        <HomePage 
+          onAddToCart={props.onAddToCart} 
+          currentUser={props.currentUser}
+          searchQuery={props.searchQuery}
+        />
+      )
     },
     {
       path: '/producto/:id',

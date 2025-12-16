@@ -90,9 +90,6 @@ export const ProductDetailPage = ({ onAddToCart }: ProductDetailPageProps) => {
         <div className={styles.productDetail}>
           <div className={styles.productDetailImage}>
             <img src={product.productPhoto} alt={product.name} />
-            {product.stock === 0 && (
-              <div className={styles.outOfStockBadge}>Agotado</div>
-            )}
           </div>
 
           <div className={styles.productDetailInfo}>

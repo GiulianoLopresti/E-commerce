@@ -153,8 +153,8 @@ export const ECommerceApp = () => {
    * Handler para búsqueda
    */
   const handleSearch = useCallback((query: string) => {
+    console.log('Búsqueda activada:', query);
     setSearchQuery(query);
-    console.log('Búsqueda:', query);
   }, []);
 
   return (
@@ -179,6 +179,7 @@ export const ECommerceApp = () => {
           onRemoveFromCart={handleRemoveFromCart}
           onUpdateCartQuantity={handleUpdateCartQuantity}
           onClearCart={handleClearCart}
+          searchQuery={searchQuery}
         />
       </main>
       

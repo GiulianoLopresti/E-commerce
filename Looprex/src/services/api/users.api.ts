@@ -58,7 +58,7 @@ export const UsersService = {
     id: number, 
     data: { rut: string; name: string; lastname: string; phone: string }
   ): Promise<ApiResponse<UserApiResponse>> {
-    return usersClient.put<UserApiResponse>(`/api/users/${id}/personal-data`, data);
+    return usersClient.put<UserApiResponse>(`/api/users/${id}`, data);
   },
 
   /**
@@ -75,10 +75,13 @@ export const UsersService = {
    */
   async updatePassword(
     id: number, 
-    oldPassword: string, 
+    rawPassword: string, 
     newPassword: string
   ): Promise<ApiResponse<void>> {
-    return usersClient.put<void>(`/api/users/${id}/password`, { oldPassword, newPassword });
+    return usersClient.put<void>(`/api/users/${id}/password`, { 
+      rawPassword,
+      newPassword 
+    });
   },
 
   /**

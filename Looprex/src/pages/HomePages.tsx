@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { ProductGrid } from '../components/common/product/ProductGrid';
-import { getProducts } from '../actions/products.actions';
+import { getProducts, searchProducts } from '../actions/products.actions';
 import { getCategories } from '../actions/categories.actions';
 import type { ProductProps, CategoryProps, UserProps } from '../interfaces';
 import styles from '../style/pages.module.css';
@@ -9,9 +9,10 @@ import styles from '../style/pages.module.css';
 interface HomePageProps {
   onAddToCart: (productId: number, quantity?: number) => void;
   currentUser?: UserProps | null;
+  searchQuery?: string;
 }
 
-export const HomePage = ({ onAddToCart, currentUser }: HomePageProps) => {
+export const HomePage = ({ onAddToCart, currentUser, searchQuery }: HomePageProps) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState<ProductProps[]>([]);
   const [categories, setCategories] = useState<CategoryProps[]>([]);
@@ -24,6 +25,21 @@ export const HomePage = ({ onAddToCart, currentUser }: HomePageProps) => {
   useEffect(() => {
     loadData();
   }, []);
+
+  // Manejar búsqueda del navbar
+  useEffect(() => {
+    if (searchQuery?.trim()) {
+      performSearch(searchQuery);
+    }
+  }, [searchQuery]);
+
+  // Manejar búsqueda desde URL al cargar la página
+  useEffect(() => {
+    const searchParam = searchParams.get('search');
+    if (searchParam?.trim()) {
+      performSearch(searchParam);
+    }
+  }, []); // Solo al montar
 
   const loadData = async () => {
     setLoading(true);
@@ -50,35 +66,59 @@ export const HomePage = ({ onAddToCart, currentUser }: HomePageProps) => {
     }
   };
 
-  // Manejar parámetros de URL y filtrado
+  // Función para realizar búsqueda en el backend
+  const performSearch = async (query: string) => {
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await searchProducts(query);
+      
+      if (response.ok) {
+        setFilteredProducts(response.products);
+        setSelectedCategory(null);
+        
+        // Actualizar URL con parámetro de búsqueda
+        const newParams = new URLSearchParams();
+        newParams.set('search', query);
+        setSearchParams(newParams);
+      } else {
+        setError('Error al buscar productos');
+      }
+    } catch (err) {
+      console.error('Error en búsqueda:', err);
+      setError('Error al buscar productos');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Manejar filtrado por categoría desde URL
   useEffect(() => {
     const categoryParam = searchParams.get('categoria');
     const searchParam = searchParams.get('search');
 
-    let filtered = [...products];
-
-    // Filtrar por búsqueda
+    // Si hay búsqueda, ya se manejó en otro useEffect
     if (searchParam) {
-      const query = searchParam.toLowerCase();
-      filtered = filtered.filter(p => 
-        p.name.toLowerCase().includes(query) ||
-        p.description.toLowerCase().includes(query) ||
-        p.category.name.toLowerCase().includes(query)
-      );
+      return;
     }
 
-    // Filtrar por categoría
+    // Si hay categoría en URL
     if (categoryParam) {
       const category = categories.find(c => c.name === categoryParam);
       if (category) {
         setSelectedCategory(category.categoryId);
-        filtered = filtered.filter(p => p.category.categoryId === category.categoryId);
+        const filtered = products.filter(p => p.category.categoryId === category.categoryId);
+        setFilteredProducts(filtered);
+        return;
       }
-    } else if (!searchParam) {
-      setSelectedCategory(null);
     }
 
-    setFilteredProducts(filtered);
+    // Sin filtros: mostrar todos
+    if (products.length > 0) {
+      setFilteredProducts(products);
+      setSelectedCategory(null);
+    }
   }, [searchParams, categories, products]);
 
   const handleCategoryChange = (categoryId: number | null) => {
@@ -86,12 +126,6 @@ export const HomePage = ({ onAddToCart, currentUser }: HomePageProps) => {
     
     const newParams: Record<string, string> = {};
     
-    // Mantener búsqueda si existe
-    const searchParam = searchParams.get('search');
-    if (searchParam) {
-      newParams.search = searchParam;
-    }
-
     // Agregar categoría
     if (categoryId !== null) {
       const category = categories.find(c => c.categoryId === categoryId);
@@ -174,6 +208,7 @@ export const HomePage = ({ onAddToCart, currentUser }: HomePageProps) => {
                   onClick={() => {
                     setSearchParams({});
                     setSelectedCategory(null);
+                    loadData();
                   }}
                   className={styles.button}
                 >
