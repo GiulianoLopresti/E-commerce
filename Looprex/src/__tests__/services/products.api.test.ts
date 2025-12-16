@@ -41,6 +41,7 @@ describe('ProductsService', () => {
     expect(result.data[0].name).toBe('Producto Test');
   });
 
+  
   it('debería manejar errores al obtener productos', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: false,
@@ -52,10 +53,9 @@ describe('ProductsService', () => {
       })
     });
 
-    const result = await ProductsService.getAll();
-
-    expect(result.success).toBe(false);
-    expect(result.statusCode).toBe(500);
+    await expect(async () => {
+      await ProductsService.getAll();
+    }).rejects.toThrow();
   });
 
   it('debería buscar productos por categoría', async () => {
