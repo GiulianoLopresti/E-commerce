@@ -1896,3 +1896,61 @@
   background-color: var(--c-gray-400);
   transform: none;
 }
+
+/* Agregar estos estilos a tu pages.module.css existente */
+
+/* Mensaje de éxito */
+.successMessage {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: rgba(46, 204, 113, 0.1);
+  border: 1px solid var(--c-success);
+  color: var(--c-success);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--spacing-lg);
+}
+
+.successMessage i {
+  font-size: var(--font-size-lg);
+}
+
+/* Grupo de botones */
+.buttonGroup {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+/* Botón de cancelar */
+.cancelButton {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  background-color: var(--c-gray-300);
+  color: var(--c-text);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.cancelButton:hover:not(:disabled) {
+  background-color: var(--c-gray-400);
+}
+
+.cancelButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Nota de campo */
+.fieldNote {
+  font-size: var(--font-size-xs);
+  color: var(--c-gray-600);
+  margin-top: var(--spacing-xs);
+  display: block;
+}

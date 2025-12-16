@@ -7,9 +7,10 @@ import styles from '../style/pages.module.css';
 interface AccountPageProps {
   currentUser: UserProps | null;
   onLogout: () => void;
+  onUserUpdated?: (updatedUser: UserProps) => void;
 }
 
-export const AccountPage = ({ currentUser, onLogout }: AccountPageProps) => {
+export const AccountPage = ({ currentUser, onLogout, onUserUpdated }: AccountPageProps) => {
   // Estados para edición de información personal
   const [isEditingInfo, setIsEditingInfo] = useState(false);
   const [formData, setFormData] = useState({
@@ -38,51 +39,51 @@ export const AccountPage = ({ currentUser, onLogout }: AccountPageProps) => {
   }
 
   // Handler para guardar cambios de información personal
-const handleSaveInfo = async () => {
-  setInfoError('');
-  setInfoSuccess('');
-  setInfoLoading(true);
+  const handleSaveInfo = async () => {
+    setInfoError('');
+    setInfoSuccess('');
+    setInfoLoading(true);
 
-  // Validaciones básicas
-  if (!formData.name.trim() || !formData.lastname.trim()) {
-    setInfoError('Nombre y apellidos son obligatorios');
-    setInfoLoading(false);
-    return;
-  }
-
-  if (!formData.phone.trim()) {
-    setInfoError('El teléfono es obligatorio');
-    setInfoLoading(false);
-    return;
-  }
-
-  try {
-    // ✅ USAR updateUserPersonalData (que SÍ existe en el backend)
-    const response = await updateUserPersonalData(currentUser.userId, {
-      name: formData.name,
-      lastname: formData.lastname,
-      phone: formData.phone,
-      rut: formData.rut
-    });
-
-    if (response.ok) {
-      setInfoSuccess('Información actualizada exitosamente');
-      setIsEditingInfo(false);
-      
-      // Recargar la página después de 1.5 segundos para reflejar cambios
-      setTimeout(() => {
-        globalThis.location.reload();
-      }, 1500);
-    } else {
-      setInfoError(response.message || 'Error al actualizar información');
+    // Validaciones básicas
+    if (!formData.name.trim() || !formData.lastname.trim()) {
+      setInfoError('Nombre y apellidos son obligatorios');
+      setInfoLoading(false);
+      return;
     }
-  } catch (error) {
-    console.error('Error updating user data:', error);
-    setInfoError('Error de conexión con el servidor');
-  } finally {
-    setInfoLoading(false);
-  }
-};
+
+    if (!formData.phone.trim()) {
+      setInfoError('El teléfono es obligatorio');
+      setInfoLoading(false);
+      return;
+    }
+
+    try {
+      const response = await updateUserPersonalData(currentUser.userId, {
+        name: formData.name,
+        lastname: formData.lastname,
+        phone: formData.phone,
+        rut: formData.rut
+      });
+
+      if (response.ok && response.user) {
+        setInfoSuccess('Información actualizada exitosamente');
+
+        if (onUserUpdated) {
+            onUserUpdated(response.user);
+        }
+
+        setIsEditingInfo(false);
+        
+      } else {
+        setInfoError(response.message || 'Error al actualizar información');
+      }
+    } catch (error) {
+      console.error('Error updating user data:', error);
+      setInfoError('Error de conexión con el servidor');
+    } finally {
+      setInfoLoading(false);
+    }
+  };
 
   // Handler para cancelar edición
   const handleCancelEdit = () => {
@@ -99,56 +100,61 @@ const handleSaveInfo = async () => {
   };
 
   // Handler para cambiar contraseña
-  // Handler para cambiar contraseña
-const handleChangePassword = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setPasswordError('');
-  setPasswordSuccess('');
-  setPasswordLoading(true);
+  const handleChangePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+    setPasswordLoading(true);
 
-  // Validaciones
-  if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
-    setPasswordError('Todos los campos son obligatorios');
-    setPasswordLoading(false);
-    return;
-  }
-
-  if (passwordData.newPassword.length < 6) {
-    setPasswordError('La nueva contraseña debe tener al menos 6 caracteres');
-    setPasswordLoading(false);
-    return;
-  }
-
-  if (passwordData.newPassword !== passwordData.confirmPassword) {
-    setPasswordError('Las contraseñas no coinciden');
-    setPasswordLoading(false);
-    return;
-  }
-
-  try {
-    const response = await updateUserPassword(
-      currentUser.userId,
-      passwordData.currentPassword,
-      passwordData.newPassword
-    );
-
-    if (response.ok) {
-      setPasswordSuccess('Contraseña actualizada exitosamente');
-      setPasswordData({
-        currentPassword: '',
-        newPassword: '',
-        confirmPassword: ''
-      });
-    } else {
-      setPasswordError(response.message || 'Error al cambiar contraseña');
+    // Validaciones
+    if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+      setPasswordError('Todos los campos son obligatorios');
+      setPasswordLoading(false);
+      return;
     }
-  } catch (error) {
-    console.error('Error updating password:', error);
-    setPasswordError('Error de conexión con el servidor');
-  } finally {
-    setPasswordLoading(false);
-  }
-};
+
+    if (passwordData.newPassword.length < 6) {
+      setPasswordError('La nueva contraseña debe tener al menos 6 caracteres');
+      setPasswordLoading(false);
+      return;
+    }
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setPasswordError('Las contraseñas no coinciden');
+      setPasswordLoading(false);
+      return;
+    }
+
+    try {
+      console.log('Enviando cambio de contraseña:', {
+        userId: currentUser.userId,
+        rawPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword
+      });
+
+      const response = await updateUserPassword(
+        currentUser.userId,
+        passwordData.currentPassword,  // rawPassword
+        passwordData.newPassword
+      );
+
+      if (response.ok) {
+        setPasswordSuccess('Contraseña actualizada exitosamente');
+        setPasswordData({
+          currentPassword: '',
+          newPassword: '',
+          confirmPassword: ''
+        });
+      } else {
+        setPasswordError(response.message || 'Error al cambiar contraseña');
+      }
+    } catch (error: any) {
+      console.error('Error updating password:', error);
+      setPasswordError(error.message || 'Error de conexión con el servidor');
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
 
   return (
     <div className={styles.accountPage}>
@@ -309,7 +315,7 @@ const handleChangePassword = async (e: React.FormEvent) => {
                       className={styles.cancelButton}
                       disabled={infoLoading}
                     >
-                      <i className="fa-solid fa-xmark"></i>{}
+                      <i className="fa-solid fa-xmark"></i>
                       Cancelar
                     </button>
                   </div>

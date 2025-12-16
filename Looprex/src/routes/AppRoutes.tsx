@@ -24,7 +24,8 @@ interface AppRoutesProps {
   onRemoveFromCart: (productId: number) => void;
   onUpdateCartQuantity: (productId: number, newQuantity: number) => void;
   onClearCart: () => void;
-  searchQuery?: string; // ← NUEVO
+  searchQuery?: string;
+  onUserUpdate: (user: UserProps) => void;
 }
 
 export const AppRoutes = (props: AppRoutesProps) => {
@@ -78,6 +79,7 @@ export const AppRoutes = (props: AppRoutesProps) => {
         <AccountPage 
           currentUser={props.currentUser}
           onLogout={props.onLogout}
+          onUserUpdated={props.onUserUpdate}
         />
       )
     },

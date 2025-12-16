@@ -58,7 +58,12 @@ export const UsersService = {
     id: number, 
     data: { rut: string; name: string; lastname: string; phone: string }
   ): Promise<ApiResponse<UserApiResponse>> {
-    return usersClient.put<UserApiResponse>(`/api/users/${id}`, data);
+    return usersClient.put<UserApiResponse>(`/api/users/${id}/personal-data`, {
+      rut: data.rut,
+      name: data.name,
+      lastName: data.lastname,
+      phone: data.phone
+    });
   },
 
   /**
@@ -79,7 +84,7 @@ export const UsersService = {
     newPassword: string
   ): Promise<ApiResponse<void>> {
     return usersClient.put<void>(`/api/users/${id}/password`, { 
-      rawPassword,
+      currentPassword: rawPassword,
       newPassword 
     });
   },

@@ -86,13 +86,6 @@ export const LoginPage = ({ onLogin }: LoginPageProps) => {
               )}
             </button>
           </form>
-
-          <div className={styles.authLinks}>
-            <Link to="/recuperar-contrasena" className={styles.forgotPassword}>
-              ¿Olvidaste tu contraseña?
-            </Link>
-          </div>
-
           <p className={styles.authFooter}>
             ¿No tienes una cuenta?{' '}
             <Link to="/registro">Crear una cuenta</Link>

@@ -5,10 +5,14 @@ import { CategoryNav } from './components/common/categoryNav/Category';
 import { Footer } from './components/layout/Footer';
 import type { UserProps, Cart } from './interfaces';
 
+
 export const ECommerceApp = () => {
   const [currentUser, setCurrentUser] = useState<UserProps | null>(null);
   const [cart, setCart] = useState<Cart>({ items: [] });
   const [searchQuery, setSearchQuery] = useState('');
+  const handleUserUpdate = useCallback((updatedUser: UserProps) => {
+    setCurrentUser(updatedUser);
+    localStorage.setItem('currentUser', JSON.stringify(updatedUser));}, []);
 
   // Recuperar usuario de localStorage al montar (opcional)
   useEffect(() => {
@@ -180,6 +184,7 @@ export const ECommerceApp = () => {
           onUpdateCartQuantity={handleUpdateCartQuantity}
           onClearCart={handleClearCart}
           searchQuery={searchQuery}
+          onUserUpdate={handleUserUpdate}
         />
       </main>
       
