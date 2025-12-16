@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "./navBar.module.css";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,18 +10,9 @@ interface SearchBarProps {
 export const SearchBar = ({ onSearch }: SearchBarProps) => {
   const [query, setQuery] = useState('');
 
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      onSearch(query);
-    });
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, [query, onSearch]);
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    // Solo ejecutar la búsqueda cuando se presiona el botón o Enter
     onSearch(query);
   };
 

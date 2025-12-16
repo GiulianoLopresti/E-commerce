@@ -18,6 +18,7 @@ export const CloudinaryUpload = ({ onImageUploaded, currentImageUrl }: Cloudinar
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Validaciones
     if (!file.type.startsWith('image/')) {
       setError('Solo se permiten imágenes (JPG, PNG, GIF)');
       return;
@@ -28,18 +29,37 @@ export const CloudinaryUpload = ({ onImageUploaded, currentImageUrl }: Cloudinar
       return;
     }
 
+    // Verificar variables de entorno
+    if (!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET) {
+      setError('Error de configuración: Variables de entorno no encontradas');
+      console.error('Cloudinary config:', {
+        cloudName: CLOUDINARY_CLOUD_NAME,
+        uploadPreset: CLOUDINARY_UPLOAD_PRESET
+      });
+      return;
+    }
+
     setError('');
     setUploading(true);
 
+    // Mostrar preview inmediato
     const reader = new FileReader();
     reader.onloadend = () => setPreview(reader.result as string);
     reader.readAsDataURL(file);
 
+    // Preparar FormData
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
     try {
+      console.log('Subiendo a Cloudinary:', {
+        cloudName: CLOUDINARY_CLOUD_NAME,
+        uploadPreset: CLOUDINARY_UPLOAD_PRESET,
+        fileSize: file.size,
+        fileType: file.type
+      });
+
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`,
         {
@@ -48,26 +68,32 @@ export const CloudinaryUpload = ({ onImageUploaded, currentImageUrl }: Cloudinar
         }
       );
 
+      // Log de respuesta para debugging
+      console.log('Respuesta status:', response.status);
+
       if (!response.ok) {
-        throw new Error('Error al subir imagen');
+        const errorData = await response.json();
+        console.error('Error de Cloudinary:', errorData);
+        throw new Error(errorData.error?.message || 'Error al subir imagen');
       }
 
       const data = await response.json();
+      console.log('Imagen subida exitosamente:', data.secure_url);
+      
       onImageUploaded(data.secure_url);
       
     } catch (err: any) {
-      console.error('Error:', err);
-      setError('Error al subir imagen. Intenta nuevamente.');
+      console.error('Error completo:', err);
+      setError(`Error al subir imagen: ${err.message}`);
       setPreview(null);
     } finally {
       setUploading(false);
     }
   };
 
-  // ← NUEVA FUNCIÓN: Eliminar imagen
   const handleRemoveImage = () => {
     setPreview(null);
-    onImageUploaded(''); // Limpia la URL
+    onImageUploaded('');
   };
 
   return (
@@ -80,7 +106,6 @@ export const CloudinaryUpload = ({ onImageUploaded, currentImageUrl }: Cloudinar
               <i className="fa-solid fa-camera"></i>
               <span>Cambiar imagen</span>
             </div>
-            {/* ← NUEVO BOTÓN: Eliminar */}
             <button
               type="button"
               onClick={(e) => {
@@ -124,6 +149,20 @@ export const CloudinaryUpload = ({ onImageUploaded, currentImageUrl }: Cloudinar
           {error}
         </div>
       )}
+      
+      {/* Ayuda de configuración */}
+      {!CLOUDINARY_CLOUD_NAME || !CLOUDINARY_UPLOAD_PRESET ? (
+        <div className={styles.error}>
+          <i className="fa-solid fa-gear"></i>
+          <strong>Configuración requerida:</strong>
+          <br />
+          Crea un archivo <code>.env</code> con:
+          <br />
+          <code>VITE_CLOUDINARY_CLOUD_NAME=tu_cloud_name</code>
+          <br />
+          <code>VITE_CLOUDINARY_UPLOAD_PRESET=tu_preset</code>
+        </div>
+      ) : null}
     </div>
   );
 };
